@@ -1,10 +1,5 @@
 library fl_animated_linechart;
 
 
-
-
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
+export 'chart/animated_line_chart.dart';
+export 'chart/line_chart.dart';
