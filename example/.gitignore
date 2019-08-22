@@ -27,8 +27,7 @@
 .packages
 .pub-cache/
 .pub/
-build/
-**/values/strings_en.arb
+/build/
 
 # Android related
 **/android/**/gradle-wrapper.jar
