@@ -10,3 +10,10 @@
 ## [0.0.3] - 22 august 2019
 
 * Added codemagic CI
+
+## [0.0.4] - 22 august 2019
+
+* Style tooltip
+* Paint unit
+* Make sure tooltip paints within chart area
+* Formatted dynamic datetime axisvalues
