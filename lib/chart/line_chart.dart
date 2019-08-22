@@ -20,6 +20,7 @@ class LineChart {
 
   final List<ChartLine> lines;
   final Dates fromTo;
+  final String yAxisUnit;
   double _minX = 0;
   double _minY = 0;
   double _maxX = 0;
@@ -37,7 +38,7 @@ class LineChart {
   List<TextPainter> _axisTexts;
   List<TextPainter> _yAxisTexts;
 
-  LineChart(this.lines, this.fromTo) {
+  LineChart(this.lines, this.fromTo, this.yAxisUnit) {
       if (lines.length > 0) {
         _minX = lines[0].minX;
         _maxX = lines[0].maxX;
@@ -61,9 +62,9 @@ class LineChart {
       });
   }
 
-  factory LineChart.fromDateTimeMaps(List<Map<DateTime, double>> series, List<Color> colors) {
+  factory LineChart.fromDateTimeMaps(List<Map<DateTime, double>> series, List<Color> colors, String yAxisUnit) {
     Pair<List<ChartLine>, Dates> convertFromDateMaps = DateTimeSeriesConverter.convertFromDateMaps(series, colors);
-    return LineChart(convertFromDateMaps.left, convertFromDateMaps.right);
+    return LineChart(convertFromDateMaps.left, convertFromDateMaps.right, yAxisUnit);
   }
 
   double get width => _maxX - _minX;

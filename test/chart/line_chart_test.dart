@@ -9,19 +9,19 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('init with empty dataset', () async {
-    LineChart lineChart = LineChart([], Dates(DateTime.now(), DateTime.now()));
+    LineChart lineChart = LineChart([], Dates(DateTime.now(), DateTime.now()), 'W');
     lineChart.initialize(200, 100);
 
     expect(lineChart.seriesMap.isEmpty, true);
 
-    lineChart = LineChart([ChartLine([], Colors.black, 'C')], Dates(DateTime.now(), DateTime.now()));
+    lineChart = LineChart([ChartLine([], Colors.black, 'C')], Dates(DateTime.now(), DateTime.now()), 'W');
     lineChart.initialize(200, 100);
 
     expect(lineChart.seriesMap.isEmpty, true);
   });
 
   test('init with 1 line', () async {
-    LineChart lineChart = LineChart([_createLine(10, 2, Colors.cyan, 'W')], Dates(DateTime.now(), DateTime.now()));
+    LineChart lineChart = LineChart([_createLine(10, 2, Colors.cyan, 'W')], Dates(DateTime.now(), DateTime.now()), 'W');
     lineChart.initialize(200, 100);
 
     expect(lineChart.seriesMap.length, 1);
@@ -37,7 +37,7 @@ void main() {
   test('init with multiple lines', () async {
     LineChart lineChart = LineChart([_createLine(10, 2, Colors.cyan, 'W'),
                                      _createLine(15, 1, Colors.cyan, 'W')],
-                                      Dates(DateTime.now(), DateTime.now()));
+                                      Dates(DateTime.now(), DateTime.now()), 'W');
     lineChart.initialize(200, 100);
 
     expect(lineChart.seriesMap.length, 2);
@@ -56,7 +56,7 @@ void main() {
   });
 
   test('width and height calculated based on min and max values', () async {
-    LineChart lineChart = LineChart([_createLine(10, 2, Colors.cyan, 'W')], Dates(DateTime.now(), DateTime.now()));
+    LineChart lineChart = LineChart([_createLine(10, 2, Colors.cyan, 'W')], Dates(DateTime.now(), DateTime.now()), 'W');
     lineChart.initialize(200, 100);
 
     expect(lineChart.width, 9);
@@ -64,7 +64,7 @@ void main() {
   });
 
   test('path cache', () async {
-    LineChart lineChart = LineChart([_createLine(10, 2, Colors.cyan, 'W')], Dates(DateTime.now(), DateTime.now()));
+    LineChart lineChart = LineChart([_createLine(10, 2, Colors.cyan, 'W')], Dates(DateTime.now(), DateTime.now()), 'W');
     lineChart.initialize(200, 100);
 
     expect(lineChart.width, 9);
@@ -72,7 +72,7 @@ void main() {
   });
 
   test('find the highlight closest', () async {
-    LineChart lineChart = LineChart([_createLine(10, 2, Colors.cyan, 'W')], Dates(DateTime.now(), DateTime.now()));
+    LineChart lineChart = LineChart([_createLine(10, 2, Colors.cyan, 'W')], Dates(DateTime.now(), DateTime.now()), 'W');
     lineChart.initialize(200, 100);
 
     expect(lineChart.width, 9);

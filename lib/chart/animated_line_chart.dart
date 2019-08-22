@@ -96,7 +96,6 @@ class _GestureWrapperState extends State<_GestureWrapper> {
   }
 }
 
-
 class _AnimatedChart extends AnimatedWidget {
   final double height;
   final double width;
@@ -145,7 +144,68 @@ class ChartPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     _drawGrid(canvas, size);
+    _drawUnit(canvas, size);
+    _drawLines(size, canvas);
+    _drawAxisValues(canvas, size);
 
+    if (horizontalDragActive) {
+      _drawHighlights(size, canvas);
+    }
+  }
+
+  void _drawHighlights(Size size, Canvas canvas) {
+    linePainter.color = Colors.black45;
+    
+    if (horizontalDragPosition > axisOffsetPX && horizontalDragPosition < size.width) {
+      canvas.drawLine(Offset(horizontalDragPosition, 0), Offset(horizontalDragPosition, size.height - axisOffsetPX), linePainter);
+    }
+    
+    List<HighlightPoint> highlights = chart.getClosetHighlightPoints(horizontalDragPosition);
+    
+    int index = 0;
+    highlights.forEach((highlight) {
+      canvas.drawCircle(Offset(highlight.chartPoint.x, highlight.chartPoint.y), 5, linePainter);
+    
+      String prefix = "";
+    
+      if (highlight.chartPoint is DateTimeChartPoint) {
+        DateTimeChartPoint dateTimeChartPoint = highlight.chartPoint;
+        prefix = chart.formatDateTime(dateTimeChartPoint.dateTime);
+      }
+    
+      TextSpan span = new TextSpan(style: new TextStyle(color: chart.lines[index].color, fontWeight: FontWeight.w200, fontSize: 12), text: '$prefix: ${highlight.yValue.toStringAsFixed(1)} ${chart.yAxisUnit}');
+      TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.right, textDirection: TextDirection.ltr);
+    
+      tp.layout();
+    
+      double x = highlight.chartPoint.x;
+    
+      double toolTipWidth = tp.width + 15;
+      if (x > (size.width - toolTipWidth)) {
+        x -= toolTipWidth;
+      }
+    
+      canvas.drawRect(Rect.fromLTWH(x, highlight.yTextPosition - 15, toolTipWidth, tp.height + 15), tooltipPainter);
+      tp.paint(canvas, new Offset(x + 7, highlight.yTextPosition-10));
+    
+      index++;
+    });
+  }
+
+  void _drawAxisValues(Canvas canvas, Size size) {
+    //TODO: calculate and cache
+    for (int c = 0; c <= (stepCount + 1); c++) {
+      TextPainter tp = chart.axisTexts[c];
+      tp.paint(canvas, new Offset(chart.axisOffSetWithPadding - tp.width, (size.height - 6)- (c * chart.heightStepSize) - axisOffsetPX));
+    }
+    
+    //TODO: calculate and cache
+    for (int c = 0; c <= (stepCount + 1); c++) {
+      _drawRotatedText(canvas, chart.yAxisTexts[c], chart.axisOffSetWithPadding + (c * chart.widthStepSize), size.height - chart.axisOffSetWithPadding, pi * 1.5);
+    }
+  }
+
+  void _drawLines(Size size, Canvas canvas) {
     int index = 0;
 
     chart.lines.forEach((chartLine) {
@@ -189,56 +249,14 @@ class ChartPainter extends CustomPainter {
       canvas.drawPath(path, linePainter);
       index++;
     });
+  }
 
-    //TODO: calculate and cache
-    for (int c = 0; c <= (stepCount + 1); c++) {
-      TextPainter tp = chart.axisTexts[c];
-      tp.paint(canvas, new Offset(chart.axisOffSetWithPadding - tp.width, (size.height - 6)- (c * chart.heightStepSize) - axisOffsetPX));
-    }
+  void _drawUnit(Canvas canvas, Size size) {
+    TextSpan span = new TextSpan(style: new TextStyle(color: Colors.black54, fontWeight: FontWeight.w200, fontSize: 12), text: chart.yAxisUnit);
+    TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.right, textDirection: TextDirection.ltr);
+    tp.layout();
 
-    //TODO: calculate and cache
-    for (int c = 0; c <= (stepCount + 1); c++) {
-      _drawRotatedText(canvas, chart.yAxisTexts[c], chart.axisOffSetWithPadding + (c * chart.widthStepSize), size.height - chart.axisOffSetWithPadding, pi * 1.5);
-    }
-
-    if (horizontalDragActive) {
-      linePainter.color = Colors.black45;
-
-      if (horizontalDragPosition > axisOffsetPX && horizontalDragPosition < size.width) {
-        canvas.drawLine(Offset(horizontalDragPosition, 0), Offset(horizontalDragPosition, size.height - axisOffsetPX), linePainter);
-      }
-
-      List<HighlightPoint> highlights = chart.getClosetHighlightPoints(horizontalDragPosition);
-
-      index = 0;
-      highlights.forEach((highlight) {
-        canvas.drawCircle(Offset(highlight.chartPoint.x, highlight.chartPoint.y), 5, linePainter);
-
-        String prefix = "";
-
-        if (highlight.chartPoint is DateTimeChartPoint) {
-          DateTimeChartPoint dateTimeChartPoint = highlight.chartPoint;
-          prefix = chart.formatDateTime(dateTimeChartPoint.dateTime);
-        }
-
-        TextSpan span = new TextSpan(style: new TextStyle(color: chart.lines[index].color, fontWeight: FontWeight.w200, fontSize: 12), text: '$prefix: ${highlight.yValue.toStringAsFixed(1)}');
-        TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.right, textDirection: TextDirection.ltr);
-
-        tp.layout();
-
-        double x = highlight.chartPoint.x;
-
-        double toolTipWidth = tp.width + 15;
-        if (x > (size.width - toolTipWidth)) {
-          x -= toolTipWidth;
-        }
-
-        canvas.drawRect(Rect.fromLTWH(x, highlight.yTextPosition - 15, toolTipWidth, tp.height + 15), tooltipPainter);
-        tp.paint(canvas, new Offset(x + 7, highlight.yTextPosition-10));
-
-        index++;
-      });
-    }
+    tp.paint(canvas, new Offset(LineChart.axisOffsetPX - tp.width, -18));
   }
 
   void _drawGrid(Canvas canvas, Size size) {
