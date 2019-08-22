@@ -5,10 +5,16 @@ import 'package:fl_animated_linechart/chart/datetime_series_converter.dart';
 import 'package:fl_animated_linechart/chart/highlight_point.dart';
 import 'package:fl_animated_linechart/common/dates.dart';
 import 'package:fl_animated_linechart/common/pair.dart';
+import 'package:fl_animated_linechart/common/text_direction_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:intl/intl.dart';
 
 class LineChart {
+
+  final DateFormat _formatHoursMinutes = DateFormat('kk:mm');
+  final DateFormat _formatDayMonth = DateFormat('dd/MM');
+
   static final double axisOffsetPX = 50.0;
   static final double stepCount = 5;
 
@@ -112,7 +118,7 @@ class LineChart {
 
     for (int c = 0; c <= (stepCount + 1); c++) {
       TextSpan span = new TextSpan(style: new TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w200, fontSize: 10), text: '${(minY + yTick * c).round()}');
-      TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.right, textDirection: TextDirection.ltr);
+      TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.right, textDirection: TextDirectionHelper.getDirection());
       tp.layout();
 
       _axisTexts.add(tp);
@@ -121,8 +127,8 @@ class LineChart {
     _yAxisTexts = [];
 
     //Todo: make the axis part and from from/to
-    double chartDuration = fromTo.max.difference(fromTo.min).inSeconds.toDouble();
-    double stepInSeconds = chartDuration / (stepCount + 1);
+    Duration duration = fromTo.max.difference(fromTo.min);
+    double stepInSeconds = duration.inSeconds.toDouble() / (stepCount + 1);
 
 
     for (int c = 0; c <= (stepCount + 1); c++) {
@@ -131,13 +137,21 @@ class LineChart {
 
       //TODO: detect if range is <= 25h or >25h, and format accordently:
       TextSpan span = new TextSpan(
-          style: new TextStyle(color: Colors.grey[800], fontSize: 11.0, fontWeight: FontWeight.w200), text: '${tick.hour}:${tick.minute}');
+          style: new TextStyle(color: Colors.grey[800], fontSize: 11.0, fontWeight: FontWeight.w200), text: _formatDateTime(tick, duration));
       TextPainter tp = new TextPainter(
           text: span, textAlign: TextAlign.right,
-          textDirection: TextDirection.ltr);
+          textDirection: TextDirectionHelper.getDirection());
       tp.layout();
 
       _yAxisTexts.add(tp);
+    }
+  }
+
+  String _formatDateTime(DateTime dateTime, Duration duration) {
+    if (duration.inHours < 30) {
+      return _formatHoursMinutes.format(dateTime.toLocal());
+    } else {
+      return _formatDayMonth.format(dateTime.toLocal());
     }
   }
 

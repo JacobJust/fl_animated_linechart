@@ -22,8 +22,6 @@ class FakeChartSeries {
     return data;
   }
 
-
-
   Map<DateTime, double> createLine2() {
     Map<DateTime, double> data = {};
     data[DateTime.now().subtract(Duration(minutes: 40))] = 11.0;
@@ -33,6 +31,18 @@ class FakeChartSeries {
     data[DateTime.now().subtract(Duration(minutes: 15))] = 29.0;
     data[DateTime.now().subtract(Duration(minutes: 12))] = 11.0;
     data[DateTime.now().subtract(Duration(minutes: 5))] = 37.0;
+    return data;
+  }
+
+  Map<DateTime, double> createLine3() {
+    Map<DateTime, double> data = {};
+    data[DateTime.now().subtract(Duration(days: 6))] = 1100.0;
+    data[DateTime.now().subtract(Duration(days: 5))] = 2233.0;
+    data[DateTime.now().subtract(Duration(days: 4))] = 3744.0;
+    data[DateTime.now().subtract(Duration(days: 3))] = 3100.0;
+    data[DateTime.now().subtract(Duration(days: 2))] = 2900.0;
+    data[DateTime.now().subtract(Duration(days: 1))] = 1100.0;
+    data[DateTime.now().subtract(Duration(minutes: 5))] = 3700.0;
     return data;
   }
 }
