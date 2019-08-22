@@ -6,3 +6,7 @@
 
 * Added screenshots
 * Fixed warnings
+
+## [0.0.3] - 22 august 2019
+
+* Added codemagic CI
