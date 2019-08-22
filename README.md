@@ -9,6 +9,9 @@ An animated linechart library for flutter.
 
 Try the sample project or include in your project.
 
+![Chart exammple with highlight](withSelection.png)
+
+
 Example code:
 
     LineChart lineChart = LineChart.fromDateTimeMaps([line1, line2], [Colors.green, Colors.blue]);

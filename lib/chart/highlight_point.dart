@@ -12,5 +12,5 @@ class HighlightPoint {
     _deltaY = delta;
   }
 
-  double get YTextPosition => chartPoint.y + _deltaY;
+  double get yTextPosition => chartPoint.y + _deltaY;
 }

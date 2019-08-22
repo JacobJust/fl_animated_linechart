@@ -218,10 +218,10 @@ class ChartPainter extends CustomPainter {
           prefix = '${dateTimeChartPoint.dateTime.hour}:${dateTimeChartPoint.dateTime.minute}';
         }
 
-        TextSpan span = new TextSpan(style: new TextStyle(color: chart.lines[index].color, fontWeight: FontWeight.w200, fontSize: 12), text: '${prefix}: ${highlight.yValue.toStringAsFixed(1)}');
+        TextSpan span = new TextSpan(style: new TextStyle(color: chart.lines[index].color, fontWeight: FontWeight.w200, fontSize: 12), text: '$prefix: ${highlight.yValue.toStringAsFixed(1)}');
         TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.right, textDirection: TextDirection.ltr);
         tp.layout();
-        tp.paint(canvas, new Offset(highlight.chartPoint.x + 7, highlight.YTextPosition-10));
+        tp.paint(canvas, new Offset(highlight.chartPoint.x + 7, highlight.yTextPosition-10));
 
         index++;
       });

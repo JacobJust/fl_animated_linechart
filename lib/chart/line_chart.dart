@@ -170,9 +170,9 @@ class LineChart {
     highlights.forEach((highlight) {
       if (last == null) {
         last = highlight;
-      } else if ((last.YTextPosition.abs() - highlight.YTextPosition).abs() < 15) {
+      } else if ((last.yTextPosition.abs() - highlight.yTextPosition).abs() < 15) {
         if ((last.chartPoint.x - highlight.chartPoint.x).abs() < 30) {
-          if (last.YTextPosition < highlight.YTextPosition) {
+          if (last.yTextPosition < highlight.yTextPosition) {
             highlight.adjustTextY(15);
           } else {
             highlight.adjustTextY(-15);
