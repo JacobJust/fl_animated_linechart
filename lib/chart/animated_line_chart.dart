@@ -6,17 +6,17 @@ import 'package:fl_animated_linechart/chart/line_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class CustomChart extends StatefulWidget {
+class AnimatedLineChart extends StatefulWidget {
 
   final LineChart chart;
 
-  const CustomChart(this.chart, {Key key, }) : super(key: key);
+  const AnimatedLineChart(this.chart, {Key key, }) : super(key: key);
 
   @override
-  _CustomChartState createState() => _CustomChartState();
+  _AnimatedLineChartState createState() => _AnimatedLineChartState();
 }
 
-class _CustomChartState extends State<CustomChart> with SingleTickerProviderStateMixin {
+class _AnimatedLineChartState extends State<AnimatedLineChart> with SingleTickerProviderStateMixin {
   AnimationController _controller;
   Animation _animation;
 

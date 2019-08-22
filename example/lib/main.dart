@@ -51,7 +51,7 @@ class _MyHomePageState extends State<MyHomePage> with FakeChartSeries {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               SizedBox(width: 200, height: 200, child: Text('')),
-              Expanded(child: CustomChart(lineChart)),
+              Expanded(child: AnimatedLineChart(lineChart)),
               SizedBox(width: 200, height: 200, child: Text('')),
             ]
         ),
