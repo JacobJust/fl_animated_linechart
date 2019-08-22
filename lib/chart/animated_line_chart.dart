@@ -131,12 +131,16 @@ class ChartPainter extends CustomPainter {
     ..strokeWidth = 2
     ..color = Colors.black26;
 
+  Paint tooltipPainter = Paint()
+    ..style = PaintingStyle.fill
+    ..color = Colors.white70;
+
   final double progress;
   final LineChart chart;
   final bool horizontalDragActive;
   final double horizontalDragPosition;
 
-  ChartPainter(this.progress, this.chart, this.horizontalDragActive, this.horizontalDragPosition);// : horizontalDragPosition = horizontalDragActive ? horizontalDragPosition - axisOffsetPX  : 0;
+  ChartPainter(this.progress, this.chart, this.horizontalDragActive, this.horizontalDragPosition);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -198,7 +202,7 @@ class ChartPainter extends CustomPainter {
     }
 
     if (horizontalDragActive) {
-      linePainter.color = Colors.teal.shade100;
+      linePainter.color = Colors.black45;
 
       if (horizontalDragPosition > axisOffsetPX && horizontalDragPosition < size.width) {
         canvas.drawLine(Offset(horizontalDragPosition, 0), Offset(horizontalDragPosition, size.height - axisOffsetPX), linePainter);
@@ -212,16 +216,25 @@ class ChartPainter extends CustomPainter {
 
         String prefix = "";
 
-        //TODO: detect if range is <= 25h or >25h, and format accordently:
         if (highlight.chartPoint is DateTimeChartPoint) {
           DateTimeChartPoint dateTimeChartPoint = highlight.chartPoint;
-          prefix = '${dateTimeChartPoint.dateTime.hour}:${dateTimeChartPoint.dateTime.minute}';
+          prefix = chart.formatDateTime(dateTimeChartPoint.dateTime);
         }
 
         TextSpan span = new TextSpan(style: new TextStyle(color: chart.lines[index].color, fontWeight: FontWeight.w200, fontSize: 12), text: '$prefix: ${highlight.yValue.toStringAsFixed(1)}');
         TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.right, textDirection: TextDirection.ltr);
+
         tp.layout();
-        tp.paint(canvas, new Offset(highlight.chartPoint.x + 7, highlight.yTextPosition-10));
+
+        double x = highlight.chartPoint.x;
+
+        double toolTipWidth = tp.width + 15;
+        if (x > (size.width - toolTipWidth)) {
+          x -= toolTipWidth;
+        }
+
+        canvas.drawRect(Rect.fromLTWH(x, highlight.yTextPosition - 15, toolTipWidth, tp.height + 15), tooltipPainter);
+        tp.paint(canvas, new Offset(x + 7, highlight.yTextPosition-10));
 
         index++;
       });

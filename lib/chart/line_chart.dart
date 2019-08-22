@@ -240,4 +240,9 @@ class LineChart {
       return path;
     }
   }
+
+  String formatDateTime(DateTime dateTime) {
+    Duration duration = fromTo.max.difference(fromTo.min);
+    return _formatDateTime(dateTime, duration);
+  }
 }
