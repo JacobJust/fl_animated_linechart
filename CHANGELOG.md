@@ -17,3 +17,8 @@
 * Paint unit
 * Make sure tooltip paints within chart area
 * Formatted dynamic datetime axisvalues
+
+## [0.0.5] - 23 august 2019
+
+* Restyled tooltip
+* Finish testing

@@ -35,9 +35,9 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> with FakeChartSeries {
   @override
   Widget build(BuildContext context) {
-    Map<DateTime, double> line1 = createLineData(.1);
-    Map<DateTime, double> line2 = createLineData(.15);
-    Map<DateTime, double> line3 = createLineData(.17);
+    Map<DateTime, double> line1 = createLine1();
+    Map<DateTime, double> line2 = createLine2();
+    Map<DateTime, double> line3 = createLine2_2();
 //    Map<DateTime, double> line3 = createLine3();
 
     LineChart lineChart = LineChart.fromDateTimeMaps([line1, line2, line3], [Colors.green, Colors.blue, Colors.red], 'W');
