@@ -18,20 +18,26 @@ void main() {
         line[start.add(Duration(minutes: 10))] = 1.7;
         series.add(line);
 
-        LineChart lineChart = LineChart.fromDateTimeMaps(series, [Colors.amber], 'E');
+        LineChart lineChart = LineChart.fromDateTimeMaps(series, [Colors.pink], 'E');
         lineChart.initialize(200, 100);
 
         await tester.pumpWidget(buildTestableWidget(
             AnimatedLineChart(lineChart)
         ));
 
-        await tester.pump(Duration(milliseconds: 10));
+        await tester.pump(Duration(milliseconds: 50));
 
         expect(tester.hasRunningAnimations, true);
+
+        await expectLater(find.byType(AnimatedLineChart),
+            matchesGoldenFile('animatedLineChartWhileAnimating.png'));
 
         await tester.pump(Duration(seconds: 1));
 
         expect(tester.hasRunningAnimations, false);
+
+        await expectLater(find.byType(AnimatedLineChart),
+            matchesGoldenFile('animatedLineChartAfterAnimation.png'));
     });
 
   testWidgets('Test horizontal drag',
@@ -56,7 +62,10 @@ void main() {
 
             await tester.pump(Duration(seconds: 1));
 
-            final TestGesture gesture = await tester.startGesture(Offset(250, 250), pointer: 7);
-            await tester.pump();
+            await tester.startGesture(Offset(250, 250), pointer: 7);
+            await tester.pump(Duration(milliseconds: 50));
+
+            await expectLater(find.byType(AnimatedLineChart),
+                matchesGoldenFile('animatedLineChartDuringDrag.png'));
       });
 }
