@@ -3,8 +3,10 @@ import 'dart:math';
 import 'package:fl_animated_linechart/chart/datetime_chart_point.dart';
 import 'package:fl_animated_linechart/chart/highlight_point.dart';
 import 'package:fl_animated_linechart/chart/line_chart.dart';
+import 'package:fl_animated_linechart/common/text_direction_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 
 class AnimatedLineChart extends StatefulWidget {
 
@@ -120,6 +122,8 @@ class ChartPainter extends CustomPainter {
   static final double axisOffsetPX = 50.0;
   static final double stepCount = 5;
 
+  final DateFormat _formatMonthDayHoursMinutes = DateFormat('dd/MM kk:mm');
+
   final Paint _gridPainter = Paint()
                           ..style = PaintingStyle.stroke
                           ..strokeWidth = 1
@@ -132,7 +136,7 @@ class ChartPainter extends CustomPainter {
 
   Paint tooltipPainter = Paint()
     ..style = PaintingStyle.fill
-    ..color = Colors.white70;
+    ..color = Colors.white.withAlpha(230);
 
   final double progress;
   final LineChart chart;
@@ -161,34 +165,65 @@ class ChartPainter extends CustomPainter {
     }
     
     List<HighlightPoint> highlights = chart.getClosetHighlightPoints(horizontalDragPosition);
-    
+    List<TextPainter> textPainters = List();
     int index = 0;
+    double minHighlightX = highlights[0].chartPoint.x;
+    double minHighlightY = highlights[0].chartPoint.y;
+    double maxWidth = 0;
+
+    highlights.forEach((highlight) {
+      if (highlight.chartPoint.x < minHighlightX) {
+        minHighlightX = highlight.chartPoint.x;
+      }
+      if (highlight.chartPoint.y < minHighlightY) {
+        minHighlightY = highlight.chartPoint.y;
+      }
+    });
+
     highlights.forEach((highlight) {
       canvas.drawCircle(Offset(highlight.chartPoint.x, highlight.chartPoint.y), 5, linePainter);
-    
+
       String prefix = "";
     
       if (highlight.chartPoint is DateTimeChartPoint) {
         DateTimeChartPoint dateTimeChartPoint = highlight.chartPoint;
-        prefix = chart.formatDateTime(dateTimeChartPoint.dateTime);
+        prefix = _formatMonthDayHoursMinutes.format(dateTimeChartPoint.dateTime);
       }
-    
+
       TextSpan span = new TextSpan(style: new TextStyle(color: chart.lines[index].color, fontWeight: FontWeight.w200, fontSize: 12), text: '$prefix: ${highlight.yValue.toStringAsFixed(1)} ${chart.yAxisUnit}');
-      TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.right, textDirection: TextDirection.ltr);
+      TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.right, textDirection: TextDirectionHelper.getDirection());
     
       tp.layout();
-    
-      double x = highlight.chartPoint.x;
-    
-      double toolTipWidth = tp.width + 15;
-      if (x > (size.width - toolTipWidth)) {
-        x -= toolTipWidth;
+
+      if (tp.width > maxWidth) {
+        maxWidth = tp.width;
       }
-    
-      canvas.drawRect(Rect.fromLTWH(x, highlight.yTextPosition - 15, toolTipWidth, tp.height + 15), tooltipPainter);
-      tp.paint(canvas, new Offset(x + 7, highlight.yTextPosition-10));
-    
+
+      textPainters.add(tp);
       index++;
+    });
+
+    minHighlightX += 12; //make room for the chart points
+    double tooltipHeight = textPainters[0].height * textPainters.length + 16;
+
+    if ((minHighlightX + maxWidth + 16) > size.width) {
+      minHighlightX -= maxWidth;
+      minHighlightX -= 34;
+    }
+
+    if (minHighlightY + tooltipHeight > size.height - chart.axisOffSetWithPadding) {
+      minHighlightY = size.height - chart.axisOffSetWithPadding - tooltipHeight;
+    }
+
+    //Draw highlight bordered box:
+    Rect tooltipRect = Rect.fromLTWH(minHighlightX-5, minHighlightY - 5, maxWidth+20, tooltipHeight);
+    canvas.drawRect(tooltipRect, tooltipPainter);
+    canvas.drawRect(tooltipRect, _gridPainter);
+
+    //Draw the actual highlights:
+    textPainters.forEach((tp) {
+      tp.paint(canvas, Offset(minHighlightX+5, minHighlightY));
+      minHighlightY += 17;
     });
   }
 
@@ -253,7 +288,7 @@ class ChartPainter extends CustomPainter {
 
   void _drawUnit(Canvas canvas, Size size) {
     TextSpan span = new TextSpan(style: new TextStyle(color: Colors.black54, fontWeight: FontWeight.w200, fontSize: 12), text: chart.yAxisUnit);
-    TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.right, textDirection: TextDirection.ltr);
+    TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.right, textDirection: TextDirectionHelper.getDirection());
     tp.layout();
 
     tp.paint(canvas, new Offset(LineChart.axisOffsetPX - tp.width, -18));

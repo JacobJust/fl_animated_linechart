@@ -127,16 +127,13 @@ class LineChart {
 
     _yAxisTexts = [];
 
-    //Todo: make the axis part and from from/to
+    //Todo: make the axis part generic, to support both string, dates, and numbers
     Duration duration = fromTo.max.difference(fromTo.min);
     double stepInSeconds = duration.inSeconds.toDouble() / (stepCount + 1);
 
-
     for (int c = 0; c <= (stepCount + 1); c++) {
-      //drawText(canvas, '02/07/2019', 45.0 + (c * widthStepSize), size.height - 45, (pi / 2) + pi);
       DateTime tick = fromTo.min.add(Duration(seconds: (stepInSeconds * c).round()));
 
-      //TODO: detect if range is <= 25h or >25h, and format accordently:
       TextSpan span = new TextSpan(
           style: new TextStyle(color: Colors.grey[800], fontSize: 11.0, fontWeight: FontWeight.w200), text: _formatDateTime(tick, duration));
       TextPainter tp = new TextPainter(
@@ -179,22 +176,6 @@ class LineChart {
     seriesMap.forEach((key, list) {
       HighlightPoint closest = _findClosest(list, horizontalDragPosition);
       highlights.add(closest);
-    });
-
-    HighlightPoint last;
-    highlights.forEach((highlight) {
-      if (last == null) {
-        last = highlight;
-      } else if ((last.yTextPosition.abs() - highlight.yTextPosition).abs() < 15) {
-        if ((last.chartPoint.x - highlight.chartPoint.x).abs() < 30) {
-          if (last.yTextPosition < highlight.yTextPosition) {
-            highlight.adjustTextY(15);
-          } else {
-            highlight.adjustTextY(-15);
-          }
-        }
-        last = highlight;
-      }
     });
 
     return highlights;
