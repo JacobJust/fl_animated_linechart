@@ -166,9 +166,9 @@ class LineChart {
 
   double get axisOffSetWithPadding => _axisOffSetWithPadding;
 
-  List<TextPainter> get axisTexts => _axisTexts;
+  List<TextPainter> get yAxisTexts => _axisTexts;
 
-  List<TextPainter> get yAxisTexts => _yAxisTexts;
+  List<TextPainter> get xAxisTexts => _yAxisTexts;
 
   List<HighlightPoint> getClosetHighlightPoints(double horizontalDragPosition) {
     List<HighlightPoint> highlights = List();
@@ -221,10 +221,5 @@ class LineChart {
 
       return path;
     }
-  }
-
-  String formatDateTime(DateTime dateTime) {
-    Duration duration = fromTo.max.difference(fromTo.min);
-    return _formatDateTime(dateTime, duration);
   }
 }

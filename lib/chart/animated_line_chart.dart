@@ -230,13 +230,13 @@ class ChartPainter extends CustomPainter {
   void _drawAxisValues(Canvas canvas, Size size) {
     //TODO: calculate and cache
     for (int c = 0; c <= (stepCount + 1); c++) {
-      TextPainter tp = chart.axisTexts[c];
+      TextPainter tp = chart.yAxisTexts[c];
       tp.paint(canvas, new Offset(chart.axisOffSetWithPadding - tp.width, (size.height - 6)- (c * chart.heightStepSize) - axisOffsetPX));
     }
     
     //TODO: calculate and cache
     for (int c = 0; c <= (stepCount + 1); c++) {
-      _drawRotatedText(canvas, chart.yAxisTexts[c], chart.axisOffSetWithPadding + (c * chart.widthStepSize), size.height - chart.axisOffSetWithPadding, pi * 1.5);
+      _drawRotatedText(canvas, chart.xAxisTexts[c], chart.axisOffSetWithPadding + (c * chart.widthStepSize), size.height - chart.axisOffSetWithPadding, pi * 1.5);
     }
   }
 

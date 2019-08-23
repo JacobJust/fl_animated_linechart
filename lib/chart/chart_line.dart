@@ -36,9 +36,6 @@ class ChartLine {
     });
   }
 
-  double get width => _maxX - _minX;
-  double get height => _maxY - _minY;
-
   double get minX => _minX;
   double get minY => _minY;
   double get maxX => _maxX;
