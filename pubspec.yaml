@@ -5,7 +5,7 @@ author: Jacob Just <Jacob_Just@hotmail.com>
 homepage: https://github.com/JacobJust/fl_animated_linechart
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.0.0 <3.0.0"
 
 dependencies:
   flutter:
