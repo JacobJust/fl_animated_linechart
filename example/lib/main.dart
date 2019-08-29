@@ -40,7 +40,7 @@ class _MyHomePageState extends State<MyHomePage> with FakeChartSeries {
     Map<DateTime, double> line3 = createLine2_2();
 //    Map<DateTime, double> line3 = createLine3();
 
-    LineChart lineChart = LineChart.fromDateTimeMaps([line1, line2, line3], [Colors.green, Colors.blue, Colors.red], 'W');
+    LineChart lineChart = LineChart.fromDateTimeMaps([line1, line2, line3], [Colors.green, Colors.blue, Colors.red], ['W', 'W', 'W']);
 
     return Scaffold(
       appBar: AppBar(

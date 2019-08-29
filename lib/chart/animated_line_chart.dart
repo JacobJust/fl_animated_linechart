@@ -148,7 +148,7 @@ class ChartPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     _drawGrid(canvas, size);
-    _drawUnit(canvas, size);
+    _drawUnits(canvas, size);
     _drawLines(size, canvas);
     _drawAxisValues(canvas, size);
 
@@ -190,7 +190,7 @@ class ChartPainter extends CustomPainter {
         prefix = _formatMonthDayHoursMinutes.format(dateTimeChartPoint.dateTime);
       }
 
-      TextSpan span = new TextSpan(style: new TextStyle(color: chart.lines[index].color, fontWeight: FontWeight.w200, fontSize: 12), text: '$prefix: ${highlight.yValue.toStringAsFixed(1)} ${chart.yAxisUnit}');
+      TextSpan span = new TextSpan(style: new TextStyle(color: chart.lines[index].color, fontWeight: FontWeight.w200, fontSize: 12), text: '$prefix: ${highlight.yValue.toStringAsFixed(1)} ${chart.lines[index].unit}');
       TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.right, textDirection: TextDirectionHelper.getDirection());
     
       tp.layout();
@@ -227,10 +227,11 @@ class ChartPainter extends CustomPainter {
     });
   }
 
+  //TODO: support two axis
   void _drawAxisValues(Canvas canvas, Size size) {
     //TODO: calculate and cache
     for (int c = 0; c <= (stepCount + 1); c++) {
-      TextPainter tp = chart.yAxisTexts[c];
+      TextPainter tp = chart.yAxisTexts(0)[c];
       tp.paint(canvas, new Offset(chart.axisOffSetWithPadding - tp.width, (size.height - 6)- (c * chart.heightStepSize) - axisOffsetPX));
     }
     
@@ -257,7 +258,7 @@ class ChartPainter extends CustomPainter {
 
         chartLine.points.forEach((p) {
           double x = (p.x * chart.xScale) - chart.xOffset;
-          double adjustedY = (p.y * chart.yScale) - (chart.minY * chart.yScale);
+          double adjustedY = (p.y * chart.yScale(chartLine.unit)) - (chart.minY(chartLine.unit) * chart.yScale(chartLine.unit));
           double y = (size.height - LineChart.axisOffsetPX) - (adjustedY * progress);
 
           //adjust to make room for axis values:
@@ -286,12 +287,12 @@ class ChartPainter extends CustomPainter {
     });
   }
 
-  void _drawUnit(Canvas canvas, Size size) {
-    TextSpan span = new TextSpan(style: new TextStyle(color: Colors.black54, fontWeight: FontWeight.w200, fontSize: 12), text: chart.yAxisUnit);
-    TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.right, textDirection: TextDirectionHelper.getDirection());
-    tp.layout();
-
-    tp.paint(canvas, new Offset(LineChart.axisOffsetPX - tp.width, -18));
+  void _drawUnits(Canvas canvas, Size size) {
+//    TextSpan span = new TextSpan(style: new TextStyle(color: Colors.black54, fontWeight: FontWeight.w200, fontSize: 12), text: chart.yAxisUnit);
+//    TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.right, textDirection: TextDirectionHelper.getDirection());
+//    tp.layout();
+//
+//    tp.paint(canvas, new Offset(LineChart.axisOffsetPX - tp.width, -18));
   }
 
   void _drawGrid(Canvas canvas, Size size) {

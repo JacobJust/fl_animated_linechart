@@ -18,7 +18,7 @@ void main() {
         line[start.add(Duration(minutes: 10))] = 1.7;
         series.add(line);
 
-        LineChart lineChart = LineChart.fromDateTimeMaps(series, [Colors.pink], 'E');
+        LineChart lineChart = LineChart.fromDateTimeMaps(series, [Colors.pink], ['P']);
         lineChart.initialize(200, 100);
 
         await tester.pumpWidget(buildTestableWidget(
@@ -65,7 +65,7 @@ void main() {
             line2[start.add(Duration(minutes: 34))] = 1.1;
             series.add(line2);
 
-            LineChart lineChart = LineChart.fromDateTimeMaps(series.reversed.toList(), [Colors.amber, Colors.pink], 'E');
+            LineChart lineChart = LineChart.fromDateTimeMaps(series.reversed.toList(), [Colors.amber, Colors.pink], ['P', 'P']);
             lineChart.initialize(200, 100);
 
             await tester.pumpWidget(buildTestableWidget(
@@ -112,7 +112,7 @@ void main() {
         line[start.add(Duration(minutes: 30))] = 1.7;
         series.add(line);
 
-        LineChart lineChart = LineChart.fromDateTimeMaps(series, [Colors.amber], 'E');
+        LineChart lineChart = LineChart.fromDateTimeMaps(series, [Colors.amber], ['W']);
         lineChart.initialize(200, 100);
 
         await tester.pumpWidget(buildTestableWidget(
