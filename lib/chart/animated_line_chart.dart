@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:fl_animated_linechart/chart/datetime_chart_point.dart';
 import 'package:fl_animated_linechart/chart/highlight_point.dart';
 import 'package:fl_animated_linechart/chart/line_chart.dart';
+import 'package:fl_animated_linechart/common/animated_path_util.dart';
 import 'package:fl_animated_linechart/common/text_direction_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -24,9 +25,9 @@ class _AnimatedLineChartState extends State<AnimatedLineChart> with SingleTicker
 
   @override
   void initState() {
-    _controller = AnimationController(vsync: this, duration: Duration(milliseconds: 600));
+    _controller = AnimationController(vsync: this, duration: Duration(milliseconds: 900));
 
-    Animation curve = CurvedAnimation(parent: _controller, curve: Curves.easeInOutExpo);
+    Animation curve = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
 
     _animation = Tween(begin: 0.0, end: 1.0).animate(curve);
 
@@ -117,7 +118,7 @@ class _AnimatedChart extends AnimatedWidget {
   }
 }
 
-class ChartPainter extends CustomPainter {
+class ChartPainter extends CustomPainter with AnimatedPathUtil {
 
   static final double axisOffsetPX = 50.0;
   static final double stepCount = 5;
@@ -261,27 +262,7 @@ class ChartPainter extends CustomPainter {
       bool drawCircles = points.length < 100;
 
       if (progress < 1.0) {
-        path = Path(); // create new path, to make animation work
-        bool init = true;
-
-        chartLine.points.forEach((p) {
-          double x = (p.x * chart.xScale) - chart.xOffset;
-          double adjustedY = (p.y * chart.yScale(chartLine.unit)) - (chart.minY(chartLine.unit) * chart.yScale(chartLine.unit));
-          double y = (size.height - LineChart.axisOffsetPX) - (adjustedY * progress);
-
-          //adjust to make room for axis values:
-          x += LineChart.axisOffsetPX;
-
-          if (init) {
-            init = false;
-            path.moveTo(x, y);
-          }
-
-          path.lineTo(x, y);
-          if (drawCircles) {
-            canvas.drawCircle(Offset(x, y), 2, linePainter);
-          }
-        });
+        path = createAnimatedPath(chart.getPathCache(index), progress);
       } else {
         path = chart.getPathCache(index);
 
