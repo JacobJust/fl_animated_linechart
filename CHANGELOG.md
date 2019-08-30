@@ -22,3 +22,8 @@
 
 * Restyled tooltip
 * Finish testing
+
+## [0.0.6] - 30 august 2019
+
+* Change animations, to be really cool, now the animations draws the chart lines.
+* secondary Y axis support, to support 1-2 units.
