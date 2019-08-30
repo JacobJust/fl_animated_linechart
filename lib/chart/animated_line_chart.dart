@@ -227,14 +227,22 @@ class ChartPainter extends CustomPainter {
     });
   }
 
-  //TODO: support two axis
   void _drawAxisValues(Canvas canvas, Size size) {
     //TODO: calculate and cache
+
+    //Draw main axis, should always be available:
     for (int c = 0; c <= (stepCount + 1); c++) {
       TextPainter tp = chart.yAxisTexts(0)[c];
       tp.paint(canvas, new Offset(chart.axisOffSetWithPadding - tp.width, (size.height - 6)- (c * chart.heightStepSize) - axisOffsetPX));
     }
-    
+
+    if (chart.yAxisCount == 2) {
+      for (int c = 0; c <= (stepCount + 1); c++) {
+        TextPainter tp = chart.yAxisTexts(1)[c];
+        tp.paint(canvas, new Offset(size.width + 5, (size.height - 6)- (c * chart.heightStepSize) - axisOffsetPX));
+      }
+    }
+
     //TODO: calculate and cache
     for (int c = 0; c <= (stepCount + 1); c++) {
       _drawRotatedText(canvas, chart.xAxisTexts[c], chart.axisOffSetWithPadding + (c * chart.widthStepSize), size.height - chart.axisOffSetWithPadding, pi * 1.5);
@@ -288,11 +296,39 @@ class ChartPainter extends CustomPainter {
   }
 
   void _drawUnits(Canvas canvas, Size size) {
-//    TextSpan span = new TextSpan(style: new TextStyle(color: Colors.black54, fontWeight: FontWeight.w200, fontSize: 12), text: chart.yAxisUnit);
-//    TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.right, textDirection: TextDirectionHelper.getDirection());
-//    tp.layout();
-//
-//    tp.paint(canvas, new Offset(LineChart.axisOffsetPX - tp.width, -18));
+      if (chart.indexToUnit.length > 0) {
+        Color color;
+
+        if (chart.lines.length == 2 && chart.indexToUnit.length == 2) {
+          color = chart.lines[0].color;
+        } else {
+          color  = Colors.black54;
+        }
+
+        TextSpan span = new TextSpan(style: new TextStyle(color: color, fontWeight: FontWeight.w200, fontSize: 14), text: chart.indexToUnit[0]);
+        TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.right, textDirection: TextDirectionHelper.getDirection());
+        tp.layout();
+
+        tp.paint(canvas, new Offset(LineChart.axisOffsetPX, -16));
+      }
+
+      if (chart.indexToUnit.length == 2) {
+        Color color;
+
+        if (chart.lines.length == 2) {
+          color = chart.lines[1].color;
+        } else {
+          color  = Colors.black54;
+        }
+
+
+        TextSpan span = new TextSpan(style: new TextStyle(color: color, fontWeight: FontWeight.w200, fontSize: 14), text: chart.indexToUnit[1]);
+        TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.right, textDirection: TextDirectionHelper.getDirection());
+        tp.layout();
+
+        tp.paint(canvas, new Offset(size.width - tp.width, -16));
+
+      }
   }
 
   void _drawGrid(Canvas canvas, Size size) {

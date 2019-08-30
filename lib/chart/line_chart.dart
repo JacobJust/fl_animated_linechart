@@ -47,7 +47,7 @@ class LineChart {
     assert(series.length == colors.length);
     assert(series.length == units.length);
 
-    Pair<List<ChartLine>, Dates> convertFromDateMaps = DateTimeSeriesConverter.convertFromDateMaps(series, colors);
+    Pair<List<ChartLine>, Dates> convertFromDateMaps = DateTimeSeriesConverter.convertFromDateMaps(series, colors, units);
     return LineChart(convertFromDateMaps.left, convertFromDateMaps.right);
   }
 
@@ -59,7 +59,6 @@ class LineChart {
   double maxY(String unit) => _maxY[unit];
   double height(String unit) => _maxY[unit] - _minY[unit];
   double yScale(String unit) => _yScales[unit];
-  double yTick(String unit) => _yTicks[unit];
 
   void calcScales(double heightPX) {
     Map<String, Pair> unitToMinMaxY = Map();
@@ -94,7 +93,7 @@ class LineChart {
       _maxY[unitToMinMaxY.entries.first.key] = unitToMinMaxY.entries.first.value.right;
       _yScales[unitToMinMaxY.entries.first.key]  = (heightPX - axisOffsetPX - 20) / height(unitToMinMaxY.entries.first.key);
       indexToUnit[0] = unitToMinMaxY.entries.first.key;
-    } else {
+    } else if (unitToMinMaxY.length == 2) {
       MapEntry<String, Pair> first = unitToMinMaxY.entries.elementAt(0);
       MapEntry<String, Pair> second = unitToMinMaxY.entries.elementAt(1);
 
@@ -103,13 +102,8 @@ class LineChart {
       _minY[second.key] = second.value.left;
       _maxY[second.key] = second.value.right;
 
-      double firstHeight = first.value.right - first.value.left;
-      double secondHeight = second.value.right - first.value.right;
-
-      double secondAxisRatio = firstHeight / secondHeight;
-
-      double firstYScale = (heightPX - axisOffsetPX - 20) / height(unitToMinMaxY.entries.first.key);
-      double secondYScale = firstYScale * secondAxisRatio;
+      double firstYScale = (heightPX - axisOffsetPX - 20) / height(first.key);
+      double secondYScale = (heightPX - axisOffsetPX - 20) / height(second.key); //firstYScale * secondAxisRatio;
 
       _yScales[first.key] = firstYScale;
       _yScales[second.key] = secondYScale;

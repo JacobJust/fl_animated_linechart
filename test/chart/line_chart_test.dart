@@ -33,8 +33,8 @@ void main() {
     expect(lineChart.minX, 0.0);
     expect(lineChart.maxX, 9.0);
 
-    expect(lineChart.minY, 0.0);
-    expect(lineChart.maxY, 18.0);
+    expect(lineChart.minY('W'), 0.0);
+    expect(lineChart.maxY('W'), 18.0);
   });
 
   test('init with multiple lines', () async {
@@ -50,8 +50,8 @@ void main() {
     expect(lineChart.minX, 0.0);
     expect(lineChart.maxX, 14.0);
 
-    expect(lineChart.minY, 0.0);
-    expect(lineChart.maxY, 18.0);
+    expect(lineChart.minY('W'), 0.0);
+    expect(lineChart.maxY('W'), 18.0);
   });
 
   test('init with datetime chart points', () async {
@@ -89,7 +89,7 @@ void main() {
         Dates(DateTime.now(), DateTime.now()));
     lineChart.initialize(200, 100);
 
-    expect(lineChart.yScale, 1.6666666666666667);
+    expect(lineChart.yScale('W'), 1.6666666666666667);
   });
 
   test('test heightStepSize', () async {
@@ -131,15 +131,15 @@ void main() {
       ChartPoint(0, 0),
       ChartPoint(maxX, maxY),
       ChartPoint(minX, minY),
-    ], Colors.pink, 'C');
+    ], Colors.pink, 'W');
 
     LineChart lineChart = LineChart([ChartLine([], Colors.amber, 'W'), line], Dates(DateTime.now(), DateTime.now()));
     lineChart.initialize(200, 100);
 
     expect(lineChart.minX, minX);
     expect(lineChart.maxX, maxX);
-    expect(lineChart.minY, minY);
-    expect(lineChart.maxY, maxY);
+    expect(lineChart.minY('W'), minY);
+    expect(lineChart.maxY('W'), maxY);
   });
 
   test('width and height calculated based on min and max values', () async {
@@ -147,7 +147,7 @@ void main() {
     lineChart.initialize(200, 100);
 
     expect(lineChart.width, 9);
-    expect(lineChart.height, 18.0);
+    expect(lineChart.height('W'), 18.0);
   });
 
   test('path calculate', () async {
@@ -265,13 +265,8 @@ void main() {
 
     lineChart.initialize(200, 100);
 
-    List<HighlightPoint> leftSide = lineChart.seriesMap[0];
-    List<HighlightPoint> rightSide = lineChart.seriesMap[1];
-
-    for (int c = 0; c < 10; c++) {
-      expect(leftSide[c].yValue, c);
-      expect(rightSide[c].yValue, c); //Since it´s scaled down
-    }
+    expect(3.0 + 1/3, lineChart.yScale('C'));
+    expect(1/3, lineChart.yScale('F'));
   });
 
   test('multi axis support highlight tooltip for scaled axis', () async {
@@ -287,20 +282,8 @@ void main() {
 
     for (int c = 0; c < 10; c++) {
       expect(leftSide[c].yValue, c);
-      expect(rightSide[c].yValue, c); //Since it´s scaled down
+      expect(rightSide[c].yValue, c * 10); //Since it´s scaled down
     }
-  });
-
-  test('multi axis support, two of each', () async {
-    LineChart lineChart = LineChart([
-      ChartLineHelper.createLine(10, 1.0, Colors.green, 'C'),
-      ChartLineHelper.createLine(10, 2.0, Colors.green, 'F'),
-    ], Dates(DateTime.now().subtract(Duration(hours: 1)), DateTime.now()));
-  });
-
-  test('multi axis support datetime series', () async {
-//    LineChart lineChart = LineChart.fromDateTimeMaps(series, [Colors.amber], ['F']);
-
   });
 }
 
