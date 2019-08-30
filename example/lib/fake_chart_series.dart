@@ -2,7 +2,7 @@ class FakeChartSeries {
   Map<DateTime, double> createLineData(double factor) {
     Map<DateTime, double> data = {};
 
-    for (int c = 3000; c > 0; c--) {
+    for (int c = 50; c > 0; c--) {
       data[DateTime.now().subtract(Duration(minutes: c))] = c.toDouble() * factor;
     }
 
@@ -36,13 +36,13 @@ class FakeChartSeries {
 
   Map<DateTime, double> createLine2_2() {
     Map<DateTime, double> data = {};
-    data[DateTime.now().subtract(Duration(minutes: 40))] = 11.0;
-    data[DateTime.now().subtract(Duration(minutes: 30))] = 22.0;
-    data[DateTime.now().subtract(Duration(minutes: 22))] = 37.0;
-    data[DateTime.now().subtract(Duration(minutes: 20))] = 31.0;
-    data[DateTime.now().subtract(Duration(minutes: 15))] = 29.0;
-    data[DateTime.now().subtract(Duration(minutes: 12))] = 11.0;
-    data[DateTime.now().subtract(Duration(minutes: 5))] = 37.0;
+    data[DateTime.now().subtract(Duration(minutes: 40))] = 30.0;
+    data[DateTime.now().subtract(Duration(minutes: 30))] = 48.0;
+    data[DateTime.now().subtract(Duration(minutes: 22))] = 67.0;
+    data[DateTime.now().subtract(Duration(minutes: 20))] = 99.0;
+    data[DateTime.now().subtract(Duration(minutes: 15))] = 23.0;
+    data[DateTime.now().subtract(Duration(minutes: 12))] = 47.0;
+    data[DateTime.now().subtract(Duration(minutes: 5))] = 10.0;
     return data;
   }
 

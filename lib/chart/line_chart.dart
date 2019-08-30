@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fl_animated_linechart/chart/chart_line.dart';
 import 'package:fl_animated_linechart/chart/chart_point.dart';
 import 'package:fl_animated_linechart/chart/datetime_chart_point.dart';
@@ -20,79 +22,117 @@ class LineChart {
 
   final List<ChartLine> lines;
   final Dates fromTo;
-  final String yAxisUnit;
   double _minX = 0;
-  double _minY = 0;
   double _maxX = 0;
-  double _maxY = 0;
+
+  Map<String, double> _minY;
+  Map<String, double> _maxY;
+  Map<String, double> _yScales;
+  Map<String, double> _yTicks;
 
   double _widthStepSize;
   double _heightStepSize;
   double _xScale;
   double _xOffset;
-  double _yScale;
   Map<int, List<HighlightPoint>> _seriesMap;
   Map<int, Path> _pathMap;
-  double _yTick;
   double _axisOffSetWithPadding;
-  List<TextPainter> _axisTexts;
+  Map<int, List<TextPainter>> _axisTexts;
   List<TextPainter> _yAxisTexts;
+  Map<int, String> indexToUnit;
 
-  LineChart(this.lines, this.fromTo, this.yAxisUnit) {
-      if (lines.length > 0) {
-        _minX = lines[0].minX;
-        _maxX = lines[0].maxX;
-        _minY = lines[0].minY;
-        _maxY = lines[0].maxY;
-      }
+  LineChart(this.lines, this.fromTo);
 
-      lines.forEach((p) {
-        if (p.minX < _minX) {
-          _minX = p.minX;
-        }
-        if (p.maxX > _maxX) {
-          _maxX = p.maxX;
-        }
-        if (p.minY < _minY) {
-          _minY = p.minY;
-        }
-        if (p.maxY > _maxY) {
-          _maxY = p.maxY;
-        }
-      });
-  }
+  factory LineChart.fromDateTimeMaps(List<Map<DateTime, double>> series, List<Color> colors, List<String> units) {
+    assert(series.length == colors.length);
+    assert(series.length == units.length);
 
-  factory LineChart.fromDateTimeMaps(List<Map<DateTime, double>> series, List<Color> colors, String yAxisUnit) {
-    Pair<List<ChartLine>, Dates> convertFromDateMaps = DateTimeSeriesConverter.convertFromDateMaps(series, colors);
-    return LineChart(convertFromDateMaps.left, convertFromDateMaps.right, yAxisUnit);
+    Pair<List<ChartLine>, Dates> convertFromDateMaps = DateTimeSeriesConverter.convertFromDateMaps(series, colors, units);
+    return LineChart(convertFromDateMaps.left, convertFromDateMaps.right);
   }
 
   double get width => _maxX - _minX;
-  double get height => _maxY - _minY;
-
   double get minX => _minX;
-  double get minY => _minY;
   double get maxX => _maxX;
-  double get maxY => _maxY;
+
+  double minY(String unit) => _minY[unit];
+  double maxY(String unit) => _maxY[unit];
+  double height(String unit) => _maxY[unit] - _minY[unit];
+  double yScale(String unit) => _yScales[unit];
+
+  void calcScales(double heightPX) {
+    Map<String, Pair> unitToMinMaxY = Map();
+
+    lines.forEach((line) {
+      if (unitToMinMaxY.containsKey(line.unit)) {
+        double minY = min(unitToMinMaxY[line.unit].left, line.minY);
+        double maxY = max(unitToMinMaxY[line.unit].right, line.maxY);
+
+        unitToMinMaxY[line.unit] = Pair(minY, maxY);
+      } else {
+        unitToMinMaxY[line.unit] = Pair(line.minY, line.maxY);
+      }
+
+      if (line.minX < _minX) {
+        _minX = line.minX;
+      }
+      if (line.maxX > _maxX) {
+        _maxX = line.maxX;
+      }
+    });
+
+    assert(unitToMinMaxY.length <= 2); //The line chart supports max 2 different units
+
+    _minY = Map();
+    _maxY = Map();
+    _yScales = Map();
+    indexToUnit = Map();
+
+    if (unitToMinMaxY.length == 1) {
+      _minY[unitToMinMaxY.entries.first.key] = unitToMinMaxY.entries.first.value.left;
+      _maxY[unitToMinMaxY.entries.first.key] = unitToMinMaxY.entries.first.value.right;
+      _yScales[unitToMinMaxY.entries.first.key]  = (heightPX - axisOffsetPX - 20) / height(unitToMinMaxY.entries.first.key);
+      indexToUnit[0] = unitToMinMaxY.entries.first.key;
+    } else if (unitToMinMaxY.length == 2) {
+      MapEntry<String, Pair> first = unitToMinMaxY.entries.elementAt(0);
+      MapEntry<String, Pair> second = unitToMinMaxY.entries.elementAt(1);
+
+      _minY[first.key] = first.value.left;
+      _maxY[first.key] = first.value.right;
+      _minY[second.key] = second.value.left;
+      _maxY[second.key] = second.value.right;
+
+      double firstYScale = (heightPX - axisOffsetPX - 20) / height(first.key);
+      double secondYScale = (heightPX - axisOffsetPX - 20) / height(second.key); //firstYScale * secondAxisRatio;
+
+      _yScales[first.key] = firstYScale;
+      _yScales[second.key] = secondYScale;
+
+      indexToUnit[0] = first.key;
+      indexToUnit[1] = second.key;
+    }
+  }
 
   //Calculate ui pixels values
   void initialize(double widthPX, double heightPX) {
+    calcScales(heightPX);
+
     _widthStepSize = (widthPX-axisOffsetPX) / (stepCount+1);
     _heightStepSize = (heightPX-axisOffsetPX) / (stepCount+1);
 
     _xScale = (widthPX - axisOffsetPX)/width;
     _xOffset = minX * _xScale;
-    _yScale = (heightPX - axisOffsetPX - 20)/height;
 
     _seriesMap = Map();
     _pathMap = Map();
+    _yTicks = Map();
 
     int index = 0;
     lines.forEach((chartLine) {
       chartLine.points.forEach((p) {
         double x = (p.x * xScale) - xOffset;
 
-        double adjustedY = (p.y * yScale) - (minY * yScale);
+        double adjustedY = (p.y * _yScales[chartLine.unit]) - (_minY[chartLine.unit] * _yScales[chartLine.unit]);
         double y = (heightPX - axisOffsetPX) - adjustedY;
 
         //adjust to make room for axis values:
@@ -108,21 +148,28 @@ class LineChart {
         }
       });
 
+      _yTicks[chartLine.unit] = height(chartLine.unit) / 5;
+
       index++;
     });
 
-    _yTick = height / 5;
 
     _axisOffSetWithPadding = axisOffsetPX - 5.0;
 
-    _axisTexts = [];
+    _axisTexts = Map();
 
-    for (int c = 0; c <= (stepCount + 1); c++) {
-      TextSpan span = new TextSpan(style: new TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w200, fontSize: 10), text: '${(minY + yTick * c).round()}');
-      TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.right, textDirection: TextDirectionHelper.getDirection());
-      tp.layout();
+    for (int c = 0; c < _minY.length; c++) {
+      List<TextPainter> painters = List();
+      _axisTexts[c] = painters;
+      String unit = indexToUnit[c];
 
-      _axisTexts.add(tp);
+      for (int c = 0; c <= (stepCount + 1); c++) {
+        TextSpan span = new TextSpan(style: new TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w200, fontSize: 10), text: '${(_minY[unit]  + _yTicks[unit] * c).round()}');
+        TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.right, textDirection: TextDirectionHelper.getDirection());
+        tp.layout();
+
+        painters.add(tp);
+      }
     }
 
     _yAxisTexts = [];
@@ -156,18 +203,18 @@ class LineChart {
   double get heightStepSize => _heightStepSize;
   double get widthStepSize => _widthStepSize;
 
-  double get yScale => _yScale;
   double get xOffset => _xOffset;
   double get xScale => _xScale;
 
   Map<int, List<HighlightPoint>> get seriesMap => _seriesMap;
 
-  double get yTick => _yTick;
-
   double get axisOffSetWithPadding => _axisOffSetWithPadding;
 
-  List<TextPainter> get yAxisTexts => _axisTexts;
+  List<TextPainter> yAxisTexts(int index) => _axisTexts[index];
 
+  int get yAxisCount => _axisTexts.length;
+
+  //TODO: rename the last x/y mix
   List<TextPainter> get xAxisTexts => _yAxisTexts;
 
   List<HighlightPoint> getClosetHighlightPoints(double horizontalDragPosition) {

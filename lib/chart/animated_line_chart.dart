@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:fl_animated_linechart/chart/datetime_chart_point.dart';
 import 'package:fl_animated_linechart/chart/highlight_point.dart';
 import 'package:fl_animated_linechart/chart/line_chart.dart';
+import 'package:fl_animated_linechart/common/animated_path_util.dart';
 import 'package:fl_animated_linechart/common/text_direction_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -24,9 +25,9 @@ class _AnimatedLineChartState extends State<AnimatedLineChart> with SingleTicker
 
   @override
   void initState() {
-    _controller = AnimationController(vsync: this, duration: Duration(milliseconds: 600));
+    _controller = AnimationController(vsync: this, duration: Duration(milliseconds: 900));
 
-    Animation curve = CurvedAnimation(parent: _controller, curve: Curves.easeInOutExpo);
+    Animation curve = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
 
     _animation = Tween(begin: 0.0, end: 1.0).animate(curve);
 
@@ -117,7 +118,7 @@ class _AnimatedChart extends AnimatedWidget {
   }
 }
 
-class ChartPainter extends CustomPainter {
+class ChartPainter extends CustomPainter with AnimatedPathUtil {
 
   static final double axisOffsetPX = 50.0;
   static final double stepCount = 5;
@@ -148,7 +149,7 @@ class ChartPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     _drawGrid(canvas, size);
-    _drawUnit(canvas, size);
+    _drawUnits(canvas, size);
     _drawLines(size, canvas);
     _drawAxisValues(canvas, size);
 
@@ -190,7 +191,7 @@ class ChartPainter extends CustomPainter {
         prefix = _formatMonthDayHoursMinutes.format(dateTimeChartPoint.dateTime);
       }
 
-      TextSpan span = new TextSpan(style: new TextStyle(color: chart.lines[index].color, fontWeight: FontWeight.w200, fontSize: 12), text: '$prefix: ${highlight.yValue.toStringAsFixed(1)} ${chart.yAxisUnit}');
+      TextSpan span = new TextSpan(style: new TextStyle(color: chart.lines[index].color, fontWeight: FontWeight.w200, fontSize: 12), text: '$prefix: ${highlight.yValue.toStringAsFixed(1)} ${chart.lines[index].unit}');
       TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.right, textDirection: TextDirectionHelper.getDirection());
     
       tp.layout();
@@ -229,11 +230,20 @@ class ChartPainter extends CustomPainter {
 
   void _drawAxisValues(Canvas canvas, Size size) {
     //TODO: calculate and cache
+
+    //Draw main axis, should always be available:
     for (int c = 0; c <= (stepCount + 1); c++) {
-      TextPainter tp = chart.yAxisTexts[c];
+      TextPainter tp = chart.yAxisTexts(0)[c];
       tp.paint(canvas, new Offset(chart.axisOffSetWithPadding - tp.width, (size.height - 6)- (c * chart.heightStepSize) - axisOffsetPX));
     }
-    
+
+    if (chart.yAxisCount == 2) {
+      for (int c = 0; c <= (stepCount + 1); c++) {
+        TextPainter tp = chart.yAxisTexts(1)[c];
+        tp.paint(canvas, new Offset(size.width + 5, (size.height - 6)- (c * chart.heightStepSize) - axisOffsetPX));
+      }
+    }
+
     //TODO: calculate and cache
     for (int c = 0; c <= (stepCount + 1); c++) {
       _drawRotatedText(canvas, chart.xAxisTexts[c], chart.axisOffSetWithPadding + (c * chart.widthStepSize), size.height - chart.axisOffSetWithPadding, pi * 1.5);
@@ -252,27 +262,7 @@ class ChartPainter extends CustomPainter {
       bool drawCircles = points.length < 100;
 
       if (progress < 1.0) {
-        path = Path(); // create new path, to make animation work
-        bool init = true;
-
-        chartLine.points.forEach((p) {
-          double x = (p.x * chart.xScale) - chart.xOffset;
-          double adjustedY = (p.y * chart.yScale) - (chart.minY * chart.yScale);
-          double y = (size.height - LineChart.axisOffsetPX) - (adjustedY * progress);
-
-          //adjust to make room for axis values:
-          x += LineChart.axisOffsetPX;
-
-          if (init) {
-            init = false;
-            path.moveTo(x, y);
-          }
-
-          path.lineTo(x, y);
-          if (drawCircles) {
-            canvas.drawCircle(Offset(x, y), 2, linePainter);
-          }
-        });
+        path = createAnimatedPath(chart.getPathCache(index), progress);
       } else {
         path = chart.getPathCache(index);
 
@@ -286,12 +276,40 @@ class ChartPainter extends CustomPainter {
     });
   }
 
-  void _drawUnit(Canvas canvas, Size size) {
-    TextSpan span = new TextSpan(style: new TextStyle(color: Colors.black54, fontWeight: FontWeight.w200, fontSize: 12), text: chart.yAxisUnit);
-    TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.right, textDirection: TextDirectionHelper.getDirection());
-    tp.layout();
+  void _drawUnits(Canvas canvas, Size size) {
+      if (chart.indexToUnit.length > 0) {
+        Color color;
 
-    tp.paint(canvas, new Offset(LineChart.axisOffsetPX - tp.width, -18));
+        if (chart.lines.length == 2 && chart.indexToUnit.length == 2) {
+          color = chart.lines[0].color;
+        } else {
+          color  = Colors.black54;
+        }
+
+        TextSpan span = new TextSpan(style: new TextStyle(color: color, fontWeight: FontWeight.w200, fontSize: 14), text: chart.indexToUnit[0]);
+        TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.right, textDirection: TextDirectionHelper.getDirection());
+        tp.layout();
+
+        tp.paint(canvas, new Offset(LineChart.axisOffsetPX, -16));
+      }
+
+      if (chart.indexToUnit.length == 2) {
+        Color color;
+
+        if (chart.lines.length == 2) {
+          color = chart.lines[1].color;
+        } else {
+          color  = Colors.black54;
+        }
+
+
+        TextSpan span = new TextSpan(style: new TextStyle(color: color, fontWeight: FontWeight.w200, fontSize: 14), text: chart.indexToUnit[1]);
+        TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.right, textDirection: TextDirectionHelper.getDirection());
+        tp.layout();
+
+        tp.paint(canvas, new Offset(size.width - tp.width, -16));
+
+      }
   }
 
   void _drawGrid(Canvas canvas, Size size) {
