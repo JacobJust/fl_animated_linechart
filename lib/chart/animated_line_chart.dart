@@ -78,6 +78,12 @@ class _GestureWrapperState extends State<_GestureWrapper> {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: _AnimatedChart(widget.chart, widget.width, widget._height, horizontalDragActive, horizontalDragPosition, animation: widget.animation,),
+      onTapDown: (tap) {
+        horizontalDragActive = true;
+        horizontalDragPosition = tap.globalPosition.dx;
+        setState(() {
+        });
+      },
       onHorizontalDragStart: (dragStartDetails) {
         horizontalDragActive = true;
         horizontalDragPosition = dragStartDetails.globalPosition.dx;
@@ -90,6 +96,12 @@ class _GestureWrapperState extends State<_GestureWrapper> {
         });
       },
       onHorizontalDragEnd: (dragEndDetails) {
+        horizontalDragActive = false;
+        horizontalDragPosition = 0.0;
+        setState(() {
+        });
+      },
+      onTapUp: (tap) {
         horizontalDragActive = false;
         horizontalDragPosition = 0.0;
         setState(() {
@@ -118,7 +130,7 @@ class _AnimatedChart extends AnimatedWidget {
   }
 }
 
-class ChartPainter extends CustomPainter with AnimatedPathUtil {
+class ChartPainter extends CustomPainter {
 
   static final double axisOffsetPX = 50.0;
   static final double stepCount = 5;
@@ -262,7 +274,7 @@ class ChartPainter extends CustomPainter with AnimatedPathUtil {
       bool drawCircles = points.length < 100;
 
       if (progress < 1.0) {
-        path = createAnimatedPath(chart.getPathCache(index), progress);
+        path = AnimatedPathUtil.createAnimatedPath(chart.getPathCache(index), progress);
       } else {
         path = chart.getPathCache(index);
 
