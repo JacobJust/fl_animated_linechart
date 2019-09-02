@@ -25,14 +25,17 @@ void main() {
             AnimatedLineChart(lineChart)
         ));
 
-        await tester.pump(Duration(milliseconds: 50));
+        int count = 0;
 
         expect(tester.hasRunningAnimations, true);
-
+        await tester.pump(Duration(milliseconds: 50));
         await expectLater(find.byType(AnimatedLineChart),
             matchesGoldenFile('animatedLineChartWhileAnimating.png'));
 
-        await tester.pump(Duration(seconds: 1));
+        while (count < 20) {
+          await tester.pump(Duration(milliseconds: 50));
+          count++;
+        }
 
         expect(tester.hasRunningAnimations, false);
 
@@ -197,6 +200,39 @@ void main() {
         await testGesture.up();
 
         await tester.pump(Duration(milliseconds: 50));
+
+        await expectLater(find.byType(AnimatedLineChart),
+            matchesGoldenFile('animatedLineChartAfterDragSingle.png'));
+
+      });
+
+  testWidgets('Test tooltip triggered by tap',
+          (WidgetTester tester) async {
+        DateTime start = DateTime.now();
+
+        List<Map<DateTime, double>> series = List();
+        Map<DateTime, double> line = Map();
+        line[start] = 1.2;
+        line[start.add(Duration(minutes: 5))] = 0.5;
+        line[start.add(Duration(minutes: 10))] = 1.7;
+        line[start.add(Duration(minutes: 15))] = 1.7;
+        line[start.add(Duration(minutes: 20))] = 1.7;
+        line[start.add(Duration(minutes: 25))] = 1.7;
+        line[start.add(Duration(minutes: 30))] = 1.7;
+        series.add(line);
+
+        LineChart lineChart = LineChart.fromDateTimeMaps(series, [Colors.amber], ['W']);
+        lineChart.initialize(200, 100);
+
+        await tester.pumpWidget(buildTestableWidget(
+            SizedBox(child: AnimatedLineChart(lineChart),
+              width: 500,
+              height: 500,)
+        ));
+
+        await tester.pump(Duration(seconds: 1));
+
+        await tester.tapAt(Offset(250, 250));
 
         await expectLater(find.byType(AnimatedLineChart),
             matchesGoldenFile('animatedLineChartAfterDragSingle.png'));

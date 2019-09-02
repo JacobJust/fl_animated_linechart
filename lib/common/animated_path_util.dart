@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 class AnimatedPathUtil {
-  Path createAnimatedPath(
+  static Path createAnimatedPath(
       Path originalPath,
       double animationPercent,
       ) {
@@ -15,7 +15,7 @@ class AnimatedPathUtil {
     return extractPathUntilLength(originalPath, currentLength);
   }
 
-  Path extractPathUntilLength(
+  static Path extractPathUntilLength(
       Path originalPath,
       double length,
       ) {

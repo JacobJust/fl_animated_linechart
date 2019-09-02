@@ -27,3 +27,8 @@
 
 * Change animations, to be really cool, now the animations draws the chart lines.
 * secondary Y axis support, to support 1-2 units.
+
+## [0.0.7] - 2 september 2019
+
+* show tooltip on tap
+* coverage back to 100
