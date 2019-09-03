@@ -69,8 +69,8 @@ void main() {
 
     List<HighlightPoint> list = lineChart.seriesMap[0];
 
-    expect(list[0].chartPoint.x, 50);
-    expect(list[1].chartPoint.x, 125);
+    expect(list[0].chartPoint.x, 30);
+    expect(list[1].chartPoint.x, 115);
     expect(list[2].chartPoint.x, 200);
   });
 
@@ -80,7 +80,7 @@ void main() {
         Dates(DateTime.now(), DateTime.now()));
     lineChart.initialize(200, 100);
 
-    expect(lineChart.xScale, 10.714285714285714);
+    expect(lineChart.xScale, 12.142857142857142);
   });
 
   test('test yScale', () async {
@@ -107,7 +107,7 @@ void main() {
         Dates(DateTime.now(), DateTime.now()));
     lineChart.initialize(200, 100);
 
-    expect(lineChart.widthStepSize, 25.0);
+    expect(lineChart.widthStepSize, 28.333333333333332);
   });
 
   test('test axisOffSetWithPadding', () async {
@@ -116,7 +116,7 @@ void main() {
         Dates(DateTime.now(), DateTime.now()));
     lineChart.initialize(200, 100);
 
-    expect(lineChart.axisOffSetWithPadding, 45.0);
+    expect(lineChart.axisOffSetWithPadding, 25.0);
   });
 
   test('test min max values', () async {
@@ -180,8 +180,8 @@ void main() {
     List<HighlightPoint> closetHighlightPoints = lineChart.getClosetHighlightPoints(101);
 
     expect(closetHighlightPoints.length, 1);
-    expect(closetHighlightPoints[0].chartPoint.x, 100);
-    expect(closetHighlightPoints[0].chartPoint.y, 40);
+    expect(closetHighlightPoints[0].chartPoint.x, 105.55555555555556);
+    expect(closetHighlightPoints[0].chartPoint.y, 36.666666666666664);
   });
 
   test('y axis calculations', () async {
@@ -293,7 +293,7 @@ void expectPathCacheToMatch(Path pathCache, int pointCount, double pointFactor, 
     double adjustedY = (c * pointFactor * lineChart.yScale(unit));
     double y = (chartHeight - LineChart.axisOffsetPX) - adjustedY;
 
-    Offset offset = Offset((c * lineChart.xScale) + LineChart.axisOffsetPX, y);
+    Offset offset = Offset((c * lineChart.xScale) + LineChart.xAxisOffsetPX, y);
     expect(pathCache.contains(offset), true, reason: 'Expect path to contain $c,${c * pointFactor}');
   }
 }

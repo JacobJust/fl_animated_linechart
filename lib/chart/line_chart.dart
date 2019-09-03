@@ -18,6 +18,7 @@ class LineChart {
   final DateFormat _formatDayMonth = DateFormat('dd/MM');
 
   static final double axisOffsetPX = 50.0;
+  static final double xAxisOffsetPX = 30.0;
   static final double stepCount = 5;
 
   final List<ChartLine> lines;
@@ -123,10 +124,10 @@ class LineChart {
   void initialize(double widthPX, double heightPX) {
     calcScales(heightPX);
 
-    _widthStepSize = (widthPX-axisOffsetPX) / (stepCount+1);
+    _widthStepSize = (widthPX-xAxisOffsetPX) / (stepCount+1);
     _heightStepSize = (heightPX-axisOffsetPX) / (stepCount+1);
 
-    _xScale = (widthPX - axisOffsetPX)/width;
+    _xScale = (widthPX - xAxisOffsetPX)/width;
     _xOffset = minX * _xScale;
 
     _seriesMap = Map();
@@ -142,7 +143,7 @@ class LineChart {
         double y = (heightPX - axisOffsetPX) - adjustedY;
 
         //adjust to make room for axis values:
-        x += axisOffsetPX;
+        x += xAxisOffsetPX;
         if (_seriesMap[index] == null) {
           _seriesMap[index] = List();
         }
@@ -160,7 +161,7 @@ class LineChart {
     });
 
 
-    _axisOffSetWithPadding = axisOffsetPX - 5.0;
+    _axisOffSetWithPadding = xAxisOffsetPX - 5.0;
 
     _yAxisTexts = Map();
 
