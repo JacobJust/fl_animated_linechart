@@ -25,7 +25,7 @@ class _AnimatedLineChartState extends State<AnimatedLineChart> with SingleTicker
 
   @override
   void initState() {
-    _controller = AnimationController(vsync: this, duration: Duration(milliseconds: 900));
+    _controller = AnimationController(vsync: this, duration: Duration(milliseconds: 700));
 
     Animation curve = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
 
@@ -45,7 +45,7 @@ class _AnimatedLineChartState extends State<AnimatedLineChart> with SingleTicker
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(right: ChartPainter.axisOffsetPX),
+      padding: EdgeInsets.only(right: widget.chart.getUnitCount() == 1 ? 10 : 30),
       child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
             widget.chart.initialize(constraints.maxWidth, constraints.maxHeight);

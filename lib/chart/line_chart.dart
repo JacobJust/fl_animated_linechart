@@ -37,8 +37,8 @@ class LineChart {
   Map<int, List<HighlightPoint>> _seriesMap;
   Map<int, Path> _pathMap;
   double _axisOffSetWithPadding;
-  Map<int, List<TextPainter>> _axisTexts;
-  List<TextPainter> _yAxisTexts;
+  Map<int, List<TextPainter>> _yAxisTexts;
+  List<TextPainter> _xAxisTexts;
   Map<int, String> indexToUnit;
 
   LineChart(this.lines, this.fromTo);
@@ -59,6 +59,12 @@ class LineChart {
   double maxY(String unit) => _maxY[unit];
   double height(String unit) => _maxY[unit] - _minY[unit];
   double yScale(String unit) => _yScales[unit];
+
+  int getUnitCount() {
+    Set<String> units = Set();
+    lines.forEach((line) => units.add(line.unit));
+    return units.length;
+  }
 
   void calcScales(double heightPX) {
     Map<String, Pair> unitToMinMaxY = Map();
@@ -156,11 +162,11 @@ class LineChart {
 
     _axisOffSetWithPadding = axisOffsetPX - 5.0;
 
-    _axisTexts = Map();
+    _yAxisTexts = Map();
 
     for (int c = 0; c < _minY.length; c++) {
       List<TextPainter> painters = List();
-      _axisTexts[c] = painters;
+      _yAxisTexts[c] = painters;
       String unit = indexToUnit[c];
 
       for (int c = 0; c <= (stepCount + 1); c++) {
@@ -172,7 +178,7 @@ class LineChart {
       }
     }
 
-    _yAxisTexts = [];
+    _xAxisTexts = [];
 
     //Todo: make the axis part generic, to support both string, dates, and numbers
     Duration duration = fromTo.max.difference(fromTo.min);
@@ -188,7 +194,7 @@ class LineChart {
           textDirection: TextDirectionHelper.getDirection());
       tp.layout();
 
-      _yAxisTexts.add(tp);
+      _xAxisTexts.add(tp);
     }
   }
 
@@ -210,12 +216,11 @@ class LineChart {
 
   double get axisOffSetWithPadding => _axisOffSetWithPadding;
 
-  List<TextPainter> yAxisTexts(int index) => _axisTexts[index];
+  List<TextPainter> yAxisTexts(int index) => _yAxisTexts[index];
 
-  int get yAxisCount => _axisTexts.length;
+  int get yAxisCount => _yAxisTexts.length;
 
-  //TODO: rename the last x/y mix
-  List<TextPainter> get xAxisTexts => _yAxisTexts;
+  List<TextPainter> get xAxisTexts => _xAxisTexts;
 
   List<HighlightPoint> getClosetHighlightPoints(double horizontalDragPosition) {
     List<HighlightPoint> highlights = List();
