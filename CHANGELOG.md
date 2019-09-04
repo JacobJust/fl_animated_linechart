@@ -36,3 +36,8 @@
 ## [0.0.8] - 3 september 2019
 
 * reduce margins
+
+
+## [0.0.9] - 4 september 2019
+
+* Formatting axis values dynamic depending on the tick size
