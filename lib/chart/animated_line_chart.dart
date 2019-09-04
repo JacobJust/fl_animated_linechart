@@ -25,7 +25,7 @@ class _AnimatedLineChartState extends State<AnimatedLineChart> with SingleTicker
 
   @override
   void initState() {
-    _controller = AnimationController(vsync: this, duration: Duration(milliseconds: 900));
+    _controller = AnimationController(vsync: this, duration: Duration(milliseconds: 700));
 
     Animation curve = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
 
@@ -45,7 +45,7 @@ class _AnimatedLineChartState extends State<AnimatedLineChart> with SingleTicker
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(right: ChartPainter.axisOffsetPX),
+      padding: EdgeInsets.only(right: widget.chart.getUnitCount() == 1 ? 10 : 30),
       child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
             widget.chart.initialize(constraints.maxWidth, constraints.maxHeight);
@@ -132,7 +132,6 @@ class _AnimatedChart extends AnimatedWidget {
 
 class ChartPainter extends CustomPainter {
 
-  static final double axisOffsetPX = 50.0;
   static final double stepCount = 5;
 
   final DateFormat _formatMonthDayHoursMinutes = DateFormat('dd/MM kk:mm');
@@ -173,8 +172,8 @@ class ChartPainter extends CustomPainter {
   void _drawHighlights(Size size, Canvas canvas) {
     linePainter.color = Colors.black45;
     
-    if (horizontalDragPosition > axisOffsetPX && horizontalDragPosition < size.width) {
-      canvas.drawLine(Offset(horizontalDragPosition, 0), Offset(horizontalDragPosition, size.height - axisOffsetPX), linePainter);
+    if (horizontalDragPosition > LineChart.axisOffsetPX && horizontalDragPosition < size.width) {
+      canvas.drawLine(Offset(horizontalDragPosition, 0), Offset(horizontalDragPosition, size.height - LineChart.axisOffsetPX), linePainter);
     }
     
     List<HighlightPoint> highlights = chart.getClosetHighlightPoints(horizontalDragPosition);
@@ -246,19 +245,19 @@ class ChartPainter extends CustomPainter {
     //Draw main axis, should always be available:
     for (int c = 0; c <= (stepCount + 1); c++) {
       TextPainter tp = chart.yAxisTexts(0)[c];
-      tp.paint(canvas, new Offset(chart.axisOffSetWithPadding - tp.width, (size.height - 6)- (c * chart.heightStepSize) - axisOffsetPX));
+      tp.paint(canvas, new Offset(chart.axisOffSetWithPadding - tp.width, (size.height - 6)- (c * chart.heightStepSize) - LineChart.axisOffsetPX));
     }
 
     if (chart.yAxisCount == 2) {
       for (int c = 0; c <= (stepCount + 1); c++) {
         TextPainter tp = chart.yAxisTexts(1)[c];
-        tp.paint(canvas, new Offset(size.width + 5, (size.height - 6)- (c * chart.heightStepSize) - axisOffsetPX));
+        tp.paint(canvas, new Offset(size.width + 5, (size.height - 6)- (c * chart.heightStepSize) - LineChart.axisOffsetPX));
       }
     }
 
     //TODO: calculate and cache
     for (int c = 0; c <= (stepCount + 1); c++) {
-      _drawRotatedText(canvas, chart.xAxisTexts[c], chart.axisOffSetWithPadding + (c * chart.widthStepSize), size.height - chart.axisOffSetWithPadding, pi * 1.5);
+      _drawRotatedText(canvas, chart.xAxisTexts[c], chart.axisOffSetWithPadding + (c * chart.widthStepSize), size.height - (LineChart.axisOffsetPX-5), pi * 1.5);
     }
   }
 
@@ -302,7 +301,7 @@ class ChartPainter extends CustomPainter {
         TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.right, textDirection: TextDirectionHelper.getDirection());
         tp.layout();
 
-        tp.paint(canvas, new Offset(LineChart.axisOffsetPX, -16));
+        tp.paint(canvas, new Offset(LineChart.xAxisOffsetPX, -16));
       }
 
       if (chart.indexToUnit.length == 2) {
@@ -320,16 +319,15 @@ class ChartPainter extends CustomPainter {
         tp.layout();
 
         tp.paint(canvas, new Offset(size.width - tp.width, -16));
-
       }
   }
 
   void _drawGrid(Canvas canvas, Size size) {
-    canvas.drawRect(Rect.fromLTWH(axisOffsetPX, 0, size.width - axisOffsetPX, size.height - axisOffsetPX), _gridPainter);
+    canvas.drawRect(Rect.fromLTWH(LineChart.xAxisOffsetPX, 0, size.width - LineChart.xAxisOffsetPX, size.height - LineChart.axisOffsetPX), _gridPainter);
     
     for(double c = 1; c <= stepCount; c ++) {
-      canvas.drawLine(Offset(axisOffsetPX, c*chart.heightStepSize), Offset(size.width, c*chart.heightStepSize), _gridPainter);
-      canvas.drawLine(Offset(c*chart.widthStepSize + axisOffsetPX, 0), Offset(c*chart.widthStepSize + axisOffsetPX, size.height-axisOffsetPX), _gridPainter);
+      canvas.drawLine(Offset(LineChart.xAxisOffsetPX, c*chart.heightStepSize), Offset(size.width, c*chart.heightStepSize), _gridPainter);
+      canvas.drawLine(Offset(c*chart.widthStepSize + LineChart.xAxisOffsetPX, 0), Offset(c*chart.widthStepSize + LineChart.xAxisOffsetPX, size.height-LineChart.axisOffsetPX), _gridPainter);
     }
   }
 

@@ -32,3 +32,7 @@
 
 * show tooltip on tap
 * coverage back to 100
+
+## [0.0.8] - 3 september 2019
+
+* reduce margins
