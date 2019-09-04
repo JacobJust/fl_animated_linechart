@@ -203,14 +203,43 @@ void main() {
 
     List<TextPainter> axisTexts = lineChart.yAxisTexts(0);
 
-    expect(axisTexts[0].text.toPlainText(), '1');
-    expect(axisTexts[1].text.toPlainText(), '5');
-    expect(axisTexts[2].text.toPlainText(), '9');
-    expect(axisTexts[3].text.toPlainText(), '12');
-    expect(axisTexts[4].text.toPlainText(), '16');
-    expect(axisTexts[5].text.toPlainText(), '20');
-    expect(axisTexts[6].text.toPlainText(), '24');
+    expect(axisTexts[0].text.toPlainText(), '1.0');
+    expect(axisTexts[1].text.toPlainText(), '4.8');
+    expect(axisTexts[2].text.toPlainText(), '8.6');
+    expect(axisTexts[3].text.toPlainText(), '12.4');
+    expect(axisTexts[4].text.toPlainText(), '16.2');
+    expect(axisTexts[5].text.toPlainText(), '20.0');
+    expect(axisTexts[6].text.toPlainText(), '23.8');
   });
+
+  test('y axis calculations decimal', () async {
+    DateTime start = DateTime.now();
+
+    List<Map<DateTime, double>> series = List();
+    Map<DateTime, double> line = Map();
+    line[start] = 25.0;
+    line[start.add(Duration(minutes: 5))] = 24.8;
+    line[start.add(Duration(minutes: 10))] = 24.9;
+    line[start.add(Duration(minutes: 15))] = 25.0;
+    line[start.add(Duration(minutes: 20))] = 25.1;
+    line[start.add(Duration(minutes: 25))] = 25.2;
+    line[start.add(Duration(minutes: 30))] = 24.8;
+    series.add(line);
+
+    LineChart lineChart = LineChart.fromDateTimeMaps(series, [Colors.amber], ['A']);
+    lineChart.initialize(200, 100);
+
+    List<TextPainter> axisTexts = lineChart.yAxisTexts(0);
+
+    expect(axisTexts[0].text.toPlainText(), '24.8');
+    expect(axisTexts[1].text.toPlainText(), '24.88');
+    expect(axisTexts[2].text.toPlainText(), '24.96');
+    expect(axisTexts[3].text.toPlainText(), '25.04');
+    expect(axisTexts[4].text.toPlainText(), '25.12');
+    expect(axisTexts[5].text.toPlainText(), '25.2');
+    expect(axisTexts[6].text.toPlainText(), '25.28');
+  });
+
 
   test('x axis format hours minutes', () async {
     DateTime start = DateTime.now();

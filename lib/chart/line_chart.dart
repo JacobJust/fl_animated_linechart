@@ -171,7 +171,24 @@ class LineChart {
       String unit = indexToUnit[c];
 
       for (int c = 0; c <= (stepCount + 1); c++) {
-        TextSpan span = new TextSpan(style: new TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w200, fontSize: 10), text: '${(_minY[unit]  + _yTicks[unit] * c).round()}');
+
+        double axisValue = (_minY[unit]  + _yTicks[unit] * c);
+
+        String axisValueString;
+
+        if (_yTicks[unit] < 1) {
+          axisValueString = axisValue.toStringAsFixed(2);
+
+          if (axisValueString.endsWith('0')) {
+            axisValueString = axisValueString.substring(0, axisValueString.length - 1);
+          }
+        } else if (_yTicks[unit] <= 10) {
+          axisValueString = axisValue.toStringAsFixed(1);
+        } else {
+          axisValueString = axisValue.round().toString();
+        }
+
+        TextSpan span = new TextSpan(style: new TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w200, fontSize: 10), text: axisValueString);
         TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.right, textDirection: TextDirectionHelper.getDirection());
         tp.layout();
 
