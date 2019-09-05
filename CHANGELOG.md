@@ -36,3 +36,7 @@
 ## [0.0.8] - 3 september 2019
 
 * reduce margins
+
+## [0.1.0] - 5 september 2019
+
+* fix drawing series with all values being the same

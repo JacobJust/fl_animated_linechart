@@ -238,4 +238,33 @@ void main() {
             matchesGoldenFile('animatedLineChartAfterDragSingle.png'));
 
       });
+
+  testWidgets('serie with same values', (WidgetTester tester) async {
+    DateTime start = DateTime.now();
+
+    List<Map<DateTime, double>> series = List();
+    Map<DateTime, double> line = Map();
+    line[start] = 100.0;
+    line[start.add(Duration(minutes: 5))] = 100.0;
+    line[start.add(Duration(minutes: 10))] = 100.0;
+    line[start.add(Duration(minutes: 15))] = 100.0;
+    line[start.add(Duration(minutes: 20))] = 100.0;
+    line[start.add(Duration(minutes: 25))] = 100.0;
+    line[start.add(Duration(minutes: 30))] = 100.0;
+    series.add(line);
+
+    LineChart lineChart = LineChart.fromDateTimeMaps(series, [Colors.amber], ['W']);
+    lineChart.initialize(200, 100);
+
+    await tester.pumpWidget(buildTestableWidget(
+        SizedBox(child: AnimatedLineChart(lineChart),
+          width: 500,
+          height: 500,)
+    ));
+
+    await tester.pump(Duration(seconds: 1));
+
+    await expectLater(find.byType(AnimatedLineChart),
+        matchesGoldenFile('animatedLineChartSerieWithSameValues.png'));
+  });
 }
