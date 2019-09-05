@@ -34,6 +34,11 @@ class ChartLine {
         _maxY = p.y;
       }
     });
+
+    if (_minY == _maxY) {
+      _minY--;
+      _maxY++;
+    }
   }
 
   double get minX => _minX;
