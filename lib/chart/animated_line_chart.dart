@@ -301,7 +301,7 @@ class ChartPainter extends CustomPainter {
         TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.right, textDirection: TextDirectionHelper.getDirection());
         tp.layout();
 
-        tp.paint(canvas, new Offset(LineChart.xAxisOffsetPX, -16));
+        tp.paint(canvas, new Offset(chart.xAxisOffsetPX, -16));
       }
 
       if (chart.indexToUnit.length == 2) {
@@ -323,11 +323,11 @@ class ChartPainter extends CustomPainter {
   }
 
   void _drawGrid(Canvas canvas, Size size) {
-    canvas.drawRect(Rect.fromLTWH(LineChart.xAxisOffsetPX, 0, size.width - LineChart.xAxisOffsetPX, size.height - LineChart.axisOffsetPX), _gridPainter);
+    canvas.drawRect(Rect.fromLTWH(chart.xAxisOffsetPX, 0, size.width - chart.xAxisOffsetPX, size.height - LineChart.axisOffsetPX), _gridPainter);
     
     for(double c = 1; c <= stepCount; c ++) {
-      canvas.drawLine(Offset(LineChart.xAxisOffsetPX, c*chart.heightStepSize), Offset(size.width, c*chart.heightStepSize), _gridPainter);
-      canvas.drawLine(Offset(c*chart.widthStepSize + LineChart.xAxisOffsetPX, 0), Offset(c*chart.widthStepSize + LineChart.xAxisOffsetPX, size.height-LineChart.axisOffsetPX), _gridPainter);
+      canvas.drawLine(Offset(chart.xAxisOffsetPX, c*chart.heightStepSize), Offset(size.width, c*chart.heightStepSize), _gridPainter);
+      canvas.drawLine(Offset(c*chart.widthStepSize + chart.xAxisOffsetPX, 0), Offset(c*chart.widthStepSize + chart.xAxisOffsetPX, size.height-LineChart.axisOffsetPX), _gridPainter);
     }
   }
 
