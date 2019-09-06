@@ -70,8 +70,8 @@ void main() {
     List<HighlightPoint> list = lineChart.seriesMap[0];
 
     expect(list[0].chartPoint.x, 15);
-    expect(list[1].chartPoint.x, 107.5);
-    expect(list[2].chartPoint.x, 200);
+    expect(list[1].chartPoint.x, 107);
+    expect(list[2].chartPoint.x, 199);
   });
 
   test('test xScale', () async {
@@ -80,7 +80,7 @@ void main() {
         Dates(DateTime.now(), DateTime.now()));
     lineChart.initialize(200, 100);
 
-    expect(lineChart.xScale, 12.5);
+    expect(lineChart.xScale, 12.428571428571429);
   });
 
   test('test yScale', () async {
@@ -107,7 +107,7 @@ void main() {
         Dates(DateTime.now(), DateTime.now()));
     lineChart.initialize(200, 100);
 
-    expect(lineChart.widthStepSize, 29.166666666666668);
+    expect(lineChart.widthStepSize, 29.0);
   });
 
   test('test axisOffSetWithPadding', () async {
@@ -180,7 +180,7 @@ void main() {
     List<HighlightPoint> closetHighlightPoints = lineChart.getClosetHighlightPoints(101);
 
     expect(closetHighlightPoints.length, 1);
-    expect(closetHighlightPoints[0].chartPoint.x, 102.77777777777777);
+    expect(closetHighlightPoints[0].chartPoint.x, 102.33333333333333);
     expect(closetHighlightPoints[0].chartPoint.y, 36.666666666666664);
   });
 

@@ -26,6 +26,7 @@ class LineChart {
   double _minX = 0;
   double _maxX = 0;
   double _xAxisOffsetPX = 0;
+  double _xAxisOffsetPXright = 0;
 
   Map<String, double> _minY;
   Map<String, double> _maxY;
@@ -43,6 +44,7 @@ class LineChart {
   List<TextPainter> _xAxisTexts;
   Map<int, String> indexToUnit;
 
+
   LineChart(this.lines, this.fromTo);
 
   factory LineChart.fromDateTimeMaps(List<Map<DateTime, double>> series, List<Color> colors, List<String> units) {
@@ -57,6 +59,7 @@ class LineChart {
   double get minX => _minX;
   double get maxX => _maxX;
   double get xAxisOffsetPX => _xAxisOffsetPX;
+  double get xAxisOffsetPXright => _xAxisOffsetPXright;
 
   double minY(String unit) => _minY[unit];
   double maxY(String unit) => _maxY[unit];
@@ -139,7 +142,7 @@ class LineChart {
     _yAxisTexts = Map();
 
     double maxLeft = 0;
-    double maxRight = 0;
+    double maxRight = 1;
 
     for (int axisIndex = 0; axisIndex < indexToUnit.length; axisIndex++) {
       List<TextPainter> painters = List();
@@ -161,12 +164,13 @@ class LineChart {
       }
     }
     _xAxisOffsetPX = maxLeft;
+    _xAxisOffsetPXright = maxRight;
 
 
-    _widthStepSize = (widthPX-xAxisOffsetPX) / (stepCount+1);
+    _widthStepSize = (widthPX-maxLeft-maxRight) / (stepCount+1);
     _heightStepSize = (heightPX-axisOffsetPX) / (stepCount+1);
 
-    _xScale = (widthPX - xAxisOffsetPX)/width;
+    _xScale = (widthPX - xAxisOffsetPX - maxRight)/width;
     _xOffset = minX * _xScale;
 
     _seriesMap = Map();
