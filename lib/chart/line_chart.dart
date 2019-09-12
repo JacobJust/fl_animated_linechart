@@ -17,14 +17,16 @@ class LineChart {
   final DateFormat _formatHoursMinutes = DateFormat('kk:mm');
   final DateFormat _formatDayMonth = DateFormat('dd/MM');
 
+  static final double axisMargin = 5.0;
   static final double axisOffsetPX = 50.0;
-  static final double xAxisOffsetPX = 30.0;
   static final double stepCount = 5;
 
   final List<ChartLine> lines;
   final Dates fromTo;
   double _minX = 0;
   double _maxX = 0;
+  double _xAxisOffsetPX = 0;
+  double _xAxisOffsetPXright = 0;
 
   Map<String, double> _minY;
   Map<String, double> _maxY;
@@ -42,6 +44,7 @@ class LineChart {
   List<TextPainter> _xAxisTexts;
   Map<int, String> indexToUnit;
 
+
   LineChart(this.lines, this.fromTo);
 
   factory LineChart.fromDateTimeMaps(List<Map<DateTime, double>> series, List<Color> colors, List<String> units) {
@@ -55,11 +58,14 @@ class LineChart {
   double get width => _maxX - _minX;
   double get minX => _minX;
   double get maxX => _maxX;
+  double get xAxisOffsetPX => _xAxisOffsetPX;
+  double get xAxisOffsetPXright => _xAxisOffsetPXright;
 
   double minY(String unit) => _minY[unit];
   double maxY(String unit) => _maxY[unit];
   double height(String unit) => _maxY[unit] - _minY[unit];
   double yScale(String unit) => _yScales[unit];
+
 
   int getUnitCount() {
     Set<String> units = Set();
@@ -124,17 +130,53 @@ class LineChart {
   void initialize(double widthPX, double heightPX) {
     calcScales(heightPX);
 
-    _widthStepSize = (widthPX-xAxisOffsetPX) / (stepCount+1);
+    //calc axis textpainters, before using
+    _yTicks = Map();
+
+    int index = 0;
+    lines.forEach((chartLine) {
+      _yTicks[chartLine.unit] = height(chartLine.unit) / 5;
+      index++;
+    });
+
+    _yAxisTexts = Map();
+
+    double maxLeft = 0;
+    double maxRight = 1;
+
+    for (int axisIndex = 0; axisIndex < indexToUnit.length; axisIndex++) {
+      List<TextPainter> painters = List();
+      _yAxisTexts[axisIndex] = painters;
+      String unit = indexToUnit[axisIndex];
+
+      for (int stepIndex = 0; stepIndex <= (stepCount + 1); stepIndex++) {
+        TextSpan span = new TextSpan(style: new TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w200, fontSize: 10), text: '${(_minY[unit]  + _yTicks[unit] * stepIndex).round()}');
+        TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.right, textDirection: TextDirectionHelper.getDirection());
+        tp.layout();
+
+        if (axisIndex == 0) {
+          maxLeft = max(tp.width + axisMargin, maxLeft);
+        } else {
+          maxRight = max(tp.width + axisMargin, maxRight);
+        }
+
+        painters.add(tp);
+      }
+    }
+    _xAxisOffsetPX = maxLeft;
+    _xAxisOffsetPXright = maxRight;
+
+
+    _widthStepSize = (widthPX-maxLeft-maxRight) / (stepCount+1);
     _heightStepSize = (heightPX-axisOffsetPX) / (stepCount+1);
 
-    _xScale = (widthPX - xAxisOffsetPX)/width;
+    _xScale = (widthPX - xAxisOffsetPX - maxRight)/width;
     _xOffset = minX * _xScale;
 
     _seriesMap = Map();
     _pathMap = Map();
-    _yTicks = Map();
 
-    int index = 0;
+    index = 0;
     lines.forEach((chartLine) {
       chartLine.points.forEach((p) {
         double x = (p.x * xScale) - xOffset;
@@ -155,29 +197,10 @@ class LineChart {
         }
       });
 
-      _yTicks[chartLine.unit] = height(chartLine.unit) / 5;
-
       index++;
     });
 
-
-    _axisOffSetWithPadding = xAxisOffsetPX - 5.0;
-
-    _yAxisTexts = Map();
-
-    for (int c = 0; c < _minY.length; c++) {
-      List<TextPainter> painters = List();
-      _yAxisTexts[c] = painters;
-      String unit = indexToUnit[c];
-
-      for (int c = 0; c <= (stepCount + 1); c++) {
-        TextSpan span = new TextSpan(style: new TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w200, fontSize: 10), text: '${(_minY[unit]  + _yTicks[unit] * c).round()}');
-        TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.right, textDirection: TextDirectionHelper.getDirection());
-        tp.layout();
-
-        painters.add(tp);
-      }
-    }
+    _axisOffSetWithPadding = xAxisOffsetPX - axisMargin;
 
     _xAxisTexts = [];
 

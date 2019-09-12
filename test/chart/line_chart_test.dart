@@ -69,9 +69,9 @@ void main() {
 
     List<HighlightPoint> list = lineChart.seriesMap[0];
 
-    expect(list[0].chartPoint.x, 30);
-    expect(list[1].chartPoint.x, 115);
-    expect(list[2].chartPoint.x, 200);
+    expect(list[0].chartPoint.x, 15);
+    expect(list[1].chartPoint.x, 107);
+    expect(list[2].chartPoint.x, 199);
   });
 
   test('test xScale', () async {
@@ -80,7 +80,7 @@ void main() {
         Dates(DateTime.now(), DateTime.now()));
     lineChart.initialize(200, 100);
 
-    expect(lineChart.xScale, 12.142857142857142);
+    expect(lineChart.xScale, 12.428571428571429);
   });
 
   test('test yScale', () async {
@@ -107,7 +107,7 @@ void main() {
         Dates(DateTime.now(), DateTime.now()));
     lineChart.initialize(200, 100);
 
-    expect(lineChart.widthStepSize, 28.333333333333332);
+    expect(lineChart.widthStepSize, 29.0);
   });
 
   test('test axisOffSetWithPadding', () async {
@@ -116,7 +116,7 @@ void main() {
         Dates(DateTime.now(), DateTime.now()));
     lineChart.initialize(200, 100);
 
-    expect(lineChart.axisOffSetWithPadding, 25.0);
+    expect(lineChart.axisOffSetWithPadding, 20.0);
   });
 
   test('test min max values', () async {
@@ -156,8 +156,8 @@ void main() {
     LineChart lineChart = LineChart([ChartLineHelper.createLine(10, 2, Colors.cyan, 'W'), ChartLineHelper.createLine(10, 4, Colors.cyan, 'W')], Dates(DateTime.now(), DateTime.now()));
     lineChart.initialize(200, chartHeight);
 
-    expectPathCacheToMatch(lineChart.getPathCache(0), 10, 2, lineChart, chartHeight, 'W');
-    expectPathCacheToMatch(lineChart.getPathCache(1), 10, 4, lineChart, chartHeight, 'W');
+    expectPathCacheToMatch(lineChart.getPathCache(0), 10, 2, lineChart, chartHeight, 'W', lineChart.xAxisOffsetPX);
+    expectPathCacheToMatch(lineChart.getPathCache(1), 10, 4, lineChart, chartHeight, 'W', lineChart.xAxisOffsetPX);
   });
 
   test('path cache', () async {
@@ -180,7 +180,7 @@ void main() {
     List<HighlightPoint> closetHighlightPoints = lineChart.getClosetHighlightPoints(101);
 
     expect(closetHighlightPoints.length, 1);
-    expect(closetHighlightPoints[0].chartPoint.x, 105.55555555555556);
+    expect(closetHighlightPoints[0].chartPoint.x, 102.33333333333333);
     expect(closetHighlightPoints[0].chartPoint.y, 36.666666666666664);
   });
 
@@ -287,13 +287,13 @@ void main() {
   });
 }
 
-void expectPathCacheToMatch(Path pathCache, int pointCount, double pointFactor, LineChart lineChart, double chartHeight, String unit) {
+void expectPathCacheToMatch(Path pathCache, int pointCount, double pointFactor, LineChart lineChart, double chartHeight, String unit, double xAxisOffsetPX) {
   for (double c = 0; c < pointCount; c++) {
 
     double adjustedY = (c * pointFactor * lineChart.yScale(unit));
     double y = (chartHeight - LineChart.axisOffsetPX) - adjustedY;
 
-    Offset offset = Offset((c * lineChart.xScale) + LineChart.xAxisOffsetPX, y);
+    Offset offset = Offset((c * lineChart.xScale) + xAxisOffsetPX, y);
     expect(pathCache.contains(offset), true, reason: 'Expect path to contain $c,${c * pointFactor}');
   }
 }
