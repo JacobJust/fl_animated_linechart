@@ -45,3 +45,7 @@
 ## [0.1.1] - 6 september 2019
 
 * Calculate axis width, to make the chart paint full width
+
+## [0.1.2] - 12 september 2019
+
+* Improve performance

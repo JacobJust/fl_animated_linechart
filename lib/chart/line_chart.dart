@@ -13,7 +13,6 @@ import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 
 class LineChart {
-
   final DateFormat _formatHoursMinutes = DateFormat('kk:mm');
   final DateFormat _formatDayMonth = DateFormat('dd/MM');
 
@@ -44,7 +43,6 @@ class LineChart {
   List<TextPainter> _xAxisTexts;
   Map<int, String> indexToUnit;
 
-
   LineChart(this.lines, this.fromTo);
 
   factory LineChart.fromDateTimeMaps(List<Map<DateTime, double>> series, List<Color> colors, List<String> units) {
@@ -65,7 +63,6 @@ class LineChart {
   double maxY(String unit) => _maxY[unit];
   double height(String unit) => _maxY[unit] - _minY[unit];
   double yScale(String unit) => _yScales[unit];
-
 
   int getUnitCount() {
     Set<String> units = Set();
@@ -104,7 +101,7 @@ class LineChart {
     if (unitToMinMaxY.length == 1) {
       _minY[unitToMinMaxY.entries.first.key] = unitToMinMaxY.entries.first.value.left;
       _maxY[unitToMinMaxY.entries.first.key] = unitToMinMaxY.entries.first.value.right;
-      _yScales[unitToMinMaxY.entries.first.key]  = (heightPX - axisOffsetPX - 20) / height(unitToMinMaxY.entries.first.key);
+      _yScales[unitToMinMaxY.entries.first.key] = (heightPX - axisOffsetPX - 20) / height(unitToMinMaxY.entries.first.key);
       indexToUnit[0] = unitToMinMaxY.entries.first.key;
     } else if (unitToMinMaxY.length == 2) {
       MapEntry<String, Pair> first = unitToMinMaxY.entries.elementAt(0);
@@ -150,7 +147,9 @@ class LineChart {
       String unit = indexToUnit[axisIndex];
 
       for (int stepIndex = 0; stepIndex <= (stepCount + 1); stepIndex++) {
-        TextSpan span = new TextSpan(style: new TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w200, fontSize: 10), text: '${(_minY[unit]  + _yTicks[unit] * stepIndex).round()}');
+        TextSpan span = new TextSpan(
+            style: new TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w200, fontSize: 10),
+            text: '${(_minY[unit] + _yTicks[unit] * stepIndex).round()}');
         TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.right, textDirection: TextDirectionHelper.getDirection());
         tp.layout();
 
@@ -166,11 +165,10 @@ class LineChart {
     _xAxisOffsetPX = maxLeft;
     _xAxisOffsetPXright = maxRight;
 
+    _widthStepSize = (widthPX - maxLeft - maxRight) / (stepCount + 1);
+    _heightStepSize = (heightPX - axisOffsetPX) / (stepCount + 1);
 
-    _widthStepSize = (widthPX-maxLeft-maxRight) / (stepCount+1);
-    _heightStepSize = (heightPX-axisOffsetPX) / (stepCount+1);
-
-    _xScale = (widthPX - xAxisOffsetPX - maxRight)/width;
+    _xScale = (widthPX - xAxisOffsetPX - maxRight) / width;
     _xOffset = minX * _xScale;
 
     _seriesMap = Map();
@@ -212,10 +210,9 @@ class LineChart {
       DateTime tick = fromTo.min.add(Duration(seconds: (stepInSeconds * c).round()));
 
       TextSpan span = new TextSpan(
-          style: new TextStyle(color: Colors.grey[800], fontSize: 11.0, fontWeight: FontWeight.w200), text: _formatDateTime(tick, duration));
-      TextPainter tp = new TextPainter(
-          text: span, textAlign: TextAlign.right,
-          textDirection: TextDirectionHelper.getDirection());
+          style: new TextStyle(color: Colors.grey[800], fontSize: 11.0, fontWeight: FontWeight.w200),
+          text: _formatDateTime(tick, duration));
+      TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.right, textDirection: TextDirectionHelper.getDirection());
       tp.layout();
 
       _xAxisTexts.add(tp);
@@ -261,7 +258,7 @@ class LineChart {
     HighlightPoint candidate = list[0];
 
     double candidateDist = ((candidate.chartPoint.x) - horizontalDragPosition).abs();
-    list.forEach((alternative) {
+    for (HighlightPoint alternative in list) {
       double alternativeDist = ((alternative.chartPoint.x) - horizontalDragPosition).abs();
 
       if (alternativeDist < candidateDist) {
@@ -269,9 +266,9 @@ class LineChart {
         candidateDist = ((candidate.chartPoint.x) - horizontalDragPosition).abs();
       }
       if (alternativeDist > candidateDist) {
-        return candidate;
+        break;
       }
-    });
+    }
 
     return candidate;
   }
