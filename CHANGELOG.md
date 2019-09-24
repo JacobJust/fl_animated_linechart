@@ -37,7 +37,19 @@
 
 * reduce margins
 
+## [0.1.0] - 5 september 2019
 
-## [0.0.9] - 4 september 2019
+* fix drawing series with all values being the same
+
+
+## [0.1.1] - 6 september 2019
+
+* Calculate axis width, to make the chart paint full width
+
+## [0.1.2] - 12 september 2019
+
+* Improve performance
+
+## [0.1.3] - 24 september 2019
 
 * Formatting axis values dynamic depending on the tick size

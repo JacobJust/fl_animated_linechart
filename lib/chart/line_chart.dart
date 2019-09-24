@@ -13,18 +13,19 @@ import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 
 class LineChart {
-
   final DateFormat _formatHoursMinutes = DateFormat('kk:mm');
   final DateFormat _formatDayMonth = DateFormat('dd/MM');
 
+  static final double axisMargin = 5.0;
   static final double axisOffsetPX = 50.0;
-  static final double xAxisOffsetPX = 30.0;
   static final double stepCount = 5;
 
   final List<ChartLine> lines;
   final Dates fromTo;
   double _minX = 0;
   double _maxX = 0;
+  double _xAxisOffsetPX = 0;
+  double _xAxisOffsetPXright = 0;
 
   Map<String, double> _minY;
   Map<String, double> _maxY;
@@ -55,6 +56,8 @@ class LineChart {
   double get width => _maxX - _minX;
   double get minX => _minX;
   double get maxX => _maxX;
+  double get xAxisOffsetPX => _xAxisOffsetPX;
+  double get xAxisOffsetPXright => _xAxisOffsetPXright;
 
   double minY(String unit) => _minY[unit];
   double maxY(String unit) => _maxY[unit];
@@ -98,7 +101,7 @@ class LineChart {
     if (unitToMinMaxY.length == 1) {
       _minY[unitToMinMaxY.entries.first.key] = unitToMinMaxY.entries.first.value.left;
       _maxY[unitToMinMaxY.entries.first.key] = unitToMinMaxY.entries.first.value.right;
-      _yScales[unitToMinMaxY.entries.first.key]  = (heightPX - axisOffsetPX - 20) / height(unitToMinMaxY.entries.first.key);
+      _yScales[unitToMinMaxY.entries.first.key] = (heightPX - axisOffsetPX - 20) / height(unitToMinMaxY.entries.first.key);
       indexToUnit[0] = unitToMinMaxY.entries.first.key;
     } else if (unitToMinMaxY.length == 2) {
       MapEntry<String, Pair> first = unitToMinMaxY.entries.elementAt(0);
@@ -124,55 +127,27 @@ class LineChart {
   void initialize(double widthPX, double heightPX) {
     calcScales(heightPX);
 
-    _widthStepSize = (widthPX-xAxisOffsetPX) / (stepCount+1);
-    _heightStepSize = (heightPX-axisOffsetPX) / (stepCount+1);
-
-    _xScale = (widthPX - xAxisOffsetPX)/width;
-    _xOffset = minX * _xScale;
-
-    _seriesMap = Map();
-    _pathMap = Map();
+    //calc axis textpainters, before using
     _yTicks = Map();
 
     int index = 0;
     lines.forEach((chartLine) {
-      chartLine.points.forEach((p) {
-        double x = (p.x * xScale) - xOffset;
-
-        double adjustedY = (p.y * _yScales[chartLine.unit]) - (_minY[chartLine.unit] * _yScales[chartLine.unit]);
-        double y = (heightPX - axisOffsetPX) - adjustedY;
-
-        //adjust to make room for axis values:
-        x += xAxisOffsetPX;
-        if (_seriesMap[index] == null) {
-          _seriesMap[index] = List();
-        }
-
-        if (p is DateTimeChartPoint) {
-          _seriesMap[index].add(HighlightPoint(DateTimeChartPoint(x, y, p.dateTime), p.y));
-        } else {
-          _seriesMap[index].add(HighlightPoint(ChartPoint(x, y), p.y));
-        }
-      });
-
       _yTicks[chartLine.unit] = height(chartLine.unit) / 5;
-
       index++;
     });
 
-
-    _axisOffSetWithPadding = xAxisOffsetPX - 5.0;
-
     _yAxisTexts = Map();
 
-    for (int c = 0; c < _minY.length; c++) {
+    double maxLeft = 0;
+    double maxRight = 1;
+
+    for (int axisIndex = 0; axisIndex < indexToUnit.length; axisIndex++) {
       List<TextPainter> painters = List();
-      _yAxisTexts[c] = painters;
-      String unit = indexToUnit[c];
+      _yAxisTexts[axisIndex] = painters;
+      String unit = indexToUnit[axisIndex];
 
       for (int c = 0; c <= (stepCount + 1); c++) {
-
-        double axisValue = (_minY[unit]  + _yTicks[unit] * c);
+        double axisValue = (_minY[unit] + _yTicks[unit] * c);
 
         String axisValueString;
 
@@ -195,7 +170,43 @@ class LineChart {
         painters.add(tp);
       }
     }
+    _xAxisOffsetPX = maxLeft;
+    _xAxisOffsetPXright = maxRight;
 
+    _widthStepSize = (widthPX - maxLeft - maxRight) / (stepCount + 1);
+    _heightStepSize = (heightPX - axisOffsetPX) / (stepCount + 1);
+
+    _xScale = (widthPX - xAxisOffsetPX - maxRight) / width;
+    _xOffset = minX * _xScale;
+
+    _seriesMap = Map();
+    _pathMap = Map();
+
+    index = 0;
+    lines.forEach((chartLine) {
+      chartLine.points.forEach((p) {
+        double x = (p.x * xScale) - xOffset;
+
+        double adjustedY = (p.y * _yScales[chartLine.unit]) - (_minY[chartLine.unit] * _yScales[chartLine.unit]);
+        double y = (heightPX - axisOffsetPX) - adjustedY;
+
+        //adjust to make room for axis values:
+        x += xAxisOffsetPX;
+        if (_seriesMap[index] == null) {
+          _seriesMap[index] = List();
+        }
+
+        if (p is DateTimeChartPoint) {
+          _seriesMap[index].add(HighlightPoint(DateTimeChartPoint(x, y, p.dateTime), p.y));
+        } else {
+          _seriesMap[index].add(HighlightPoint(ChartPoint(x, y), p.y));
+        }
+      });
+
+      index++;
+    });
+
+    _axisOffSetWithPadding = xAxisOffsetPX - axisMargin;
     _xAxisTexts = [];
 
     //Todo: make the axis part generic, to support both string, dates, and numbers
@@ -206,10 +217,9 @@ class LineChart {
       DateTime tick = fromTo.min.add(Duration(seconds: (stepInSeconds * c).round()));
 
       TextSpan span = new TextSpan(
-          style: new TextStyle(color: Colors.grey[800], fontSize: 11.0, fontWeight: FontWeight.w200), text: _formatDateTime(tick, duration));
-      TextPainter tp = new TextPainter(
-          text: span, textAlign: TextAlign.right,
-          textDirection: TextDirectionHelper.getDirection());
+          style: new TextStyle(color: Colors.grey[800], fontSize: 11.0, fontWeight: FontWeight.w200),
+          text: _formatDateTime(tick, duration));
+      TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.right, textDirection: TextDirectionHelper.getDirection());
       tp.layout();
 
       _xAxisTexts.add(tp);
@@ -255,7 +265,7 @@ class LineChart {
     HighlightPoint candidate = list[0];
 
     double candidateDist = ((candidate.chartPoint.x) - horizontalDragPosition).abs();
-    list.forEach((alternative) {
+    for (HighlightPoint alternative in list) {
       double alternativeDist = ((alternative.chartPoint.x) - horizontalDragPosition).abs();
 
       if (alternativeDist < candidateDist) {
@@ -263,9 +273,9 @@ class LineChart {
         candidateDist = ((candidate.chartPoint.x) - horizontalDragPosition).abs();
       }
       if (alternativeDist > candidateDist) {
-        return candidate;
+        break;
       }
-    });
+    }
 
     return candidate;
   }

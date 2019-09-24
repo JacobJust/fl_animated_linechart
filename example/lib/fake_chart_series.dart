@@ -9,6 +9,20 @@ class FakeChartSeries {
     return data;
   }
 
+
+  Map<DateTime, double> createLineAlmostSaveValues() {
+    Map<DateTime, double> data = {};
+    data[DateTime.now().subtract(Duration(minutes: 40))] = 25.0;
+    data[DateTime.now().subtract(Duration(minutes: 30))] = 25.0;
+    data[DateTime.now().subtract(Duration(minutes: 22))] = 25.0;
+    data[DateTime.now().subtract(Duration(minutes: 20))] = 24.9;
+    data[DateTime.now().subtract(Duration(minutes: 15))] = 25.0;
+    data[DateTime.now().subtract(Duration(minutes: 12))] = 25.0;
+    data[DateTime.now().subtract(Duration(minutes: 5))] = 25.0;
+
+    return data;
+  }
+
   Map<DateTime, double> createLine1() {
     Map<DateTime, double> data = {};
     data[DateTime.now().subtract(Duration(minutes: 40))] = 14.0;
