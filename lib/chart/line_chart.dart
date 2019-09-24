@@ -101,7 +101,7 @@ class LineChart {
     if (unitToMinMaxY.length == 1) {
       _minY[unitToMinMaxY.entries.first.key] = unitToMinMaxY.entries.first.value.left;
       _maxY[unitToMinMaxY.entries.first.key] = unitToMinMaxY.entries.first.value.right;
-      _yScales[unitToMinMaxY.entries.first.key] = (heightPX - axisOffsetPX - 20) / height(unitToMinMaxY.entries.first.key);
+      _yScales[unitToMinMaxY.entries.first.key] = (heightPX - axisOffsetPX - 45) / height(unitToMinMaxY.entries.first.key);
       indexToUnit[0] = unitToMinMaxY.entries.first.key;
     } else if (unitToMinMaxY.length == 2) {
       MapEntry<String, Pair> first = unitToMinMaxY.entries.elementAt(0);
@@ -112,8 +112,8 @@ class LineChart {
       _minY[second.key] = second.value.left;
       _maxY[second.key] = second.value.right;
 
-      double firstYScale = (heightPX - axisOffsetPX - 20) / height(first.key);
-      double secondYScale = (heightPX - axisOffsetPX - 20) / height(second.key); //firstYScale * secondAxisRatio;
+      double firstYScale = (heightPX - axisOffsetPX - 45) / height(first.key);
+      double secondYScale = (heightPX - axisOffsetPX - 45) / height(second.key); //firstYScale * secondAxisRatio;
 
       _yScales[first.key] = firstYScale;
       _yScales[second.key] = secondYScale;
@@ -146,10 +146,24 @@ class LineChart {
       _yAxisTexts[axisIndex] = painters;
       String unit = indexToUnit[axisIndex];
 
-      for (int stepIndex = 0; stepIndex <= (stepCount + 1); stepIndex++) {
-        TextSpan span = new TextSpan(
-            style: new TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w200, fontSize: 10),
-            text: '${(_minY[unit] + _yTicks[unit] * stepIndex).round()}');
+      for (int c = 0; c <= (stepCount + 1); c++) {
+        double axisValue = (_minY[unit] + _yTicks[unit] * c);
+
+        String axisValueString;
+
+        if (_yTicks[unit] < 1) {
+          axisValueString = axisValue.toStringAsFixed(2);
+
+          if (axisValueString.endsWith('0')) {
+            axisValueString = axisValueString.substring(0, axisValueString.length - 1);
+          }
+        } else if (_yTicks[unit] <= 10) {
+          axisValueString = axisValue.toStringAsFixed(1);
+        } else {
+          axisValueString = axisValue.round().toString();
+        }
+
+        TextSpan span = new TextSpan(style: new TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w200, fontSize: 10), text: axisValueString);
         TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.right, textDirection: TextDirectionHelper.getDirection());
         tp.layout();
 
@@ -199,7 +213,6 @@ class LineChart {
     });
 
     _axisOffSetWithPadding = xAxisOffsetPX - axisMargin;
-
     _xAxisTexts = [];
 
     //Todo: make the axis part generic, to support both string, dates, and numbers

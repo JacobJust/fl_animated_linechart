@@ -49,3 +49,7 @@
 ## [0.1.2] - 12 september 2019
 
 * Improve performance
+
+## [0.1.3] - 24 september 2019
+
+* Formatting axis values dynamic depending on the tick size
