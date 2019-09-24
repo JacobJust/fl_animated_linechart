@@ -69,8 +69,8 @@ void main() {
 
     List<HighlightPoint> list = lineChart.seriesMap[0];
 
-    expect(list[0].chartPoint.x, 15);
-    expect(list[1].chartPoint.x, 107);
+    expect(list[0].chartPoint.x, 45);
+    expect(list[1].chartPoint.x, 122);
     expect(list[2].chartPoint.x, 199);
   });
 
@@ -80,7 +80,7 @@ void main() {
         Dates(DateTime.now(), DateTime.now()));
     lineChart.initialize(200, 100);
 
-    expect(lineChart.xScale, 12.428571428571429);
+    expect(lineChart.xScale, 11);
   });
 
   test('test yScale', () async {
@@ -89,7 +89,7 @@ void main() {
         Dates(DateTime.now(), DateTime.now()));
     lineChart.initialize(200, 100);
 
-    expect(lineChart.yScale('W'), 1.6666666666666667);
+    expect(lineChart.yScale('W'), 0.2777777777777778);
   });
 
   test('test heightStepSize', () async {
@@ -107,7 +107,7 @@ void main() {
         Dates(DateTime.now(), DateTime.now()));
     lineChart.initialize(200, 100);
 
-    expect(lineChart.widthStepSize, 29.0);
+    expect(lineChart.widthStepSize, 25.666666666666668);
   });
 
   test('test axisOffSetWithPadding', () async {
@@ -116,7 +116,7 @@ void main() {
         Dates(DateTime.now(), DateTime.now()));
     lineChart.initialize(200, 100);
 
-    expect(lineChart.axisOffSetWithPadding, 20.0);
+    expect(lineChart.axisOffSetWithPadding, 40.0);
   });
 
   test('test min max values', () async {
@@ -180,8 +180,8 @@ void main() {
     List<HighlightPoint> closetHighlightPoints = lineChart.getClosetHighlightPoints(101);
 
     expect(closetHighlightPoints.length, 1);
-    expect(closetHighlightPoints[0].chartPoint.x, 102.33333333333333);
-    expect(closetHighlightPoints[0].chartPoint.y, 36.666666666666664);
+    expect(closetHighlightPoints[0].chartPoint.x, 96.33333333333333);
+    expect(closetHighlightPoints[0].chartPoint.y, 48.333333333333336);
   });
 
   test('y axis calculations', () async {
@@ -294,8 +294,8 @@ void main() {
 
     lineChart.initialize(200, 100);
 
-    expect(3.0 + 1/3, lineChart.yScale('C'));
-    expect(1/3, lineChart.yScale('F'));
+    expect(lineChart.yScale('C'), 0.5555555555555556);
+    expect(lineChart.yScale('F'), 0.05555555555555555);
   });
 
   test('multi axis support highlight tooltip for scaled axis', () async {
