@@ -53,3 +53,7 @@
 ## [0.1.3] - 24 september 2019
 
 * Formatting axis values dynamic depending on the tick size
+
+## [0.1.4] - 25 september 2019
+
+* Adding support for area chart

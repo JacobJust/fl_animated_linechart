@@ -1,5 +1,6 @@
 
 
+import 'package:fl_animated_linechart/chart/area_line_chart.dart';
 import 'package:fl_animated_linechart/fl_animated_linechart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -266,5 +267,34 @@ void main() {
 
     await expectLater(find.byType(AnimatedLineChart),
         matchesGoldenFile('animatedLineChartSerieWithSameValues.png'));
+  });
+
+  testWidgets('area chart', (WidgetTester tester) async {
+    DateTime start = DateTime.now();
+
+    List<Map<DateTime, double>> series = List();
+    Map<DateTime, double> line = Map();
+    line[start] = 100.0;
+    line[start.add(Duration(minutes: 5))] = 100.0;
+    line[start.add(Duration(minutes: 10))] = 50.0;
+    line[start.add(Duration(minutes: 15))] = 80.0;
+    line[start.add(Duration(minutes: 20))] = 30.0;
+    line[start.add(Duration(minutes: 25))] = 60.0;
+    line[start.add(Duration(minutes: 30))] = 90.0;
+    series.add(line);
+
+    AreaLineChart lineChart = AreaLineChart.fromDateTimeMaps(series, [Colors.amber], ['W']);
+    lineChart.initialize(200, 100);
+
+    await tester.pumpWidget(buildTestableWidget(
+        SizedBox(child: AnimatedLineChart(lineChart),
+          width: 500,
+          height: 500,)
+    ));
+
+    await tester.pump(Duration(seconds: 1));
+
+    await expectLater(find.byType(AnimatedLineChart),
+        matchesGoldenFile('areaChart.png'));
   });
 }

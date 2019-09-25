@@ -11,7 +11,10 @@ An animated linechart library for flutter.
 
 Try the sample project or include in your project.
 
-![Chart exammple with highlight](withSelection.png)
+![Chart example with highlight](withSelection.png)
+
+
+![Area Chart example](areaChart.png)
 
 
 Example code:
@@ -33,3 +36,5 @@ Example code:
         ),
       ),
     );
+
+![Example app](areaChart.png)
