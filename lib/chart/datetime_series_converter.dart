@@ -6,17 +6,22 @@ import 'package:fl_animated_linechart/common/dates.dart';
 import 'package:fl_animated_linechart/common/pair.dart';
 
 class DateTimeSeriesConverter {
-
-  static Pair<List<ChartLine>, Dates> convertFromDateMaps(List<Map<DateTime, double>> series, List<Color> colors, List<String> units) {
+  static Pair<List<ChartLine>, Dates> convertFromDateMaps(
+      List<Map<DateTime, double>> series,
+      List<Color> colors,
+      List<String> units) {
     Dates minMax = _findMinMax(series);
 
     int index = 0;
-    List<ChartLine> lines = series.map((map) => _convert(map, minMax, colors[index], units[index++])).toList();
+    List<ChartLine> lines = series
+        .map((map) => _convert(map, minMax, colors[index], units[index++]))
+        .toList();
 
     return Pair(lines, minMax);
   }
 
-  static ChartLine _convert(Map<DateTime, double> input, Dates minMax, Color color, String unit) {
+  static ChartLine _convert(
+      Map<DateTime, double> input, Dates minMax, Color color, String unit) {
     DateTime from = minMax.min;
 
     List<DateTimeChartPoint> result = [];
@@ -52,5 +57,4 @@ class DateTimeSeriesConverter {
 
     return Dates(min, max);
   }
-
 }

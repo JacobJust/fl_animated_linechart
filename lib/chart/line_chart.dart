@@ -45,11 +45,13 @@ class LineChart {
 
   LineChart(this.lines, this.fromTo);
 
-  factory LineChart.fromDateTimeMaps(List<Map<DateTime, double>> series, List<Color> colors, List<String> units) {
+  factory LineChart.fromDateTimeMaps(List<Map<DateTime, double>> series,
+      List<Color> colors, List<String> units) {
     assert(series.length == colors.length);
     assert(series.length == units.length);
 
-    Pair<List<ChartLine>, Dates> convertFromDateMaps = DateTimeSeriesConverter.convertFromDateMaps(series, colors, units);
+    Pair<List<ChartLine>, Dates> convertFromDateMaps =
+        DateTimeSeriesConverter.convertFromDateMaps(series, colors, units);
     return LineChart(convertFromDateMaps.left, convertFromDateMaps.right);
   }
 
@@ -64,13 +66,7 @@ class LineChart {
   double height(String unit) => _maxY[unit] - _minY[unit];
   double yScale(String unit) => _yScales[unit];
 
-  int getUnitCount() {
-    Set<String> units = Set();
-    lines.forEach((line) => units.add(line.unit));
-    return units.length;
-  }
-
-  void calcScales(double heightPX) {
+  void _calcScales(double heightPX) {
     Map<String, Pair> unitToMinMaxY = Map();
 
     lines.forEach((line) {
@@ -91,7 +87,8 @@ class LineChart {
       }
     });
 
-    assert(unitToMinMaxY.length <= 2); //The line chart supports max 2 different units
+    assert(unitToMinMaxY.length <=
+        2); //The line chart supports max 2 different units
 
     _minY = Map();
     _maxY = Map();
@@ -99,9 +96,13 @@ class LineChart {
     indexToUnit = Map();
 
     if (unitToMinMaxY.length == 1) {
-      _minY[unitToMinMaxY.entries.first.key] = unitToMinMaxY.entries.first.value.left;
-      _maxY[unitToMinMaxY.entries.first.key] = unitToMinMaxY.entries.first.value.right;
-      _yScales[unitToMinMaxY.entries.first.key] = (heightPX - axisOffsetPX - 45) / height(unitToMinMaxY.entries.first.key);
+      _minY[unitToMinMaxY.entries.first.key] =
+          unitToMinMaxY.entries.first.value.left;
+      _maxY[unitToMinMaxY.entries.first.key] =
+          unitToMinMaxY.entries.first.value.right;
+      _yScales[unitToMinMaxY.entries.first.key] =
+          (heightPX - axisOffsetPX - 45) /
+              height(unitToMinMaxY.entries.first.key);
       indexToUnit[0] = unitToMinMaxY.entries.first.key;
     } else if (unitToMinMaxY.length == 2) {
       MapEntry<String, Pair> first = unitToMinMaxY.entries.elementAt(0);
@@ -113,7 +114,8 @@ class LineChart {
       _maxY[second.key] = second.value.right;
 
       double firstYScale = (heightPX - axisOffsetPX - 45) / height(first.key);
-      double secondYScale = (heightPX - axisOffsetPX - 45) / height(second.key); //firstYScale * secondAxisRatio;
+      double secondYScale = (heightPX - axisOffsetPX - 45) /
+          height(second.key); //firstYScale * secondAxisRatio;
 
       _yScales[first.key] = firstYScale;
       _yScales[second.key] = secondYScale;
@@ -125,7 +127,7 @@ class LineChart {
 
   //Calculate ui pixels values
   void initialize(double widthPX, double heightPX) {
-    calcScales(heightPX);
+    _calcScales(heightPX);
 
     //calc axis textpainters, before using
     _yTicks = Map();
@@ -155,7 +157,8 @@ class LineChart {
           axisValueString = axisValue.toStringAsFixed(2);
 
           if (axisValueString.endsWith('0')) {
-            axisValueString = axisValueString.substring(0, axisValueString.length - 1);
+            axisValueString =
+                axisValueString.substring(0, axisValueString.length - 1);
           }
         } else if (_yTicks[unit] <= 10) {
           axisValueString = axisValue.toStringAsFixed(1);
@@ -163,8 +166,16 @@ class LineChart {
           axisValueString = axisValue.round().toString();
         }
 
-        TextSpan span = new TextSpan(style: new TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w200, fontSize: 10), text: axisValueString);
-        TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.right, textDirection: TextDirectionHelper.getDirection());
+        TextSpan span = new TextSpan(
+            style: new TextStyle(
+                color: Colors.grey[800],
+                fontWeight: FontWeight.w200,
+                fontSize: 10),
+            text: axisValueString);
+        TextPainter tp = new TextPainter(
+            text: span,
+            textAlign: TextAlign.right,
+            textDirection: TextDirectionHelper.getDirection());
         tp.layout();
 
         if (axisIndex == 0) {
@@ -193,7 +204,8 @@ class LineChart {
       chartLine.points.forEach((p) {
         double x = (p.x * xScale) - xOffset;
 
-        double adjustedY = (p.y * _yScales[chartLine.unit]) - (_minY[chartLine.unit] * _yScales[chartLine.unit]);
+        double adjustedY = (p.y * _yScales[chartLine.unit]) -
+            (_minY[chartLine.unit] * _yScales[chartLine.unit]);
         double y = (heightPX - axisOffsetPX) - adjustedY;
 
         //adjust to make room for axis values:
@@ -203,7 +215,8 @@ class LineChart {
         }
 
         if (p is DateTimeChartPoint) {
-          _seriesMap[index].add(HighlightPoint(DateTimeChartPoint(x, y, p.dateTime), p.y));
+          _seriesMap[index]
+              .add(HighlightPoint(DateTimeChartPoint(x, y, p.dateTime), p.y));
         } else {
           _seriesMap[index].add(HighlightPoint(ChartPoint(x, y), p.y));
         }
@@ -220,12 +233,19 @@ class LineChart {
     double stepInSeconds = duration.inSeconds.toDouble() / (stepCount + 1);
 
     for (int c = 0; c <= (stepCount + 1); c++) {
-      DateTime tick = fromTo.min.add(Duration(seconds: (stepInSeconds * c).round()));
+      DateTime tick =
+          fromTo.min.add(Duration(seconds: (stepInSeconds * c).round()));
 
       TextSpan span = new TextSpan(
-          style: new TextStyle(color: Colors.grey[800], fontSize: 11.0, fontWeight: FontWeight.w200),
+          style: new TextStyle(
+              color: Colors.grey[800],
+              fontSize: 11.0,
+              fontWeight: FontWeight.w200),
           text: _formatDateTime(tick, duration));
-      TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.right, textDirection: TextDirectionHelper.getDirection());
+      TextPainter tp = new TextPainter(
+          text: span,
+          textAlign: TextAlign.right,
+          textDirection: TextDirectionHelper.getDirection());
       tp.layout();
 
       _xAxisTexts.add(tp);
@@ -267,16 +287,20 @@ class LineChart {
     return highlights;
   }
 
-  HighlightPoint _findClosest(List<HighlightPoint> list, double horizontalDragPosition) {
+  HighlightPoint _findClosest(
+      List<HighlightPoint> list, double horizontalDragPosition) {
     HighlightPoint candidate = list[0];
 
-    double candidateDist = ((candidate.chartPoint.x) - horizontalDragPosition).abs();
+    double candidateDist =
+        ((candidate.chartPoint.x) - horizontalDragPosition).abs();
     for (HighlightPoint alternative in list) {
-      double alternativeDist = ((alternative.chartPoint.x) - horizontalDragPosition).abs();
+      double alternativeDist =
+          ((alternative.chartPoint.x) - horizontalDragPosition).abs();
 
       if (alternativeDist < candidateDist) {
         candidate = alternative;
-        candidateDist = ((candidate.chartPoint.x) - horizontalDragPosition).abs();
+        candidateDist =
+            ((candidate.chartPoint.x) - horizontalDragPosition).abs();
       }
       if (alternativeDist > candidateDist) {
         break;
