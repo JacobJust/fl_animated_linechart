@@ -61,3 +61,7 @@
 ## [0.1.5] - 25 september 2019
 
 * Updated readme
+
+## [0.1.6] - 25 september 2019
+
+* Updated readme

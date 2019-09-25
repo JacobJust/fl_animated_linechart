@@ -1,4 +1,3 @@
-
 class Dates {
   final DateTime min;
   final DateTime max;

@@ -4,20 +4,26 @@
 
 ![Animations](chart.gif)
 
-An animated linechart library for flutter.
- - Support for datetime xaxis
- - highlight selection
- - animation the chart
+An animated chart library for flutter.
+ - Support for datetime axis
+ - Multiple y axis, supporting different units
+ - Highlight selection
+ - Animation of the chart
+ - Tested with more than 3000 points and still performing
+
+There are currently two different charts:
+ - line chart
+ - area chart
 
 ## Getting Started
 
 Try the sample project or include in your project.
 
+Highlight for the line chart:
 ![Chart example with highlight](withSelection.png)
 
-
+Area chart:
 ![Area Chart example](areaChart.png)
-
 
 Example code:
 
@@ -39,4 +45,5 @@ Example code:
       ),
     );
 
+The example app, can toggle between line chart and area chart.
 ![Example app](exampleScreenshot.png)

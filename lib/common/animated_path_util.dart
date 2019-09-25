@@ -2,9 +2,9 @@ import 'dart:ui';
 
 class AnimatedPathUtil {
   static Path createAnimatedPath(
-      Path originalPath,
-      double animationPercent,
-      ) {
+    Path originalPath,
+    double animationPercent,
+  ) {
     // ComputeMetrics can only be iterated once!
     final totalLength = originalPath
         .computeMetrics()
@@ -16,9 +16,9 @@ class AnimatedPathUtil {
   }
 
   static Path extractPathUntilLength(
-      Path originalPath,
-      double length,
-      ) {
+    Path originalPath,
+    double length,
+  ) {
     var currentLength = 0.0;
 
     final path = new Path();
@@ -49,4 +49,3 @@ class AnimatedPathUtil {
     return path;
   }
 }
-

@@ -3,12 +3,12 @@ class FakeChartSeries {
     Map<DateTime, double> data = {};
 
     for (int c = 50; c > 0; c--) {
-      data[DateTime.now().subtract(Duration(minutes: c))] = c.toDouble() * factor;
+      data[DateTime.now().subtract(Duration(minutes: c))] =
+          c.toDouble() * factor;
     }
 
     return data;
   }
-
 
   Map<DateTime, double> createLineAlmostSaveValues() {
     Map<DateTime, double> data = {};

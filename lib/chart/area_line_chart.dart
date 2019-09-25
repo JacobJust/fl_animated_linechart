@@ -10,11 +10,13 @@ class AreaLineChart extends LineChart {
 
   AreaLineChart(List<ChartLine> lines, Dates fromTo) : super(lines, fromTo);
 
-  factory AreaLineChart.fromDateTimeMaps(List<Map<DateTime, double>> series, List<Color> colors, List<String> units) {
+  factory AreaLineChart.fromDateTimeMaps(List<Map<DateTime, double>> series,
+      List<Color> colors, List<String> units) {
     assert(series.length == colors.length);
     assert(series.length == units.length);
 
-    Pair<List<ChartLine>, Dates> convertFromDateMaps = DateTimeSeriesConverter.convertFromDateMaps(series, colors, units);
+    Pair<List<ChartLine>, Dates> convertFromDateMaps =
+        DateTimeSeriesConverter.convertFromDateMaps(series, colors, units);
     return AreaLineChart(convertFromDateMaps.left, convertFromDateMaps.right);
   }
 
@@ -28,7 +30,8 @@ class AreaLineChart extends LineChart {
       areaPath.moveTo(pathCache.getBounds().left, pathCache.getBounds().bottom);
       areaPath.addPath(pathCache, Offset(0, 0));
 
-      areaPath.lineTo(pathCache.getBounds().right, pathCache.getBounds().bottom);
+      areaPath.lineTo(
+          pathCache.getBounds().right, pathCache.getBounds().bottom);
       areaPath.lineTo(pathCache.getBounds().left, pathCache.getBounds().bottom);
 
       _areaPathMap[index] = areaPath;
