@@ -57,3 +57,7 @@
 ## [0.1.4] - 25 september 2019
 
 * Adding support for area chart
+
+## [0.1.5] - 25 september 2019
+
+* Updated readme

@@ -2,7 +2,7 @@
 
 [![Codemagic build status](https://api.codemagic.io/apps/5d5e513ff8278e001ca52adf/5d5e513ff8278e001ca52ade/status_badge.svg)](https://codemagic.io/apps/5d5e513ff8278e001ca52adf/5d5e513ff8278e001ca52ade/latest_build)
 
-![Animations](chart.png)
+![Animations](chart.gif)
 
 An animated linechart library for flutter.
  - Support for datetime xaxis
@@ -39,4 +39,4 @@ Example code:
       ),
     );
 
-![Example app](areaChart.png)
+![Example app](exampleScreenshot.png)
