@@ -209,8 +209,6 @@ class LineChart {
 
         double y = (heightPX - axisOffsetPX) - adjustedY;
 
-//        y += (heightPX - axisOffsetPX) /  6;
-
         //adjust to make room for axis values:
         x += xAxisOffsetPX;
         if (_seriesMap[index] == null) {
