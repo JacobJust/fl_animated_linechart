@@ -77,3 +77,7 @@
 ## [0.1.9] - 26 september 2019
 
 * Fixed small offset issue between yaxis and line/point drawing
+
+## [1.0.0] - 26 september 2019
+
+* We consider the library as stable
