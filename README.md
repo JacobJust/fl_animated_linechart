@@ -24,6 +24,7 @@ Highlight for the line chart:
 
 Area chart:
 ![Area Chart example](areaChart.png)
+![Area Chart example](areaChartGradient.png)
 
 Example code:
 

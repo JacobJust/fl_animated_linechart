@@ -5,6 +5,7 @@ import 'package:fl_animated_linechart/chart/datetime_chart_point.dart';
 import 'package:fl_animated_linechart/chart/highlight_point.dart';
 import 'package:fl_animated_linechart/chart/line_chart.dart';
 import 'package:fl_animated_linechart/common/animated_path_util.dart';
+import 'package:fl_animated_linechart/common/pair.dart';
 import 'package:fl_animated_linechart/common/text_direction_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -161,8 +162,7 @@ class ChartPainter extends CustomPainter {
 
   Paint _fillPainter = Paint()
     ..style = PaintingStyle.fill
-    ..strokeWidth = 2
-    ..color = Colors.black26;
+    ..strokeWidth = 2;
 
   Paint _tooltipPainter = Paint()
     ..style = PaintingStyle.fill
@@ -341,12 +341,18 @@ class ChartPainter extends CustomPainter {
 
       canvas.drawPath(path, _linePainter);
 
-      if (_chart is AreaLineChart) {
-        _fillPainter.color =
-            chartLine.color.withAlpha((200 * _progress).round());
+        if (_chart is AreaLineChart) {
         AreaLineChart areaLineChart = _chart;
-        Path areaPathCache = areaLineChart.getAreaPathCache(index);
 
+        if (areaLineChart.gradients != null) {
+          Pair<Color, Color> gradient = areaLineChart.gradients[index];
+
+          _fillPainter.shader = LinearGradient(stops: [0.0, 0.6],colors: [gradient.left.withAlpha((220 * _progress).round()), gradient.right.withAlpha((220 * _progress).round())], begin: Alignment.bottomCenter, end: Alignment.topCenter).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
+        } else {
+          _fillPainter.color = chartLine.color.withAlpha((200 * _progress).round());
+        }
+
+        Path areaPathCache = areaLineChart.getAreaPathCache(index);
         canvas.drawPath(areaPathCache, _fillPainter);
       }
 

@@ -14,7 +14,7 @@ void main() {
 
     AreaLineChart lineChart = AreaLineChart(
         [ChartLineHelper.createLine(10, 2, Colors.cyan, 'W')],
-        Dates(DateTime.now(), DateTime.now()));
+        Dates(DateTime.now(), DateTime.now()), null);
     lineChart.initialize(200, chartHeight);
 
     expectPathCacheToMatch(
@@ -33,7 +33,7 @@ void main() {
 
     AreaLineChart lineChart = AreaLineChart(
         [ChartLineHelper.createLine(10, 2, Colors.cyan, 'W')],
-        Dates(DateTime.now(), DateTime.now()));
+        Dates(DateTime.now(), DateTime.now()), null);
     lineChart.initialize(200, chartHeight);
 
     Path path = lineChart.getAreaPathCache(0);
