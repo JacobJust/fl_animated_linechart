@@ -8,17 +8,21 @@ import 'package:flutter/rendering.dart';
 class AreaLineChart extends LineChart {
   Map<int, Path> _areaPathMap = Map();
 
-  AreaLineChart(List<ChartLine> lines, Dates fromTo) : super(lines, fromTo);
+  final List<Pair<Color, Color>> _gradients;
+
+  AreaLineChart(List<ChartLine> lines, Dates fromTo, this._gradients) : super(lines, fromTo);
 
   factory AreaLineChart.fromDateTimeMaps(List<Map<DateTime, double>> series,
-      List<Color> colors, List<String> units) {
+      List<Color> colors, List<String> units, {List<Pair<Color, Color>> gradients}) {
     assert(series.length == colors.length);
     assert(series.length == units.length);
 
     Pair<List<ChartLine>, Dates> convertFromDateMaps =
         DateTimeSeriesConverter.convertFromDateMaps(series, colors, units);
-    return AreaLineChart(convertFromDateMaps.left, convertFromDateMaps.right);
+    return AreaLineChart(convertFromDateMaps.left, convertFromDateMaps.right, gradients);
   }
+
+  List<Pair<Color, Color>> get gradients => _gradients;
 
   Path getAreaPathCache(int index) {
     if (_areaPathMap.containsKey(index)) {

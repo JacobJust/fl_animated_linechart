@@ -1,5 +1,6 @@
 import 'package:example/fake_chart_series.dart';
 import 'package:fl_animated_linechart/chart/area_line_chart.dart';
+import 'package:fl_animated_linechart/common/pair.dart';
 import 'package:fl_animated_linechart/fl_animated_linechart.dart';
 import 'package:flutter/material.dart';
 
@@ -42,7 +43,7 @@ class _MyHomePageState extends State<MyHomePage> with FakeChartSeries {
       chart = LineChart.fromDateTimeMaps(
           [line1, line2], [Colors.green, Colors.blue], ['C', 'C']);
     } else {
-      chart = AreaLineChart.fromDateTimeMaps([line1], [Colors.green], ['C']);
+      chart = AreaLineChart.fromDateTimeMaps([line1], [Colors.red.shade900], ['C'],  gradients: [Pair(Colors.yellow.shade400, Colors.red.shade700)]);
     }
 
     return Scaffold(

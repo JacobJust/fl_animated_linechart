@@ -69,3 +69,7 @@
 ## [0.1.7] - 25 september 2019
 
 * More detailed description
+
+## [0.1.8] - 25 september 2019
+
+* Added gradient option to the area chart
