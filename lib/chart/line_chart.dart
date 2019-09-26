@@ -15,6 +15,7 @@ import 'package:intl/intl.dart';
 class LineChart {
   final DateFormat _formatHoursMinutes = DateFormat('kk:mm');
   final DateFormat _formatDayMonth = DateFormat('dd/MM');
+  final double _effectiveChartHeightRatio = 5/6; //The lines / points should only draw to 5/6 from the top of the chart area
 
   static final double axisMargin = 5.0;
   static final double axisOffsetPX = 50.0;
@@ -101,8 +102,8 @@ class LineChart {
       _maxY[unitToMinMaxY.entries.first.key] =
           unitToMinMaxY.entries.first.value.right;
       _yScales[unitToMinMaxY.entries.first.key] =
-          (heightPX - axisOffsetPX - 45) /
-              height(unitToMinMaxY.entries.first.key);
+          ((heightPX - axisOffsetPX) /
+              height(unitToMinMaxY.entries.first.key)) * _effectiveChartHeightRatio;
       indexToUnit[0] = unitToMinMaxY.entries.first.key;
     } else if (unitToMinMaxY.length == 2) {
       MapEntry<String, Pair> first = unitToMinMaxY.entries.elementAt(0);
@@ -113,9 +114,8 @@ class LineChart {
       _minY[second.key] = second.value.left;
       _maxY[second.key] = second.value.right;
 
-      double firstYScale = (heightPX - axisOffsetPX - 45) / height(first.key);
-      double secondYScale = (heightPX - axisOffsetPX - 45) /
-          height(second.key); //firstYScale * secondAxisRatio;
+      double firstYScale = ((heightPX - axisOffsetPX) / height(first.key)) * _effectiveChartHeightRatio;
+      double secondYScale = ((heightPX - axisOffsetPX) / height(second.key)) * _effectiveChartHeightRatio;
 
       _yScales[first.key] = firstYScale;
       _yScales[second.key] = secondYScale;
@@ -206,6 +206,7 @@ class LineChart {
 
         double adjustedY = (p.y * _yScales[chartLine.unit]) -
             (_minY[chartLine.unit] * _yScales[chartLine.unit]);
+
         double y = (heightPX - axisOffsetPX) - adjustedY;
 
         //adjust to make room for axis values:

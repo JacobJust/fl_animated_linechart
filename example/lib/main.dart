@@ -30,7 +30,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> with FakeChartSeries {
-  bool _showLineChart = true;
+  int chartIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +39,12 @@ class _MyHomePageState extends State<MyHomePage> with FakeChartSeries {
 
     LineChart chart;
 
-    if (_showLineChart) {
+    if (chartIndex == 0) {
       chart = LineChart.fromDateTimeMaps(
           [line1, line2], [Colors.green, Colors.blue], ['C', 'C']);
+    } else if (chartIndex == 1) {
+      chart = LineChart.fromDateTimeMaps(
+          [createLineAlmostSaveValues()], [Colors.green], ['C']);
     } else {
       chart = AreaLineChart.fromDateTimeMaps([line1], [Colors.red.shade900], ['C'],  gradients: [Pair(Colors.yellow.shade400, Colors.red.shade700)]);
     }
@@ -70,11 +73,26 @@ class _MyHomePageState extends State<MyHomePage> with FakeChartSeries {
                         'LineChart',
                         style: TextStyle(
                             color:
-                                _showLineChart ? Colors.black : Colors.black12),
+                            chartIndex == 0 ? Colors.black : Colors.black12),
                       ),
                       onPressed: () {
                         setState(() {
-                          _showLineChart = true;
+                          chartIndex = 0;
+                        });
+                      },
+                    ),
+                    FlatButton(
+                      shape: RoundedRectangleBorder(
+                          side: BorderSide(color: Colors.black45),
+                          borderRadius: BorderRadius.all(Radius.circular(3))),
+                      child: Text('LineChart2',
+                          style: TextStyle(
+                              color: chartIndex == 1
+                                  ? Colors.black
+                                  : Colors.black12)),
+                      onPressed: () {
+                        setState(() {
+                          chartIndex = 1;
                         });
                       },
                     ),
@@ -84,12 +102,12 @@ class _MyHomePageState extends State<MyHomePage> with FakeChartSeries {
                           borderRadius: BorderRadius.all(Radius.circular(3))),
                       child: Text('AreaChart',
                           style: TextStyle(
-                              color: !_showLineChart
+                              color: chartIndex == 2
                                   ? Colors.black
                                   : Colors.black12)),
                       onPressed: () {
                         setState(() {
-                          _showLineChart = false;
+                          chartIndex = 2;
                         });
                       },
                     ),
@@ -104,7 +122,7 @@ class _MyHomePageState extends State<MyHomePage> with FakeChartSeries {
                   key: UniqueKey(),
                 ), //Unique key to force animations
               )),
-              SizedBox(width: 200, height: 200, child: Text('')),
+              SizedBox(width: 200, height: 50, child: Text('')),
             ]),
       ),
     );

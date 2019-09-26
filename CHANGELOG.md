@@ -73,3 +73,7 @@
 ## [0.1.8] - 25 september 2019
 
 * Added gradient option to the area chart
+
+## [0.1.9] - 26 september 2019
+
+* Fixed small offset issue between yaxis and line/point drawing
