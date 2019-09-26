@@ -96,7 +96,7 @@ void main() {
     ], Dates(DateTime.now(), DateTime.now()));
     lineChart.initialize(200, 100);
 
-    expect(lineChart.yScale('W'), 0.2777777777777778);
+    expect(lineChart.yScale('W'), 2.314814814814815);
   });
 
   test('test heightStepSize', () async {
@@ -204,7 +204,7 @@ void main() {
 
     expect(closetHighlightPoints.length, 1);
     expect(closetHighlightPoints[0].chartPoint.x, 96.33333333333333);
-    expect(closetHighlightPoints[0].chartPoint.y, 48.333333333333336);
+    expect(closetHighlightPoints[0].chartPoint.y, 36.111111111111114);
   });
 
   test('y axis calculations', () async {
@@ -320,8 +320,8 @@ void main() {
 
     lineChart.initialize(200, 100);
 
-    expect(lineChart.yScale('C'), 0.5555555555555556);
-    expect(lineChart.yScale('F'), 0.05555555555555555);
+    expect(lineChart.yScale('C'), 4.62962962962963);
+    expect(lineChart.yScale('F'), 0.462962962962963);
   });
 
   test('multi axis support highlight tooltip for scaled axis', () async {
