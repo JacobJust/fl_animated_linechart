@@ -54,22 +54,17 @@ class _AnimatedLineChartState extends State<AnimatedLineChart>
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
       widget.chart.initialize(constraints.maxWidth, constraints.maxHeight);
-      return _GestureWrapper(constraints.maxHeight, constraints.maxWidth,
-          widget.chart, _animation);
+      return _GestureWrapper(widget.chart, _animation);
     });
   }
 }
 
 //Wrap gestures, to avoid reinitializing the chart model when doing gestures
 class _GestureWrapper extends StatefulWidget {
-  final double _height;
-  final double _width;
   final LineChart _chart;
   final Animation _animation;
 
   const _GestureWrapper(
-    this._height,
-    this._width,
     this._chart,
     this._animation, {
     Key key,
@@ -88,8 +83,6 @@ class _GestureWrapperState extends State<_GestureWrapper> {
     return GestureDetector(
       child: _AnimatedChart(
         widget._chart,
-        widget._width,
-        widget._height,
         _horizontalDragActive,
         _horizontalDragPosition,
         animation: widget._animation,
@@ -123,14 +116,12 @@ class _GestureWrapperState extends State<_GestureWrapper> {
 }
 
 class _AnimatedChart extends AnimatedWidget {
-  final double _height;
-  final double _width;
   final LineChart _chart;
   final bool _horizontalDragActive;
   final double _horizontalDragPosition;
 
-  _AnimatedChart(this._chart, this._width, this._height,
-      this._horizontalDragActive, this._horizontalDragPosition,
+  _AnimatedChart(
+      this._chart, this._horizontalDragActive, this._horizontalDragPosition,
       {Key key, Animation animation})
       : super(key: key, listenable: animation);
 
@@ -341,15 +332,23 @@ class ChartPainter extends CustomPainter {
 
       canvas.drawPath(path, _linePainter);
 
-        if (_chart is AreaLineChart) {
+      if (_chart is AreaLineChart) {
         AreaLineChart areaLineChart = _chart;
 
         if (areaLineChart.gradients != null) {
           Pair<Color, Color> gradient = areaLineChart.gradients[index];
 
-          _fillPainter.shader = LinearGradient(stops: [0.0, 0.6],colors: [gradient.left.withAlpha((220 * _progress).round()), gradient.right.withAlpha((220 * _progress).round())], begin: Alignment.bottomCenter, end: Alignment.topCenter).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
+          _fillPainter.shader = LinearGradient(stops: [
+            0.0,
+            0.6
+          ], colors: [
+            gradient.left.withAlpha((220 * _progress).round()),
+            gradient.right.withAlpha((220 * _progress).round())
+          ], begin: Alignment.bottomCenter, end: Alignment.topCenter)
+              .createShader(Rect.fromLTWH(0, 0, size.width, size.height));
         } else {
-          _fillPainter.color = chartLine.color.withAlpha((200 * _progress).round());
+          _fillPainter.color =
+              chartLine.color.withAlpha((200 * _progress).round());
         }
 
         Path areaPathCache = areaLineChart.getAreaPathCache(index);

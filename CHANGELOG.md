@@ -81,3 +81,11 @@
 ## [1.0.0] - 26 september 2019
 
 * We consider the library as stable
+
+## [1.0.1] - 12 december 2019
+
+* Upgrade intl package
+
+## [1.0.2] - 12 december 2019
+
+* Updated pub.dev health recommendations
