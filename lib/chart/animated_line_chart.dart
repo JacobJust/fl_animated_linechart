@@ -13,10 +13,12 @@ import 'package:intl/intl.dart';
 
 class AnimatedLineChart extends StatefulWidget {
   final LineChart chart;
+  final String Function(String prefix, double y, String unit) mouseOverText;
 
   const AnimatedLineChart(
     this.chart, {
     Key key,
+    this.mouseOverText,
   }) : super(key: key);
 
   @override
@@ -54,7 +56,11 @@ class _AnimatedLineChartState extends State<AnimatedLineChart>
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
       widget.chart.initialize(constraints.maxWidth, constraints.maxHeight);
-      return _GestureWrapper(widget.chart, _animation);
+      return _GestureWrapper(
+        widget.chart,
+        _animation,
+        mouseOverText: widget.mouseOverText,
+      );
     });
   }
 }
@@ -63,11 +69,13 @@ class _AnimatedLineChartState extends State<AnimatedLineChart>
 class _GestureWrapper extends StatefulWidget {
   final LineChart _chart;
   final Animation _animation;
+  final String Function(String prefix, double y, String unit) mouseOverText;
 
   const _GestureWrapper(
     this._chart,
     this._animation, {
     Key key,
+    this.mouseOverText,
   }) : super(key: key);
 
   @override
@@ -86,6 +94,7 @@ class _GestureWrapperState extends State<_GestureWrapper> {
         _horizontalDragActive,
         _horizontalDragPosition,
         animation: widget._animation,
+        mouseOverText: widget.mouseOverText,
       ),
       onTapDown: (tap) {
         _horizontalDragActive = true;
@@ -119,10 +128,11 @@ class _AnimatedChart extends AnimatedWidget {
   final LineChart _chart;
   final bool _horizontalDragActive;
   final double _horizontalDragPosition;
+  final String Function(String prefix, double y, String unit) mouseOverText;
 
   _AnimatedChart(
       this._chart, this._horizontalDragActive, this._horizontalDragPosition,
-      {Key key, Animation animation})
+      {this.mouseOverText, Key key, Animation animation})
       : super(key: key, listenable: animation);
 
   @override
@@ -131,7 +141,8 @@ class _AnimatedChart extends AnimatedWidget {
 
     return CustomPaint(
       painter: ChartPainter(animation?.value, _chart, _horizontalDragActive,
-          _horizontalDragPosition),
+          _horizontalDragPosition,
+          mouseOverText: mouseOverText),
     );
   }
 }
@@ -164,8 +175,16 @@ class ChartPainter extends CustomPainter {
   final bool _horizontalDragActive;
   final double _horizontalDragPosition;
 
+  final String Function(String prefix, double y, String unit) mouseOverText;
+
+  static final String Function(String prefix, double y, String unit)
+      _defaultMouseOverText =
+      (prefix, y, unit) => '$prefix: ${y.toStringAsFixed(1)} $unit';
+
   ChartPainter(this._progress, this._chart, this._horizontalDragActive,
-      this._horizontalDragPosition);
+      this._horizontalDragPosition,
+      {String Function(String prefix, double y, String unit) mouseOverText})
+      : mouseOverText = mouseOverText ?? _defaultMouseOverText;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -224,8 +243,11 @@ class ChartPainter extends CustomPainter {
               color: _chart.lines[index].color,
               fontWeight: FontWeight.w200,
               fontSize: 12),
-          text:
-              '$prefix: ${highlight.yValue.toStringAsFixed(1)} ${_chart.lines[index].unit}');
+          text: mouseOverText(
+            prefix,
+            highlight.yValue,
+            _chart.lines[index].unit,
+          ));
       TextPainter tp = new TextPainter(
           text: span,
           textAlign: TextAlign.right,
