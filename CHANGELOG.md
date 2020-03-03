@@ -89,3 +89,7 @@
 ## [1.0.2] - 12 december 2019
 
 * Updated pub.dev health recommendations
+
+## [1.1.0] - 3. march 2020
+
+* Make mouse over text configurable
