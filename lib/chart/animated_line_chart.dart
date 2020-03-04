@@ -230,7 +230,7 @@ class ChartPainter extends CustomPainter {
       canvas.drawCircle(Offset(highlight.chartPoint.x, highlight.chartPoint.y),
           5, _linePainter);
 
-      String prefix = "";
+      String prefix = '';
 
       if (highlight.chartPoint is DateTimeChartPoint) {
         DateTimeChartPoint dateTimeChartPoint = highlight.chartPoint;
