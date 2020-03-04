@@ -1,3 +1,7 @@
+## [1.1.1]
+
+* Refactor mouse over text to TapText typedef and expose it on factory method
+
 ## [1.1.0]
 
 * Make mouse over text configurable
