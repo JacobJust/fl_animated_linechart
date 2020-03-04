@@ -7,18 +7,19 @@ import 'package:fl_animated_linechart/chart/line_chart.dart';
 import 'package:fl_animated_linechart/common/animated_path_util.dart';
 import 'package:fl_animated_linechart/common/pair.dart';
 import 'package:fl_animated_linechart/common/text_direction_helper.dart';
+import 'package:fl_animated_linechart/fl_animated_linechart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
 class AnimatedLineChart extends StatefulWidget {
   final LineChart chart;
-  final String Function(String prefix, double y, String unit) mouseOverText;
+  final TapText tapText;
 
   const AnimatedLineChart(
     this.chart, {
     Key key,
-    this.mouseOverText,
+    this.tapText,
   }) : super(key: key);
 
   @override
@@ -59,7 +60,7 @@ class _AnimatedLineChartState extends State<AnimatedLineChart>
       return _GestureWrapper(
         widget.chart,
         _animation,
-        mouseOverText: widget.mouseOverText,
+        tapText: widget.tapText,
       );
     });
   }
@@ -69,13 +70,13 @@ class _AnimatedLineChartState extends State<AnimatedLineChart>
 class _GestureWrapper extends StatefulWidget {
   final LineChart _chart;
   final Animation _animation;
-  final String Function(String prefix, double y, String unit) mouseOverText;
+  final TapText tapText;
 
   const _GestureWrapper(
     this._chart,
     this._animation, {
     Key key,
-    this.mouseOverText,
+    this.tapText,
   }) : super(key: key);
 
   @override
@@ -94,7 +95,7 @@ class _GestureWrapperState extends State<_GestureWrapper> {
         _horizontalDragActive,
         _horizontalDragPosition,
         animation: widget._animation,
-        mouseOverText: widget.mouseOverText,
+        tapText: widget.tapText,
       ),
       onTapDown: (tap) {
         _horizontalDragActive = true;
@@ -128,11 +129,11 @@ class _AnimatedChart extends AnimatedWidget {
   final LineChart _chart;
   final bool _horizontalDragActive;
   final double _horizontalDragPosition;
-  final String Function(String prefix, double y, String unit) mouseOverText;
+  final TapText tapText;
 
   _AnimatedChart(
       this._chart, this._horizontalDragActive, this._horizontalDragPosition,
-      {this.mouseOverText, Key key, Animation animation})
+      {this.tapText, Key key, Animation animation})
       : super(key: key, listenable: animation);
 
   @override
@@ -142,7 +143,7 @@ class _AnimatedChart extends AnimatedWidget {
     return CustomPaint(
       painter: ChartPainter(animation?.value, _chart, _horizontalDragActive,
           _horizontalDragPosition,
-          mouseOverText: mouseOverText),
+          tapText: tapText),
     );
   }
 }
@@ -175,16 +176,15 @@ class ChartPainter extends CustomPainter {
   final bool _horizontalDragActive;
   final double _horizontalDragPosition;
 
-  final String Function(String prefix, double y, String unit) mouseOverText;
+  final TapText tapText;
 
-  static final String Function(String prefix, double y, String unit)
-      _defaultMouseOverText =
+  static final TapText _defaultTapText =
       (prefix, y, unit) => '$prefix: ${y.toStringAsFixed(1)} $unit';
 
   ChartPainter(this._progress, this._chart, this._horizontalDragActive,
       this._horizontalDragPosition,
-      {String Function(String prefix, double y, String unit) mouseOverText})
-      : mouseOverText = mouseOverText ?? _defaultMouseOverText;
+      {TapText tapText})
+      : tapText = tapText ?? _defaultTapText;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -238,17 +238,17 @@ class ChartPainter extends CustomPainter {
             _formatMonthDayHoursMinutes.format(dateTimeChartPoint.dateTime);
       }
 
-      TextSpan span = new TextSpan(
-          style: new TextStyle(
+      TextSpan span = TextSpan(
+          style: TextStyle(
               color: _chart.lines[index].color,
               fontWeight: FontWeight.w200,
               fontSize: 12),
-          text: mouseOverText(
+          text: tapText(
             prefix,
             highlight.yValue,
             _chart.lines[index].unit,
           ));
-      TextPainter tp = new TextPainter(
+      TextPainter tp = TextPainter(
           text: span,
           textAlign: TextAlign.right,
           textDirection: TextDirectionHelper.getDirection());
@@ -298,7 +298,7 @@ class ChartPainter extends CustomPainter {
       TextPainter tp = _chart.yAxisTexts(0)[c];
       tp.paint(
           canvas,
-          new Offset(
+          Offset(
               _chart.axisOffSetWithPadding - tp.width,
               (size.height - 6) -
                   (c * _chart.heightStepSize) -
@@ -310,7 +310,7 @@ class ChartPainter extends CustomPainter {
         TextPainter tp = _chart.yAxisTexts(1)[c];
         tp.paint(
             canvas,
-            new Offset(
+            Offset(
                 LineChart.axisMargin + size.width - _chart.xAxisOffsetPXright,
                 (size.height - 6) -
                     (c * _chart.heightStepSize) -
@@ -391,17 +391,17 @@ class ChartPainter extends CustomPainter {
         color = Colors.black54;
       }
 
-      TextSpan span = new TextSpan(
-          style: new TextStyle(
+      TextSpan span = TextSpan(
+          style: TextStyle(
               color: color, fontWeight: FontWeight.w200, fontSize: 14),
           text: _chart.indexToUnit[0]);
-      TextPainter tp = new TextPainter(
+      TextPainter tp = TextPainter(
           text: span,
           textAlign: TextAlign.right,
           textDirection: TextDirectionHelper.getDirection());
       tp.layout();
 
-      tp.paint(canvas, new Offset(_chart.xAxisOffsetPX, -16));
+      tp.paint(canvas, Offset(_chart.xAxisOffsetPX, -16));
     }
 
     if (_chart.indexToUnit.length == 2) {
@@ -413,18 +413,18 @@ class ChartPainter extends CustomPainter {
         color = Colors.black54;
       }
 
-      TextSpan span = new TextSpan(
-          style: new TextStyle(
+      TextSpan span = TextSpan(
+          style: TextStyle(
               color: color, fontWeight: FontWeight.w200, fontSize: 14),
           text: _chart.indexToUnit[1]);
-      TextPainter tp = new TextPainter(
+      TextPainter tp = TextPainter(
           text: span,
           textAlign: TextAlign.right,
           textDirection: TextDirectionHelper.getDirection());
       tp.layout();
 
       tp.paint(canvas,
-          new Offset(size.width - tp.width - _chart.xAxisOffsetPXright, -16));
+          Offset(size.width - tp.width - _chart.xAxisOffsetPXright, -16));
     }
   }
 
@@ -456,7 +456,7 @@ class ChartPainter extends CustomPainter {
     canvas.save();
     canvas.translate(x, y + tp.width);
     canvas.rotate(angleRotationInRadians);
-    tp.paint(canvas, new Offset(0.0, 0.0));
+    tp.paint(canvas, Offset(0.0, 0.0));
     canvas.restore();
   }
 
