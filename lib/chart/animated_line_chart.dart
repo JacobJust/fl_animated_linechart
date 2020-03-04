@@ -7,10 +7,11 @@ import 'package:fl_animated_linechart/chart/line_chart.dart';
 import 'package:fl_animated_linechart/common/animated_path_util.dart';
 import 'package:fl_animated_linechart/common/pair.dart';
 import 'package:fl_animated_linechart/common/text_direction_helper.dart';
-import 'package:fl_animated_linechart/fl_animated_linechart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+
+typedef TapText = String Function(String prefix, double y, String unit);
 
 class AnimatedLineChart extends StatefulWidget {
   final LineChart chart;

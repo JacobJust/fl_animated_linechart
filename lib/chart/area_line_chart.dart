@@ -3,10 +3,7 @@ import 'package:fl_animated_linechart/chart/datetime_series_converter.dart';
 import 'package:fl_animated_linechart/chart/line_chart.dart';
 import 'package:fl_animated_linechart/common/dates.dart';
 import 'package:fl_animated_linechart/common/pair.dart';
-import 'package:fl_animated_linechart/fl_animated_linechart.dart';
 import 'package:flutter/rendering.dart';
-
-typedef TapText = String Function(String prefix, double y, String unit);
 
 class AreaLineChart extends LineChart {
   Map<int, Path> _areaPathMap = Map();
