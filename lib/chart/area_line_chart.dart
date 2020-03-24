@@ -17,7 +17,7 @@ class AreaLineChart extends LineChart {
 
   factory AreaLineChart.fromDateTimeMaps(List<Map<DateTime, double>> series,
       List<Color> colors, List<String> units,
-      {List<Pair<Color, Color>> gradients, FontWeight fontWeight}) {
+      {List<Pair<Color, Color>> gradients, FontWeight tapTextFontWeight}) {
     assert(series.length == colors.length);
     assert(series.length == units.length);
 
@@ -25,7 +25,7 @@ class AreaLineChart extends LineChart {
         DateTimeSeriesConverter.convertFromDateMaps(series, colors, units);
     return AreaLineChart(
         convertFromDateMaps.left, convertFromDateMaps.right, gradients,
-        tapTextFontWeight: fontWeight);
+        tapTextFontWeight: tapTextFontWeight);
   }
 
   List<Pair<Color, Color>> get gradients => _gradients;
