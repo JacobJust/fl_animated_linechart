@@ -242,7 +242,7 @@ class ChartPainter extends CustomPainter {
       TextSpan span = TextSpan(
           style: TextStyle(
               color: _chart.lines[index].color,
-              fontWeight: FontWeight.w200,
+              fontWeight: FontWeight.w700,
               fontSize: 12),
           text: tapText(
             prefix,
