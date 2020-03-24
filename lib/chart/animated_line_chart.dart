@@ -195,11 +195,11 @@ class ChartPainter extends CustomPainter {
     _drawAxisValues(canvas, size);
 
     if (_horizontalDragActive) {
-      _drawHighlights(size, canvas);
+      _drawHighlights(size, canvas, _chart.tapTextFontWeight);
     }
   }
 
-  void _drawHighlights(Size size, Canvas canvas) {
+  void _drawHighlights(Size size, Canvas canvas, FontWeight tapTextFontWeight) {
     _linePainter.color = Colors.black45;
 
     if (_horizontalDragPosition > LineChart.axisOffsetPX &&
@@ -242,7 +242,7 @@ class ChartPainter extends CustomPainter {
       TextSpan span = TextSpan(
           style: TextStyle(
               color: _chart.lines[index].color,
-              fontWeight: FontWeight.w700,
+              fontWeight: tapTextFontWeight ?? FontWeight.w200,
               fontSize: 12),
           text: tapText(
             prefix,

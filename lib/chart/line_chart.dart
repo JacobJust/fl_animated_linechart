@@ -16,6 +16,7 @@ class LineChart {
   final DateFormat _formatHoursMinutes = DateFormat('kk:mm');
   final DateFormat _formatDayMonth = DateFormat('dd/MM');
   final double _effectiveChartHeightRatio = 5 / 6;
+  final FontWeight tapTextFontWeight;
   //The lines / points should only draw to 5/6 from the top of the chart area
 
   static final double axisMargin = 5.0;
@@ -45,16 +46,18 @@ class LineChart {
   List<TextPainter> _xAxisTexts;
   Map<int, String> indexToUnit;
 
-  LineChart(this.lines, this.fromTo);
+  LineChart(this.lines, this.fromTo, {this.tapTextFontWeight});
 
   factory LineChart.fromDateTimeMaps(List<Map<DateTime, double>> series,
-      List<Color> colors, List<String> units) {
+      List<Color> colors, List<String> units,
+      {FontWeight tapTextFontWeight}) {
     assert(series.length == colors.length);
     assert(series.length == units.length);
 
     Pair<List<ChartLine>, Dates> convertFromDateMaps =
         DateTimeSeriesConverter.convertFromDateMaps(series, colors, units);
-    return LineChart(convertFromDateMaps.left, convertFromDateMaps.right);
+    return LineChart(convertFromDateMaps.left, convertFromDateMaps.right,
+        tapTextFontWeight: tapTextFontWeight);
   }
 
   double get width => _maxX - _minX;
