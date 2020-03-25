@@ -1,3 +1,7 @@
+## [1.1.2]
+
+* Expose parameter to configure the FontWeight of the highlighted text in charts
+
 ## [1.1.1]
 
 * Refactor mouse over text to TapText typedef and expose it on factory method
