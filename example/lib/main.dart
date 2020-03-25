@@ -41,12 +41,16 @@ class _MyHomePageState extends State<MyHomePage> with FakeChartSeries {
 
     if (chartIndex == 0) {
       chart = LineChart.fromDateTimeMaps(
-          [line1, line2], [Colors.green, Colors.blue], ['C', 'C']);
+          [line1, line2], [Colors.green, Colors.blue], ['C', 'C'],
+          tapTextFontWeight: FontWeight.w400);
     } else if (chartIndex == 1) {
       chart = LineChart.fromDateTimeMaps(
-          [createLineAlmostSaveValues()], [Colors.green], ['C']);
+          [createLineAlmostSaveValues()], [Colors.green], ['C'],
+          tapTextFontWeight: FontWeight.w400);
     } else {
-      chart = AreaLineChart.fromDateTimeMaps([line1], [Colors.red.shade900], ['C'],  gradients: [Pair(Colors.yellow.shade400, Colors.red.shade700)]);
+      chart = AreaLineChart.fromDateTimeMaps(
+          [line1], [Colors.red.shade900], ['C'],
+          gradients: [Pair(Colors.yellow.shade400, Colors.red.shade700)]);
     }
 
     return Scaffold(
@@ -72,8 +76,9 @@ class _MyHomePageState extends State<MyHomePage> with FakeChartSeries {
                       child: Text(
                         'LineChart',
                         style: TextStyle(
-                            color:
-                            chartIndex == 0 ? Colors.black : Colors.black12),
+                            color: chartIndex == 0
+                                ? Colors.black
+                                : Colors.black12),
                       ),
                       onPressed: () {
                         setState(() {
