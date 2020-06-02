@@ -15,8 +15,6 @@ import 'package:intl/intl.dart';
 class LineChart {
   final DateFormat formatHoursMinutes;
   final DateFormat formatDayMonth;
-  static const String _defaultFormatHoursMinutes = 'kk:mm';
-  static const String _defaultFormatDayMonth = 'dd/MM';
   final double _effectiveChartHeightRatio = 5 / 6;
   final FontWeight tapTextFontWeight;
   //The lines / points should only draw to 5/6 from the top of the chart area
@@ -50,8 +48,8 @@ class LineChart {
 
   LineChart(this.lines, this.fromTo,
       {this.tapTextFontWeight,
-      String formatHoursMinutes = _defaultFormatHoursMinutes,
-      String formatDayMonth = _defaultFormatDayMonth})
+      String formatHoursMinutes = 'kk:mm',
+      String formatDayMonth = 'dd/MM'})
       : this.formatHoursMinutes = DateFormat(formatHoursMinutes),
         this.formatDayMonth = DateFormat(formatDayMonth);
 
