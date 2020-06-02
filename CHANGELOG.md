@@ -1,3 +1,8 @@
+## [1.1.3]
+
+* Fix to support any lines
+* Make the pattern for date/time configurable
+
 ## [1.1.2]
 
 * Expose parameter to configure the FontWeight of the highlighted text in charts
