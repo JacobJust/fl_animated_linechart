@@ -13,8 +13,8 @@ import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 
 class LineChart {
-  final DateFormat formatHoursMinutes;
-  final DateFormat formatDayMonth;
+  final DateFormat _formatHoursMinutes;
+  final DateFormat _formatDayMonth;
   final double _effectiveChartHeightRatio = 5 / 6;
   final FontWeight tapTextFontWeight;
   //The lines / points should only draw to 5/6 from the top of the chart area
@@ -50,8 +50,8 @@ class LineChart {
       {this.tapTextFontWeight,
       String formatHoursMinutes = 'kk:mm',
       String formatDayMonth = 'dd/MM'})
-      : this.formatHoursMinutes = DateFormat(formatHoursMinutes),
-        this.formatDayMonth = DateFormat(formatDayMonth);
+      : this._formatHoursMinutes = DateFormat(formatHoursMinutes),
+        this._formatDayMonth = DateFormat(formatDayMonth);
 
   factory LineChart.fromDateTimeMaps(List<Map<DateTime, double>> series,
       List<Color> colors, List<String> units,
@@ -242,9 +242,9 @@ class LineChart {
 
   String _formatDateTime(DateTime dateTime, Duration duration) {
     if (duration.inHours < 30) {
-      return formatHoursMinutes.format(dateTime.toLocal());
+      return _formatHoursMinutes.format(dateTime.toLocal());
     } else {
-      return formatDayMonth.format(dateTime.toLocal());
+      return _formatDayMonth.format(dateTime.toLocal());
     }
   }
 
