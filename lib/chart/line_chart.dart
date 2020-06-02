@@ -92,43 +92,19 @@ class LineChart {
       }
     });
 
-    assert(unitToMinMaxY.length <=
-        2); //The line chart supports max 2 different units
-
     _minY = Map();
     _maxY = Map();
     _yScales = Map();
     indexToUnit = Map();
 
-    if (unitToMinMaxY.length == 1) {
-      _minY[unitToMinMaxY.entries.first.key] =
-          unitToMinMaxY.entries.first.value.left;
-      _maxY[unitToMinMaxY.entries.first.key] =
-          unitToMinMaxY.entries.first.value.right;
-      _yScales[unitToMinMaxY.entries.first.key] = ((heightPX - axisOffsetPX) /
-              height(unitToMinMaxY.entries.first.key)) *
-          _effectiveChartHeightRatio;
-      indexToUnit[0] = unitToMinMaxY.entries.first.key;
-    } else if (unitToMinMaxY.length == 2) {
-      MapEntry<String, Pair> first = unitToMinMaxY.entries.elementAt(0);
-      MapEntry<String, Pair> second = unitToMinMaxY.entries.elementAt(1);
-
-      _minY[first.key] = first.value.left;
-      _maxY[first.key] = first.value.right;
-      _minY[second.key] = second.value.left;
-      _maxY[second.key] = second.value.right;
-
-      double firstYScale = ((heightPX - axisOffsetPX) / height(first.key)) *
-          _effectiveChartHeightRatio;
-      double secondYScale = ((heightPX - axisOffsetPX) / height(second.key)) *
-          _effectiveChartHeightRatio;
-
-      _yScales[first.key] = firstYScale;
-      _yScales[second.key] = secondYScale;
-
-      indexToUnit[0] = first.key;
-      indexToUnit[1] = second.key;
-    }
+    int i = 0;
+    unitToMinMaxY.forEach((key, value) {
+      _minY[key] = value.left;
+      _maxY[key] = value.right;
+      _yScales[key] = ((heightPX - axisOffsetPX) / height(key)) 
+          * _effectiveChartHeightRatio;
+      indexToUnit[i++] = key;
+    });
   }
 
   //Calculate ui pixels values
