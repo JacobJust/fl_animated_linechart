@@ -16,11 +16,13 @@ typedef TapText = String Function(String prefix, double y, String unit);
 class AnimatedLineChart extends StatefulWidget {
   final LineChart chart;
   final TapText tapText;
+  final TextStyle style;
 
   const AnimatedLineChart(
     this.chart, {
     Key key,
     this.tapText,
+    this.style
   }) : super(key: key);
 
   @override
@@ -57,7 +59,7 @@ class _AnimatedLineChartState extends State<AnimatedLineChart>
   Widget build(BuildContext context) {
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-      widget.chart.initialize(constraints.maxWidth, constraints.maxHeight);
+      widget.chart.initialize(constraints.maxWidth, constraints.maxHeight, widget.style);
       return _GestureWrapper(
         widget.chart,
         _animation,
@@ -131,10 +133,11 @@ class _AnimatedChart extends AnimatedWidget {
   final bool _horizontalDragActive;
   final double _horizontalDragPosition;
   final TapText tapText;
+  final TextStyle style;
 
   _AnimatedChart(
       this._chart, this._horizontalDragActive, this._horizontalDragPosition,
-      {this.tapText, Key key, Animation animation})
+      {this.tapText, Key key, Animation animation, this.style})
       : super(key: key, listenable: animation);
 
   @override
@@ -143,7 +146,7 @@ class _AnimatedChart extends AnimatedWidget {
 
     return CustomPaint(
       painter: ChartPainter(animation?.value, _chart, _horizontalDragActive,
-          _horizontalDragPosition,
+          _horizontalDragPosition, style,
           tapText: tapText),
     );
   }
@@ -178,28 +181,29 @@ class ChartPainter extends CustomPainter {
   final double _horizontalDragPosition;
 
   final TapText tapText;
+  final TextStyle style;
 
   static final TapText _defaultTapText =
       (prefix, y, unit) => '$prefix: ${y.toStringAsFixed(1)} $unit';
 
   ChartPainter(this._progress, this._chart, this._horizontalDragActive,
-      this._horizontalDragPosition,
+      this._horizontalDragPosition, this.style,
       {TapText tapText})
       : tapText = tapText ?? _defaultTapText;
 
   @override
   void paint(Canvas canvas, Size size) {
     _drawGrid(canvas, size);
-    _drawUnits(canvas, size);
+    _drawUnits(canvas, size, style);
     _drawLines(size, canvas);
     _drawAxisValues(canvas, size);
 
     if (_horizontalDragActive) {
-      _drawHighlights(size, canvas, _chart.tapTextFontWeight);
+      _drawHighlights(size, canvas, _chart.tapTextFontWeight, style);
     }
   }
 
-  void _drawHighlights(Size size, Canvas canvas, FontWeight tapTextFontWeight) {
+  void _drawHighlights(Size size, Canvas canvas, FontWeight tapTextFontWeight, TextStyle style) {
     _linePainter.color = Colors.black45;
 
     if (_horizontalDragPosition > LineChart.axisOffsetPX &&
@@ -240,10 +244,7 @@ class ChartPainter extends CustomPainter {
       }
 
       TextSpan span = TextSpan(
-          style: TextStyle(
-              color: _chart.lines[index].color,
-              fontWeight: tapTextFontWeight ?? FontWeight.w400,
-              fontSize: 12),
+          style: style,
           text: tapText(
             prefix,
             highlight.yValue,
@@ -382,19 +383,11 @@ class ChartPainter extends CustomPainter {
     });
   }
 
-  void _drawUnits(Canvas canvas, Size size) {
+  void _drawUnits(Canvas canvas, Size size, TextStyle style) {
     if (_chart.indexToUnit.length > 0) {
-      Color color;
-
-      if (_chart.lines.length == 2 && _chart.indexToUnit.length == 2) {
-        color = _chart.lines[0].color;
-      } else {
-        color = Colors.black54;
-      }
 
       TextSpan span = TextSpan(
-          style: TextStyle(
-              color: color, fontWeight: FontWeight.w200, fontSize: 14),
+          style: style,
           text: _chart.indexToUnit[0]);
       TextPainter tp = TextPainter(
           text: span,
@@ -406,17 +399,8 @@ class ChartPainter extends CustomPainter {
     }
 
     if (_chart.indexToUnit.length == 2) {
-      Color color;
-
-      if (_chart.lines.length == 2) {
-        color = _chart.lines[1].color;
-      } else {
-        color = Colors.black54;
-      }
-
       TextSpan span = TextSpan(
-          style: TextStyle(
-              color: color, fontWeight: FontWeight.w200, fontSize: 14),
+          style: style,
           text: _chart.indexToUnit[1]);
       TextPainter tp = TextPainter(
           text: span,
