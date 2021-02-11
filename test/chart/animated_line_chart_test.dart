@@ -24,7 +24,16 @@ void main() {
       TextStyle(color: Colors.grey[800], fontSize: 11.0, fontWeight: FontWeight.w200),
     );
 
-    await tester.pumpWidget(buildTestableWidget(AnimatedLineChart(lineChart)));
+    await tester.pumpWidget(
+      buildTestableWidget(
+        AnimatedLineChart(
+          lineChart,
+          gridColor: Colors.black54,
+          textStyle: TextStyle(fontSize: 10, color: Colors.black54),
+          toolTipColor: Colors.white,
+        ),
+      ),
+    );
 
     int count = 0;
 
@@ -74,7 +83,12 @@ void main() {
     );
 
     await tester.pumpWidget(buildTestableWidget(SizedBox(
-      child: AnimatedLineChart(lineChart),
+      child: AnimatedLineChart(
+        lineChart,
+        gridColor: Colors.black54,
+        textStyle: TextStyle(fontSize: 10, color: Colors.black54),
+        toolTipColor: Colors.white,
+      ),
       width: 500,
       height: 500,
     )));
@@ -131,7 +145,12 @@ void main() {
     );
 
     await tester.pumpWidget(buildTestableWidget(SizedBox(
-      child: AnimatedLineChart(lineChart),
+      child: AnimatedLineChart(
+        lineChart,
+        gridColor: Colors.black54,
+        textStyle: TextStyle(fontSize: 10, color: Colors.black54),
+        toolTipColor: Colors.white,
+      ),
       width: 500,
       height: 500,
     )));
@@ -178,7 +197,12 @@ void main() {
     );
 
     await tester.pumpWidget(buildTestableWidget(SizedBox(
-      child: AnimatedLineChart(lineChart),
+      child: AnimatedLineChart(
+        lineChart,
+        gridColor: Colors.black54,
+        textStyle: TextStyle(fontSize: 10, color: Colors.black54),
+        toolTipColor: Colors.white,
+      ),
       width: 500,
       height: 500,
     )));
@@ -226,7 +250,12 @@ void main() {
     );
 
     await tester.pumpWidget(buildTestableWidget(SizedBox(
-      child: AnimatedLineChart(lineChart),
+      child: AnimatedLineChart(
+        lineChart,
+        gridColor: Colors.black54,
+        textStyle: TextStyle(fontSize: 10, color: Colors.black54),
+        toolTipColor: Colors.white,
+      ),
       width: 500,
       height: 500,
     )));
@@ -260,7 +289,12 @@ void main() {
     );
 
     await tester.pumpWidget(buildTestableWidget(SizedBox(
-      child: AnimatedLineChart(lineChart),
+      child: AnimatedLineChart(
+        lineChart,
+        gridColor: Colors.black54,
+        textStyle: TextStyle(fontSize: 10, color: Colors.black54),
+        toolTipColor: Colors.white,
+      ),
       width: 500,
       height: 500,
     )));
@@ -292,7 +326,12 @@ void main() {
     );
 
     await tester.pumpWidget(buildTestableWidget(SizedBox(
-      child: AnimatedLineChart(lineChart),
+      child: AnimatedLineChart(
+        lineChart,
+        gridColor: Colors.black54,
+        textStyle: TextStyle(fontSize: 10, color: Colors.black54),
+        toolTipColor: Colors.white,
+      ),
       width: 500,
       height: 500,
     )));
@@ -325,7 +364,12 @@ void main() {
     );
 
     await tester.pumpWidget(buildTestableWidget(SizedBox(
-      child: AnimatedLineChart(lineChart),
+      child: AnimatedLineChart(
+        lineChart,
+        gridColor: Colors.black54,
+        textStyle: TextStyle(fontSize: 10, color: Colors.black54),
+        toolTipColor: Colors.white,
+      ),
       width: 500,
       height: 500,
     )));
