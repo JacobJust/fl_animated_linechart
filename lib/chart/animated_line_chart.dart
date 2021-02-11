@@ -160,12 +160,12 @@ class ChartPainter extends CustomPainter {
   final Paint _gridPainter = Paint()
     ..style = PaintingStyle.stroke
     ..strokeWidth = 1
-    ..color = Colors.black26;
+    ..color = Colors.red;
 
   Paint _linePainter = Paint()
     ..style = PaintingStyle.stroke
     ..strokeWidth = 2
-    ..color = Colors.black26;
+    ..color = Colors.red;
 
   Paint _fillPainter = Paint()
     ..style = PaintingStyle.fill
@@ -173,7 +173,7 @@ class ChartPainter extends CustomPainter {
 
   Paint _tooltipPainter = Paint()
     ..style = PaintingStyle.fill
-    ..color = Colors.white.withAlpha(230);
+    ..color = Colors.blue;
 
   final double _progress;
   final LineChart _chart;
@@ -204,7 +204,7 @@ class ChartPainter extends CustomPainter {
   }
 
   void _drawHighlights(Size size, Canvas canvas, FontWeight tapTextFontWeight, TextStyle style) {
-    _linePainter.color = Colors.black45;
+    _linePainter.color = Colors.yellow;
 
     if (_horizontalDragPosition > LineChart.axisOffsetPX &&
         _horizontalDragPosition < size.width) {
