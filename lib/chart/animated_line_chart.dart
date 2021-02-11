@@ -64,6 +64,9 @@ class _AnimatedLineChartState extends State<AnimatedLineChart> with SingleTicker
         widget.chart,
         _animation,
         tapText: widget.tapText,
+        gridColor: widget.gridColor, 
+        textStyle: widget.textStyle,
+        toolTipColor: widget.toolTipColor,
       );
     });
   }
@@ -74,12 +77,18 @@ class _GestureWrapper extends StatefulWidget {
   final LineChart _chart;
   final Animation _animation;
   final TapText tapText;
+  final TextStyle textStyle;
+  final Color toolTipColor;
+  final Color gridColor;
 
   const _GestureWrapper(
     this._chart,
     this._animation, {
     Key key,
     this.tapText,
+    this.gridColor,
+    this.toolTipColor,
+    this.textStyle
   }) : super(key: key);
 
   @override
@@ -99,6 +108,9 @@ class _GestureWrapperState extends State<_GestureWrapper> {
         _horizontalDragPosition,
         animation: widget._animation,
         tapText: widget.tapText,
+        gridColor: widget.gridColor,
+        style: widget.textStyle,
+        toolTipColor: widget.toolTipColor,
       ),
       onTapDown: (tap) {
         _horizontalDragActive = true;
