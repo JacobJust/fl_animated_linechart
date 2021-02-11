@@ -40,16 +40,11 @@ class _MyHomePageState extends State<MyHomePage> with FakeChartSeries {
     LineChart chart;
 
     if (chartIndex == 0) {
-      chart = LineChart.fromDateTimeMaps(
-          [line1, line2], [Colors.green, Colors.blue], ['C', 'C'],
-          tapTextFontWeight: FontWeight.w400);
+      chart = LineChart.fromDateTimeMaps([line1, line2], [Colors.green, Colors.blue], ['C', 'C'], tapTextFontWeight: FontWeight.w400);
     } else if (chartIndex == 1) {
-      chart = LineChart.fromDateTimeMaps(
-          [createLineAlmostSaveValues()], [Colors.green], ['C'],
-          tapTextFontWeight: FontWeight.w400);
+      chart = LineChart.fromDateTimeMaps([createLineAlmostSaveValues()], [Colors.green], ['C'], tapTextFontWeight: FontWeight.w400);
     } else {
-      chart = AreaLineChart.fromDateTimeMaps(
-          [line1], [Colors.red.shade900], ['C'],
+      chart = AreaLineChart.fromDateTimeMaps([line1], [Colors.red.shade900], ['C'],
           gradients: [Pair(Colors.yellow.shade400, Colors.red.shade700)]);
     }
 
@@ -71,14 +66,10 @@ class _MyHomePageState extends State<MyHomePage> with FakeChartSeries {
                   children: <Widget>[
                     FlatButton(
                       shape: RoundedRectangleBorder(
-                          side: BorderSide(color: Colors.black45),
-                          borderRadius: BorderRadius.all(Radius.circular(3))),
+                          side: BorderSide(color: Colors.black45), borderRadius: BorderRadius.all(Radius.circular(3))),
                       child: Text(
                         'LineChart',
-                        style: TextStyle(
-                            color: chartIndex == 0
-                                ? Colors.black
-                                : Colors.black12),
+                        style: TextStyle(color: chartIndex == 0 ? Colors.black : Colors.black12),
                       ),
                       onPressed: () {
                         setState(() {
@@ -88,13 +79,8 @@ class _MyHomePageState extends State<MyHomePage> with FakeChartSeries {
                     ),
                     FlatButton(
                       shape: RoundedRectangleBorder(
-                          side: BorderSide(color: Colors.black45),
-                          borderRadius: BorderRadius.all(Radius.circular(3))),
-                      child: Text('LineChart2',
-                          style: TextStyle(
-                              color: chartIndex == 1
-                                  ? Colors.black
-                                  : Colors.black12)),
+                          side: BorderSide(color: Colors.black45), borderRadius: BorderRadius.all(Radius.circular(3))),
+                      child: Text('LineChart2', style: TextStyle(color: chartIndex == 1 ? Colors.black : Colors.black12)),
                       onPressed: () {
                         setState(() {
                           chartIndex = 1;
@@ -103,13 +89,8 @@ class _MyHomePageState extends State<MyHomePage> with FakeChartSeries {
                     ),
                     FlatButton(
                       shape: RoundedRectangleBorder(
-                          side: BorderSide(color: Colors.black45),
-                          borderRadius: BorderRadius.all(Radius.circular(3))),
-                      child: Text('AreaChart',
-                          style: TextStyle(
-                              color: chartIndex == 2
-                                  ? Colors.black
-                                  : Colors.black12)),
+                          side: BorderSide(color: Colors.black45), borderRadius: BorderRadius.all(Radius.circular(3))),
+                      child: Text('AreaChart', style: TextStyle(color: chartIndex == 2 ? Colors.black : Colors.black12)),
                       onPressed: () {
                         setState(() {
                           chartIndex = 2;
@@ -125,6 +106,9 @@ class _MyHomePageState extends State<MyHomePage> with FakeChartSeries {
                 child: AnimatedLineChart(
                   chart,
                   key: UniqueKey(),
+                  gridColor: Colors.black54,
+                  textStyle: TextStyle(fontSize: 10, color: Colors.black54),
+                  toolTipColor: Colors.white,
                 ), //Unique key to force animations
               )),
               SizedBox(width: 200, height: 50, child: Text('')),

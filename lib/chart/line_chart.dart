@@ -113,7 +113,7 @@ class LineChart {
   }
 
   //Calculate ui pixels values
-  void initialize(double widthPX, double heightPX) {
+  void initialize(double widthPX, double heightPX, TextStyle style) {
     _calcScales(heightPX);
 
     //calc axis textpainters, before using
@@ -154,10 +154,7 @@ class LineChart {
         }
 
         TextSpan span = new TextSpan(
-            style: new TextStyle(
-                color: Colors.grey[800],
-                fontWeight: FontWeight.w200,
-                fontSize: 10),
+            style: style,
             text: axisValueString);
         TextPainter tp = new TextPainter(
             text: span,
@@ -225,10 +222,7 @@ class LineChart {
           fromTo.min.add(Duration(seconds: (stepInSeconds * c).round()));
 
       TextSpan span = new TextSpan(
-          style: new TextStyle(
-              color: Colors.grey[800],
-              fontSize: 11.0,
-              fontWeight: FontWeight.w200),
+          style: style,
           text: _formatDateTime(tick, duration));
       TextPainter tp = new TextPainter(
           text: span,
