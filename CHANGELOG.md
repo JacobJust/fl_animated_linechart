@@ -1,3 +1,7 @@
+## [1.1.4]
+
+* Upgrade example to AndroidX and Android embedded v2
+
 ## [1.1.3]
 
 * Fix to support any lines
