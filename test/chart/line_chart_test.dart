@@ -13,22 +13,31 @@ import '../testHelpers/chart_data_helper.dart';
 void main() {
   test('init with empty dataset', () async {
     LineChart lineChart = LineChart([], Dates(DateTime.now(), DateTime.now()));
-    lineChart.initialize(200, 100);
+    lineChart.initialize(
+      200,
+      100,
+      TextStyle(color: Colors.grey[800], fontSize: 11.0, fontWeight: FontWeight.w200),
+    );
 
     expect(lineChart.seriesMap.isEmpty, true);
 
-    lineChart = LineChart([ChartLine([], Colors.black, 'C')],
-        Dates(DateTime.now(), DateTime.now()));
-    lineChart.initialize(200, 100);
+    lineChart = LineChart([ChartLine([], Colors.black, 'C')], Dates(DateTime.now(), DateTime.now()));
+    lineChart.initialize(
+      200,
+      100,
+      TextStyle(color: Colors.grey[800], fontSize: 11.0, fontWeight: FontWeight.w200),
+    );
 
     expect(lineChart.seriesMap.isEmpty, true);
   });
 
   test('init with 1 line', () async {
-    LineChart lineChart = LineChart(
-        [ChartLineHelper.createLine(10, 2, Colors.cyan, 'W')],
-        Dates(DateTime.now(), DateTime.now()));
-    lineChart.initialize(200, 100);
+    LineChart lineChart = LineChart([ChartLineHelper.createLine(10, 2, Colors.cyan, 'W')], Dates(DateTime.now(), DateTime.now()));
+    lineChart.initialize(
+      200,
+      100,
+      TextStyle(color: Colors.grey[800], fontSize: 11.0, fontWeight: FontWeight.w200),
+    );
 
     expect(lineChart.seriesMap.length, 1);
     expect(lineChart.seriesMap[0].length, 10);
@@ -41,11 +50,14 @@ void main() {
   });
 
   test('init with multiple lines', () async {
-    LineChart lineChart = LineChart([
-      ChartLineHelper.createLine(10, 2, Colors.cyan, 'W'),
-      ChartLineHelper.createLine(15, 1, Colors.cyan, 'W')
-    ], Dates(DateTime.now(), DateTime.now()));
-    lineChart.initialize(200, 100);
+    LineChart lineChart = LineChart(
+        [ChartLineHelper.createLine(10, 2, Colors.cyan, 'W'), ChartLineHelper.createLine(15, 1, Colors.cyan, 'W')],
+        Dates(DateTime.now(), DateTime.now()));
+    lineChart.initialize(
+      200,
+      100,
+      TextStyle(color: Colors.grey[800], fontSize: 11.0, fontWeight: FontWeight.w200),
+    );
 
     expect(lineChart.seriesMap.length, 2);
     expect(lineChart.seriesMap[0].length, 10);
@@ -68,9 +80,12 @@ void main() {
     line[start.add(Duration(minutes: 10))] = 1.7;
     series.add(line);
 
-    LineChart lineChart =
-        LineChart.fromDateTimeMaps(series, [Colors.amber], ['C']);
-    lineChart.initialize(200, 100);
+    LineChart lineChart = LineChart.fromDateTimeMaps(series, [Colors.amber], ['C']);
+    lineChart.initialize(
+      200,
+      100,
+      TextStyle(color: Colors.grey[800], fontSize: 11.0, fontWeight: FontWeight.w200),
+    );
 
     List<HighlightPoint> list = lineChart.seriesMap[0];
 
@@ -80,51 +95,66 @@ void main() {
   });
 
   test('test xScale', () async {
-    LineChart lineChart = LineChart([
-      ChartLineHelper.createLine(10, 2, Colors.cyan, 'W'),
-      ChartLineHelper.createLine(15, 1, Colors.cyan, 'W')
-    ], Dates(DateTime.now(), DateTime.now()));
-    lineChart.initialize(200, 100);
+    LineChart lineChart = LineChart(
+        [ChartLineHelper.createLine(10, 2, Colors.cyan, 'W'), ChartLineHelper.createLine(15, 1, Colors.cyan, 'W')],
+        Dates(DateTime.now(), DateTime.now()));
+    lineChart.initialize(
+      200,
+      100,
+      TextStyle(color: Colors.grey[800], fontSize: 11.0, fontWeight: FontWeight.w200),
+    );
 
     expect(lineChart.xScale, 11);
   });
 
   test('test yScale', () async {
-    LineChart lineChart = LineChart([
-      ChartLineHelper.createLine(10, 2, Colors.cyan, 'W'),
-      ChartLineHelper.createLine(15, 1, Colors.cyan, 'W')
-    ], Dates(DateTime.now(), DateTime.now()));
-    lineChart.initialize(200, 100);
+    LineChart lineChart = LineChart(
+        [ChartLineHelper.createLine(10, 2, Colors.cyan, 'W'), ChartLineHelper.createLine(15, 1, Colors.cyan, 'W')],
+        Dates(DateTime.now(), DateTime.now()));
+    lineChart.initialize(
+      200,
+      100,
+      TextStyle(color: Colors.grey[800], fontSize: 11.0, fontWeight: FontWeight.w200),
+    );
 
     expect(lineChart.yScale('W'), 2.314814814814815);
   });
 
   test('test heightStepSize', () async {
-    LineChart lineChart = LineChart([
-      ChartLineHelper.createLine(10, 2, Colors.cyan, 'W'),
-      ChartLineHelper.createLine(15, 1, Colors.cyan, 'W')
-    ], Dates(DateTime.now(), DateTime.now()));
-    lineChart.initialize(200, 100);
+    LineChart lineChart = LineChart(
+        [ChartLineHelper.createLine(10, 2, Colors.cyan, 'W'), ChartLineHelper.createLine(15, 1, Colors.cyan, 'W')],
+        Dates(DateTime.now(), DateTime.now()));
+    lineChart.initialize(
+      200,
+      100,
+      TextStyle(color: Colors.grey[800], fontSize: 11.0, fontWeight: FontWeight.w200),
+    );
 
     expect(lineChart.heightStepSize, 8.333333333333334);
   });
 
   test('test widthStepSize', () async {
-    LineChart lineChart = LineChart([
-      ChartLineHelper.createLine(10, 2, Colors.cyan, 'W'),
-      ChartLineHelper.createLine(15, 1, Colors.cyan, 'W')
-    ], Dates(DateTime.now(), DateTime.now()));
-    lineChart.initialize(200, 100);
+    LineChart lineChart = LineChart(
+        [ChartLineHelper.createLine(10, 2, Colors.cyan, 'W'), ChartLineHelper.createLine(15, 1, Colors.cyan, 'W')],
+        Dates(DateTime.now(), DateTime.now()));
+    lineChart.initialize(
+      200,
+      100,
+      TextStyle(color: Colors.grey[800], fontSize: 11.0, fontWeight: FontWeight.w200),
+    );
 
     expect(lineChart.widthStepSize, 25.666666666666668);
   });
 
   test('test axisOffSetWithPadding', () async {
-    LineChart lineChart = LineChart([
-      ChartLineHelper.createLine(10, 2, Colors.cyan, 'W'),
-      ChartLineHelper.createLine(15, 1, Colors.cyan, 'W')
-    ], Dates(DateTime.now(), DateTime.now()));
-    lineChart.initialize(200, 100);
+    LineChart lineChart = LineChart(
+        [ChartLineHelper.createLine(10, 2, Colors.cyan, 'W'), ChartLineHelper.createLine(15, 1, Colors.cyan, 'W')],
+        Dates(DateTime.now(), DateTime.now()));
+    lineChart.initialize(
+      200,
+      100,
+      TextStyle(color: Colors.grey[800], fontSize: 11.0, fontWeight: FontWeight.w200),
+    );
 
     expect(lineChart.axisOffSetWithPadding, 40.0);
   });
@@ -143,9 +173,12 @@ void main() {
       ChartPoint(minX, minY),
     ], Colors.pink, 'W');
 
-    LineChart lineChart = LineChart([ChartLine([], Colors.amber, 'W'), line],
-        Dates(DateTime.now(), DateTime.now()));
-    lineChart.initialize(200, 100);
+    LineChart lineChart = LineChart([ChartLine([], Colors.amber, 'W'), line], Dates(DateTime.now(), DateTime.now()));
+    lineChart.initialize(
+      200,
+      100,
+      TextStyle(color: Colors.grey[800], fontSize: 11.0, fontWeight: FontWeight.w200),
+    );
 
     expect(lineChart.minX, minX);
     expect(lineChart.maxX, maxX);
@@ -154,10 +187,12 @@ void main() {
   });
 
   test('width and height calculated based on min and max values', () async {
-    LineChart lineChart = LineChart(
-        [ChartLineHelper.createLine(10, 2, Colors.cyan, 'W')],
-        Dates(DateTime.now(), DateTime.now()));
-    lineChart.initialize(200, 100);
+    LineChart lineChart = LineChart([ChartLineHelper.createLine(10, 2, Colors.cyan, 'W')], Dates(DateTime.now(), DateTime.now()));
+    lineChart.initialize(
+      200,
+      100,
+      TextStyle(color: Colors.grey[800], fontSize: 11.0, fontWeight: FontWeight.w200),
+    );
 
     expect(lineChart.width, 9);
     expect(lineChart.height('W'), 18.0);
@@ -166,41 +201,44 @@ void main() {
   test('path calculate', () async {
     double chartHeight = 100.0;
 
-    LineChart lineChart = LineChart([
-      ChartLineHelper.createLine(10, 2, Colors.cyan, 'W'),
-      ChartLineHelper.createLine(10, 4, Colors.cyan, 'W')
-    ], Dates(DateTime.now(), DateTime.now()));
-    lineChart.initialize(200, chartHeight);
+    LineChart lineChart = LineChart(
+        [ChartLineHelper.createLine(10, 2, Colors.cyan, 'W'), ChartLineHelper.createLine(10, 4, Colors.cyan, 'W')],
+        Dates(DateTime.now(), DateTime.now()));
+    lineChart.initialize(
+      200,
+      chartHeight,
+      TextStyle(color: Colors.grey[800], fontSize: 11.0, fontWeight: FontWeight.w200),
+    );
 
-    expectPathCacheToMatch(lineChart.getPathCache(0), 10, 2, lineChart,
-        chartHeight, 'W', lineChart.xAxisOffsetPX);
-    expectPathCacheToMatch(lineChart.getPathCache(1), 10, 4, lineChart,
-        chartHeight, 'W', lineChart.xAxisOffsetPX);
+    expectPathCacheToMatch(lineChart.getPathCache(0), 10, 2, lineChart, chartHeight, 'W', lineChart.xAxisOffsetPX);
+    expectPathCacheToMatch(lineChart.getPathCache(1), 10, 4, lineChart, chartHeight, 'W', lineChart.xAxisOffsetPX);
   });
 
   test('path cache', () async {
     double chartHeight = 100.0;
 
-    LineChart lineChart = LineChart(
-        [ChartLineHelper.createLine(10, 2, Colors.cyan, 'W')],
-        Dates(DateTime.now(), DateTime.now()));
-    lineChart.initialize(200, chartHeight);
+    LineChart lineChart = LineChart([ChartLineHelper.createLine(10, 2, Colors.cyan, 'W')], Dates(DateTime.now(), DateTime.now()));
+    lineChart.initialize(
+      200,
+      chartHeight,
+      TextStyle(color: Colors.grey[800], fontSize: 11.0, fontWeight: FontWeight.w200),
+    );
 
     Path path = lineChart.getPathCache(0);
     Path pathCached = lineChart.getPathCache(0);
 
-    expect(path, pathCached,
-        reason: 'The two part should reference the same object reference');
+    expect(path, pathCached, reason: 'The two part should reference the same object reference');
   });
 
   test('find the highlight closest', () async {
-    LineChart lineChart = LineChart(
-        [ChartLineHelper.createLine(10, 2, Colors.cyan, 'W')],
-        Dates(DateTime.now(), DateTime.now()));
-    lineChart.initialize(200, 100);
+    LineChart lineChart = LineChart([ChartLineHelper.createLine(10, 2, Colors.cyan, 'W')], Dates(DateTime.now(), DateTime.now()));
+    lineChart.initialize(
+      200,
+      100,
+      TextStyle(color: Colors.grey[800], fontSize: 11.0, fontWeight: FontWeight.w200),
+    );
 
-    List<HighlightPoint> closetHighlightPoints =
-        lineChart.getClosetHighlightPoints(101);
+    List<HighlightPoint> closetHighlightPoints = lineChart.getClosetHighlightPoints(101);
 
     expect(closetHighlightPoints.length, 1);
     expect(closetHighlightPoints[0].chartPoint.x, 96.33333333333333);
@@ -221,9 +259,12 @@ void main() {
     line[start.add(Duration(minutes: 30))] = 20;
     series.add(line);
 
-    LineChart lineChart =
-        LineChart.fromDateTimeMaps(series, [Colors.amber], ['A']);
-    lineChart.initialize(200, 100);
+    LineChart lineChart = LineChart.fromDateTimeMaps(series, [Colors.amber], ['A']);
+    lineChart.initialize(
+      200,
+      100,
+      TextStyle(color: Colors.grey[800], fontSize: 11.0, fontWeight: FontWeight.w200),
+    );
 
     List<TextPainter> axisTexts = lineChart.yAxisTexts(0);
 
@@ -250,9 +291,12 @@ void main() {
     line[start.add(Duration(minutes: 30))] = 24.8;
     series.add(line);
 
-    LineChart lineChart =
-        LineChart.fromDateTimeMaps(series, [Colors.amber], ['A']);
-    lineChart.initialize(200, 100);
+    LineChart lineChart = LineChart.fromDateTimeMaps(series, [Colors.amber], ['A']);
+    lineChart.initialize(
+      200,
+      100,
+      TextStyle(color: Colors.grey[800], fontSize: 11.0, fontWeight: FontWeight.w200),
+    );
 
     List<TextPainter> axisTexts = lineChart.yAxisTexts(0);
 
@@ -279,9 +323,12 @@ void main() {
     line[start.add(Duration(minutes: 30))] = 20;
     series.add(line);
 
-    LineChart lineChart =
-        LineChart.fromDateTimeMaps(series, [Colors.amber], ['D']);
-    lineChart.initialize(200, 100);
+    LineChart lineChart = LineChart.fromDateTimeMaps(series, [Colors.amber], ['D']);
+    lineChart.initialize(
+      200,
+      100,
+      TextStyle(color: Colors.grey[800], fontSize: 11.0, fontWeight: FontWeight.w200),
+    );
 
     List<TextPainter> axisTexts = lineChart.xAxisTexts;
 
@@ -302,9 +349,12 @@ void main() {
     line[start.add(Duration(days: 6))] = 20;
     series.add(line);
 
-    LineChart lineChart =
-        LineChart.fromDateTimeMaps(series, [Colors.amber], ['F']);
-    lineChart.initialize(200, 100);
+    LineChart lineChart = LineChart.fromDateTimeMaps(series, [Colors.amber], ['F']);
+    lineChart.initialize(
+      200,
+      100,
+      TextStyle(color: Colors.grey[800], fontSize: 11.0, fontWeight: FontWeight.w200),
+    );
 
     List<TextPainter> axisTexts = lineChart.xAxisTexts;
 
@@ -318,7 +368,11 @@ void main() {
       ChartLineHelper.createLine(10, 10.0, Colors.green, 'F'),
     ], Dates(DateTime.now().subtract(Duration(hours: 1)), DateTime.now()));
 
-    lineChart.initialize(200, 100);
+    lineChart.initialize(
+      200,
+      100,
+      TextStyle(color: Colors.grey[800], fontSize: 11.0, fontWeight: FontWeight.w200),
+    );
 
     expect(lineChart.yScale('C'), 4.62962962962963);
     expect(lineChart.yScale('F'), 0.462962962962963);
@@ -330,7 +384,11 @@ void main() {
       ChartLineHelper.createLine(10, 10.0, Colors.green, 'F'),
     ], Dates(DateTime.now().subtract(Duration(hours: 1)), DateTime.now()));
 
-    lineChart.initialize(200, 100);
+    lineChart.initialize(
+      200,
+      100,
+      TextStyle(color: Colors.grey[800], fontSize: 11.0, fontWeight: FontWeight.w200),
+    );
 
     List<HighlightPoint> leftSide = lineChart.seriesMap[0];
     List<HighlightPoint> rightSide = lineChart.seriesMap[1];
@@ -343,19 +401,12 @@ void main() {
 }
 
 void expectPathCacheToMatch(
-    Path pathCache,
-    int pointCount,
-    double pointFactor,
-    LineChart lineChart,
-    double chartHeight,
-    String unit,
-    double xAxisOffsetPX) {
+    Path pathCache, int pointCount, double pointFactor, LineChart lineChart, double chartHeight, String unit, double xAxisOffsetPX) {
   for (double c = 0; c < pointCount; c++) {
     double adjustedY = (c * pointFactor * lineChart.yScale(unit));
     double y = (chartHeight - LineChart.axisOffsetPX) - adjustedY;
 
     Offset offset = Offset((c * lineChart.xScale) + xAxisOffsetPX, y);
-    expect(pathCache.contains(offset), true,
-        reason: 'Expect path to contain $c,${c * pointFactor}');
+    expect(pathCache.contains(offset), true, reason: 'Expect path to contain $c,${c * pointFactor}');
   }
 }
