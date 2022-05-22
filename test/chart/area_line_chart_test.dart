@@ -21,7 +21,7 @@ void main() {
     );
 
     expectPathCacheToMatch(
-        lineChart.getAreaPathCache(0), 10, 2, lineChart, chartHeight, 'W', lineChart.xAxisOffsetPX, lineChart.getPathCache(0).getBounds());
+        lineChart.getAreaPathCache(0)!, 10, 2, lineChart, chartHeight, 'W', lineChart.xAxisOffsetPX, lineChart.getPathCache(0)!.getBounds());
   });
 
   test('path cache', () async {
@@ -35,8 +35,8 @@ void main() {
       TextStyle(color: Colors.grey[800], fontSize: 11.0, fontWeight: FontWeight.w200),
     );
 
-    Path path = lineChart.getAreaPathCache(0);
-    Path pathCached = lineChart.getAreaPathCache(0);
+    Path? path = lineChart.getAreaPathCache(0);
+    Path? pathCached = lineChart.getAreaPathCache(0);
 
     expect(path, pathCached, reason: 'The two part should reference the same object reference');
   });
@@ -45,10 +45,10 @@ void main() {
 void expectPathCacheToMatch(Path pathCache, int pointCount, double pointFactor, LineChart lineChart, double chartHeight, String unit,
     double xAxisOffsetPX, Rect bounds) {
   for (double c = 0; c < pointCount; c++) {
-    double adjustedY = (c * pointFactor * lineChart.yScale(unit));
+    double adjustedY = (c * pointFactor * lineChart.yScale(unit)!);
     double y = (chartHeight - LineChart.axisOffsetPX) - adjustedY;
 
-    Offset offset = Offset((c * lineChart.xScale) + xAxisOffsetPX, y);
+    Offset offset = Offset((c * lineChart.xScale!) + xAxisOffsetPX, y);
     expect(pathCache.contains(offset), true, reason: 'Expect path to contain $c,${c * pointFactor}');
   }
 

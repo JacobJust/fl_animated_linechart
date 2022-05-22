@@ -7,9 +7,9 @@ import 'package:flutter/rendering.dart';
 
 class AreaLineChart extends LineChart {
   Map<int, Path> _areaPathMap = Map();
-  final FontWeight tapTextFontWeight;
+  final FontWeight? tapTextFontWeight;
 
-  final List<Pair<Color, Color>> _gradients;
+  final List<Pair<Color, Color>>? _gradients;
 
   AreaLineChart(List<ChartLine> lines, Dates fromTo, this._gradients,
       {this.tapTextFontWeight})
@@ -17,7 +17,7 @@ class AreaLineChart extends LineChart {
 
   factory AreaLineChart.fromDateTimeMaps(List<Map<DateTime, double>> series,
       List<Color> colors, List<String> units,
-      {List<Pair<Color, Color>> gradients, FontWeight tapTextFontWeight}) {
+      {List<Pair<Color, Color>>? gradients, FontWeight? tapTextFontWeight}) {
     assert(series.length == colors.length);
     assert(series.length == units.length);
 
@@ -28,13 +28,13 @@ class AreaLineChart extends LineChart {
         tapTextFontWeight: tapTextFontWeight);
   }
 
-  List<Pair<Color, Color>> get gradients => _gradients;
+  List<Pair<Color, Color>>? get gradients => _gradients;
 
-  Path getAreaPathCache(int index) {
+  Path? getAreaPathCache(int index) {
     if (_areaPathMap.containsKey(index)) {
       return _areaPathMap[index];
     } else {
-      Path pathCache = getPathCache(index);
+      Path pathCache = getPathCache(index)!;
 
       Path areaPath = Path();
       areaPath.moveTo(pathCache.getBounds().left, pathCache.getBounds().bottom);
