@@ -16,7 +16,7 @@ class LineChart {
   final DateFormat _formatHoursMinutes;
   final DateFormat _formatDayMonth;
   final double _effectiveChartHeightRatio = 5 / 6;
-  final FontWeight tapTextFontWeight;
+  final FontWeight? tapTextFontWeight;
   //The lines / points should only draw to 5/6 from the top of the chart area
 
   static final double axisMargin = 5.0;
@@ -30,21 +30,21 @@ class LineChart {
   double _xAxisOffsetPX = 0;
   double _xAxisOffsetPXright = 0;
 
-  Map<String, double> _minY;
-  Map<String, double> _maxY;
-  Map<String, double> _yScales;
-  Map<String, double> _yTicks;
+  late Map<String, double> _minY;
+  late Map<String, double> _maxY;
+  late Map<String, double> _yScales;
+  late Map<String, double> _yTicks;
 
-  double _widthStepSize;
-  double _heightStepSize;
-  double _xScale;
-  double _xOffset;
-  Map<int, List<HighlightPoint>> _seriesMap;
-  Map<int, Path> _pathMap;
-  double _axisOffSetWithPadding;
-  Map<int, List<TextPainter>> _yAxisTexts;
-  List<TextPainter> _xAxisTexts;
-  Map<int, String> indexToUnit;
+  double? _widthStepSize;
+  double? _heightStepSize;
+  double? _xScale;
+  double? _xOffset;
+  Map<int, List<HighlightPoint>>? _seriesMap;
+  late Map<int, Path> _pathMap;
+  double? _axisOffSetWithPadding;
+  late Map<int, List<TextPainter>> _yAxisTexts;
+  List<TextPainter>? _xAxisTexts;
+  late Map<int, String> indexToUnit;
 
   LineChart(this.lines, this.fromTo,
       {this.tapTextFontWeight,
@@ -55,7 +55,7 @@ class LineChart {
 
   factory LineChart.fromDateTimeMaps(List<Map<DateTime, double>> series,
       List<Color> colors, List<String> units,
-      {FontWeight tapTextFontWeight}) {
+      {FontWeight? tapTextFontWeight}) {
     assert(series.length == colors.length);
     assert(series.length == units.length);
 
@@ -71,18 +71,18 @@ class LineChart {
   double get xAxisOffsetPX => _xAxisOffsetPX;
   double get xAxisOffsetPXright => _xAxisOffsetPXright;
 
-  double minY(String unit) => _minY[unit];
-  double maxY(String unit) => _maxY[unit];
-  double height(String unit) => _maxY[unit] - _minY[unit];
-  double yScale(String unit) => _yScales[unit];
+  double? minY(String unit) => _minY[unit];
+  double? maxY(String unit) => _maxY[unit];
+  double height(String unit) => _maxY[unit]! - _minY[unit]!;
+  double? yScale(String unit) => _yScales[unit];
 
   void _calcScales(double heightPX) {
     Map<String, Pair> unitToMinMaxY = Map();
 
     lines.forEach((line) {
       if (unitToMinMaxY.containsKey(line.unit)) {
-        double minY = min(unitToMinMaxY[line.unit].left, line.minY);
-        double maxY = max(unitToMinMaxY[line.unit].right, line.maxY);
+        double minY = min(unitToMinMaxY[line.unit]!.left, line.minY);
+        double maxY = max(unitToMinMaxY[line.unit]!.right, line.maxY);
 
         unitToMinMaxY[line.unit] = Pair(minY, maxY);
       } else {
@@ -131,31 +131,29 @@ class LineChart {
     double maxRight = 1;
 
     for (int axisIndex = 0; axisIndex < indexToUnit.length; axisIndex++) {
-      List<TextPainter> painters = List();
+      List<TextPainter> painters = [];
       _yAxisTexts[axisIndex] = painters;
-      String unit = indexToUnit[axisIndex];
+      String? unit = indexToUnit[axisIndex];
 
       for (int c = 0; c <= (stepCount + 1); c++) {
-        double axisValue = (_minY[unit] + _yTicks[unit] * c);
+        double axisValue = (_minY[unit!]! + _yTicks[unit]! * c);
 
         String axisValueString;
 
-        if (_yTicks[unit] < 1) {
+        if (_yTicks[unit]! < 1) {
           axisValueString = axisValue.toStringAsFixed(2);
 
           if (axisValueString.endsWith('0')) {
             axisValueString =
                 axisValueString.substring(0, axisValueString.length - 1);
           }
-        } else if (_yTicks[unit] <= 10) {
+        } else if (_yTicks[unit]! <= 10) {
           axisValueString = axisValue.toStringAsFixed(1);
         } else {
           axisValueString = axisValue.round().toString();
         }
 
-        TextSpan span = new TextSpan(
-            style: style,
-            text: axisValueString);
+        TextSpan span = new TextSpan(style: style, text: axisValueString);
         TextPainter tp = new TextPainter(
             text: span,
             textAlign: TextAlign.right,
@@ -178,7 +176,7 @@ class LineChart {
     _heightStepSize = (heightPX - axisOffsetPX) / (stepCount + 1);
 
     _xScale = (widthPX - xAxisOffsetPX - maxRight) / width;
-    _xOffset = minX * _xScale;
+    _xOffset = minX * _xScale!;
 
     _seriesMap = Map();
     _pathMap = Map();
@@ -186,24 +184,24 @@ class LineChart {
     index = 0;
     lines.forEach((chartLine) {
       chartLine.points.forEach((p) {
-        double x = (p.x * xScale) - xOffset;
+        double x = (p.x * xScale!) - xOffset!;
 
-        double adjustedY = (p.y * _yScales[chartLine.unit]) -
-            (_minY[chartLine.unit] * _yScales[chartLine.unit]);
+        double adjustedY = (p.y * _yScales[chartLine.unit]!) -
+            (_minY[chartLine.unit]! * _yScales[chartLine.unit]!);
 
         double y = (heightPX - axisOffsetPX) - adjustedY;
 
         //adjust to make room for axis values:
         x += xAxisOffsetPX;
-        if (_seriesMap[index] == null) {
-          _seriesMap[index] = List();
+        if (_seriesMap![index] == null) {
+          _seriesMap![index] = [];
         }
 
         if (p is DateTimeChartPoint) {
-          _seriesMap[index]
+          _seriesMap![index]!
               .add(HighlightPoint(DateTimeChartPoint(x, y, p.dateTime), p.y));
         } else {
-          _seriesMap[index].add(HighlightPoint(ChartPoint(x, y), p.y));
+          _seriesMap![index]!.add(HighlightPoint(ChartPoint(x, y), p.y));
         }
       });
 
@@ -214,23 +212,22 @@ class LineChart {
     _xAxisTexts = [];
 
     //Todo: make the axis part generic, to support both string, dates, and numbers
-    Duration duration = fromTo.max.difference(fromTo.min);
+    Duration duration = fromTo.max!.difference(fromTo.min!);
     double stepInSeconds = duration.inSeconds.toDouble() / (stepCount + 1);
 
     for (int c = 0; c <= (stepCount + 1); c++) {
       DateTime tick =
-          fromTo.min.add(Duration(seconds: (stepInSeconds * c).round()));
+          fromTo.min!.add(Duration(seconds: (stepInSeconds * c).round()));
 
-      TextSpan span = new TextSpan(
-          style: style,
-          text: _formatDateTime(tick, duration));
+      TextSpan span =
+          new TextSpan(style: style, text: _formatDateTime(tick, duration));
       TextPainter tp = new TextPainter(
           text: span,
           textAlign: TextAlign.right,
           textDirection: TextDirectionHelper.getDirection());
       tp.layout();
 
-      _xAxisTexts.add(tp);
+      _xAxisTexts!.add(tp);
     }
   }
 
@@ -242,26 +239,26 @@ class LineChart {
     }
   }
 
-  double get heightStepSize => _heightStepSize;
-  double get widthStepSize => _widthStepSize;
+  double? get heightStepSize => _heightStepSize;
+  double? get widthStepSize => _widthStepSize;
 
-  double get xOffset => _xOffset;
-  double get xScale => _xScale;
+  double? get xOffset => _xOffset;
+  double? get xScale => _xScale;
 
-  Map<int, List<HighlightPoint>> get seriesMap => _seriesMap;
+  Map<int, List<HighlightPoint>>? get seriesMap => _seriesMap;
 
-  double get axisOffSetWithPadding => _axisOffSetWithPadding;
+  double? get axisOffSetWithPadding => _axisOffSetWithPadding;
 
-  List<TextPainter> yAxisTexts(int index) => _yAxisTexts[index];
+  List<TextPainter>? yAxisTexts(int index) => _yAxisTexts[index];
 
   int get yAxisCount => _yAxisTexts.length;
 
-  List<TextPainter> get xAxisTexts => _xAxisTexts;
+  List<TextPainter>? get xAxisTexts => _xAxisTexts;
 
   List<HighlightPoint> getClosetHighlightPoints(double horizontalDragPosition) {
-    List<HighlightPoint> highlights = List();
+    List<HighlightPoint> highlights = [];
 
-    seriesMap.forEach((key, list) {
+    seriesMap!.forEach((key, list) {
       HighlightPoint closest = _findClosest(list, horizontalDragPosition);
       highlights.add(closest);
     });
@@ -292,7 +289,7 @@ class LineChart {
     return candidate;
   }
 
-  Path getPathCache(int index) {
+  Path? getPathCache(int index) {
     if (_pathMap.containsKey(index)) {
       return _pathMap[index];
     } else {
@@ -300,7 +297,7 @@ class LineChart {
 
       bool init = true;
 
-      this.seriesMap[index].forEach((p) {
+      this.seriesMap![index]!.forEach((p) {
         if (init) {
           init = false;
           path.moveTo(p.chartPoint.x, p.chartPoint.y);

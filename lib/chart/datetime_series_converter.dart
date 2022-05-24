@@ -22,12 +22,12 @@ class DateTimeSeriesConverter {
 
   static ChartLine _convert(
       Map<DateTime, double> input, Dates minMax, Color color, String unit) {
-    DateTime from = minMax.min;
+    DateTime? from = minMax.min;
 
     List<DateTimeChartPoint> result = [];
 
     input.forEach((dateTime, value) {
-      double x = dateTime.difference(from).inSeconds.toDouble();
+      double x = dateTime.difference(from!).inSeconds.toDouble();
       double y = value;
       result.add(DateTimeChartPoint(x, y, dateTime));
     });
@@ -36,8 +36,8 @@ class DateTimeSeriesConverter {
   }
 
   static Dates _findMinMax(List<Map<DateTime, double>> list) {
-    DateTime min;
-    DateTime max;
+    DateTime? min;
+    DateTime? max;
 
     list.forEach((map) {
       map.keys.forEach((dateTime) {
@@ -45,10 +45,10 @@ class DateTimeSeriesConverter {
           min = dateTime;
           max = dateTime;
         } else {
-          if (dateTime.isBefore(min)) {
+          if (dateTime.isBefore(min!)) {
             min = dateTime;
           }
-          if (dateTime.isAfter(max)) {
+          if (dateTime.isAfter(max!)) {
             max = dateTime;
           }
         }
