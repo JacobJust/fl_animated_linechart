@@ -435,17 +435,17 @@ class ChartPainter extends CustomPainter {
       tp.paint(canvas, Offset(_chart.xAxisOffsetPX, -20)); //-16
     }
 
-    // if (_chart.indexToUnit.length == 2) {
-    //   TextSpan span = TextSpan(style: style, text: _chart.yAxisName ?? _chart.indexToUnit[1]);
-    //   TextPainter tp = TextPainter(
-    //       text: span,
-    //       textAlign: TextAlign.right,
-    //       textDirection: TextDirectionHelper.getDirection());
-    //   tp.layout();
+    if (_chart.indexToUnit.length == 2) {
+      TextSpan span = TextSpan(style: style, text: _chart.indexToUnit[1]);
+      TextPainter tp = TextPainter(
+          text: span,
+          textAlign: TextAlign.right,
+          textDirection: TextDirectionHelper.getDirection());
+      tp.layout();
 
-    //   tp.paint(canvas,
-    //       Offset(size.width - tp.width - _chart.xAxisOffsetPXright, -16));
-    // }
+      tp.paint(canvas,
+          Offset(size.width - tp.width - _chart.xAxisOffsetPXright, -16));
+    }
   }
 
   void _drawGrid(Canvas canvas, Size size) {
