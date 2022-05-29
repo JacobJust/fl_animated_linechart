@@ -50,6 +50,7 @@ class _MyHomePageState extends State<MyHomePage> with FakeChartSeries {
     } else {
       chart = AreaLineChart.fromDateTimeMaps(
           [line1], [Colors.red.shade900], ['C'],
+          yAxisName: "Temperature",
           gradients: [Pair(Colors.yellow.shade400, Colors.red.shade700)]);
     }
     final ButtonStyle flatButtonStyle = TextButton.styleFrom(
