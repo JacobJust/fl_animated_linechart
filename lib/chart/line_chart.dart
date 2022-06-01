@@ -39,15 +39,17 @@ class LineChart {
   double? _heightStepSize;
   double? _xScale;
   double? _xOffset;
-  Map<int, List<HighlightPoint>>? _seriesMap;
+  Map<int, List<HighlightPoint>> _seriesMap = {};
   late Map<int, Path> _pathMap;
   double? _axisOffSetWithPadding;
   late Map<int, List<TextPainter>> _yAxisTexts;
   List<TextPainter>? _xAxisTexts;
   late Map<int, String> indexToUnit;
+  String? yAxisName;
 
   LineChart(this.lines, this.fromTo,
       {this.tapTextFontWeight,
+      this.yAxisName,
       String formatHoursMinutes = 'kk:mm',
       String formatDayMonth = 'dd/MM'})
       : this._formatHoursMinutes = DateFormat(formatHoursMinutes),
@@ -55,14 +57,14 @@ class LineChart {
 
   factory LineChart.fromDateTimeMaps(List<Map<DateTime, double>> series,
       List<Color> colors, List<String> units,
-      {FontWeight? tapTextFontWeight}) {
+      {FontWeight? tapTextFontWeight, String? yAxisName}) {
     assert(series.length == colors.length);
     assert(series.length == units.length);
 
     Pair<List<ChartLine>, Dates> convertFromDateMaps =
         DateTimeSeriesConverter.convertFromDateMaps(series, colors, units);
     return LineChart(convertFromDateMaps.left, convertFromDateMaps.right,
-        tapTextFontWeight: tapTextFontWeight);
+        tapTextFontWeight: tapTextFontWeight, yAxisName: yAxisName);
   }
 
   double get width => _maxX - _minX;
@@ -113,7 +115,7 @@ class LineChart {
   }
 
   //Calculate ui pixels values
-  void initialize(double widthPX, double heightPX, TextStyle style) {
+  void initialize(double widthPX, double heightPX, TextStyle? style) {
     _calcScales(heightPX);
 
     //calc axis textpainters, before using
@@ -177,8 +179,10 @@ class LineChart {
 
     _xScale = (widthPX - xAxisOffsetPX - maxRight) / width;
     _xOffset = minX * _xScale!;
-
-    _seriesMap = Map();
+    if (_xOffset!.isNaN) {
+      _xOffset = 0;
+    }
+    //_seriesMap = Map();
     _pathMap = Map();
 
     index = 0;
@@ -193,15 +197,17 @@ class LineChart {
 
         //adjust to make room for axis values:
         x += xAxisOffsetPX;
-        if (_seriesMap![index] == null) {
-          _seriesMap![index] = [];
+        if (x.isNaN) x = 0;
+        if (y.isNaN) y = 0;
+        if (_seriesMap[index] == null) {
+          _seriesMap[index] = [];
         }
 
         if (p is DateTimeChartPoint) {
-          _seriesMap![index]!
+          _seriesMap[index]!
               .add(HighlightPoint(DateTimeChartPoint(x, y, p.dateTime), p.y));
         } else {
-          _seriesMap![index]!.add(HighlightPoint(ChartPoint(x, y), p.y));
+          _seriesMap[index]?.add(HighlightPoint(ChartPoint(x, y), p.y));
         }
       });
 
