@@ -16,7 +16,7 @@ typedef TapText = String Function(String prefix, double y, String unit);
 class AnimatedLineChart extends StatefulWidget {
   final LineChart chart;
   final TapText? tapText;
-  final TextStyle textStyle;
+  final TextStyle? textStyle;
   final Color toolTipColor;
   final Color gridColor;
 
@@ -24,7 +24,7 @@ class AnimatedLineChart extends StatefulWidget {
     this.chart, {
     Key? key,
     this.tapText,
-    required this.textStyle,
+    this.textStyle,
     required this.gridColor,
     required this.toolTipColor,
   }) : super(key: key);
@@ -377,7 +377,7 @@ class ChartPainter extends CustomPainter {
       _linePainter.color = chartLine.color;
       Path? path;
 
-      List<HighlightPoint> points = _chart.seriesMap![index]!;
+      List<HighlightPoint> points = _chart.seriesMap?[index] ?? [];
 
       bool drawCircles = points.length < 100;
 
@@ -424,14 +424,15 @@ class ChartPainter extends CustomPainter {
 
   void _drawUnits(Canvas canvas, Size size, TextStyle? style) {
     if (_chart.indexToUnit.length > 0) {
-      TextSpan span = TextSpan(style: style, text: _chart.indexToUnit[0]);
+      TextSpan span = TextSpan(
+          style: style, text: _chart.yAxisName ?? _chart.indexToUnit[0]); // );
       TextPainter tp = TextPainter(
           text: span,
           textAlign: TextAlign.right,
           textDirection: TextDirectionHelper.getDirection());
       tp.layout();
 
-      tp.paint(canvas, Offset(_chart.xAxisOffsetPX, -16));
+      tp.paint(canvas, Offset(_chart.xAxisOffsetPX, -20)); //-16
     }
 
     if (_chart.indexToUnit.length == 2) {
