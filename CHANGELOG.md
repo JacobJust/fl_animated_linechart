@@ -1,3 +1,7 @@
+## [1.1.5]
+
+* Adding null safety. Thanks to @AndriiHarashchak.
+
 ## [1.1.4]
 
 * Upgrade example to AndroidX and Android embedded v2
