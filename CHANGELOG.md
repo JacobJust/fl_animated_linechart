@@ -1,3 +1,9 @@
+## [1.1.6]
+
+* Ability to set a custom label for yAxis(still use units[index] if not provided).Thanks to @AndriiHarashchak
+* Fix exception when DateTime values in series are same for all values in Map(offset in NaN exception).
+* Update example app to remove deprecated FlatButton and add windows support (tested on windows 11)
+
 ## [1.1.5]
 
 * Adding null safety. Thanks to @AndriiHarashchak.
