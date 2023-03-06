@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:fl_animated_linechart/chart/chart_line.dart';
 import 'package:fl_animated_linechart/chart/chart_point.dart';
 import 'package:fl_animated_linechart/chart/highlight_point.dart';
@@ -12,7 +10,10 @@ import '../testHelpers/chart_data_helper.dart';
 
 void main() {
   test('init with empty dataset', () async {
-    LineChart lineChart = LineChart([], Dates(DateTime.now(), DateTime.now()));
+    LineChart lineChart = LineChart(
+        [],
+        Dates(DateTime.parse('2012-02-27 13:27:00'),
+            DateTime.parse('2012-02-27 13:27:00')));
     lineChart.initialize(
       200,
       100,
@@ -22,8 +23,10 @@ void main() {
 
     expect(lineChart.seriesMap!.isEmpty, true);
 
-    lineChart = LineChart([ChartLine([], Colors.black, 'C')],
-        Dates(DateTime.now(), DateTime.now()));
+    lineChart = LineChart(
+        [ChartLine([], Colors.black, 'C')],
+        Dates(DateTime.parse('2012-02-27 13:27:00'),
+            DateTime.parse('2012-02-27 13:27:00')));
     lineChart.initialize(
       200,
       100,
@@ -37,7 +40,8 @@ void main() {
   test('init with 1 line', () async {
     LineChart lineChart = LineChart(
         [ChartLineHelper.createLine(10, 2, Colors.cyan, 'W')],
-        Dates(DateTime.now(), DateTime.now()));
+        Dates(DateTime.parse('2012-02-27 13:27:00'),
+            DateTime.parse('2012-02-27 13:27:00')));
     lineChart.initialize(
       200,
       100,
@@ -56,10 +60,13 @@ void main() {
   });
 
   test('init with multiple lines', () async {
-    LineChart lineChart = LineChart([
-      ChartLineHelper.createLine(10, 2, Colors.cyan, 'W'),
-      ChartLineHelper.createLine(15, 1, Colors.cyan, 'W')
-    ], Dates(DateTime.now(), DateTime.now()));
+    LineChart lineChart = LineChart(
+        [
+          ChartLineHelper.createLine(10, 2, Colors.cyan, 'W'),
+          ChartLineHelper.createLine(15, 1, Colors.cyan, 'W')
+        ],
+        Dates(DateTime.parse('2012-02-27 13:27:00'),
+            DateTime.parse('2012-02-27 13:27:00')));
     lineChart.initialize(
       200,
       100,
@@ -79,10 +86,10 @@ void main() {
   });
 
   test('init with datetime chart points', () async {
-    DateTime start = DateTime.now();
+    DateTime start = DateTime.parse('2012-02-27 13:27:00');
 
     List<Map<DateTime, double>> series = [];
-    Map<DateTime, double> line = Map();
+    Map<DateTime, double> line = {};
     line[start] = 1.2;
     line[start.add(Duration(minutes: 5))] = 0.5;
     line[start.add(Duration(minutes: 10))] = 1.7;
@@ -105,10 +112,13 @@ void main() {
   });
 
   test('test xScale', () async {
-    LineChart lineChart = LineChart([
-      ChartLineHelper.createLine(10, 2, Colors.cyan, 'W'),
-      ChartLineHelper.createLine(15, 1, Colors.cyan, 'W')
-    ], Dates(DateTime.now(), DateTime.now()));
+    LineChart lineChart = LineChart(
+        [
+          ChartLineHelper.createLine(10, 2, Colors.cyan, 'W'),
+          ChartLineHelper.createLine(15, 1, Colors.cyan, 'W')
+        ],
+        Dates(DateTime.parse('2012-02-27 13:27:00'),
+            DateTime.parse('2012-02-27 13:27:00')));
     lineChart.initialize(
       200,
       100,
@@ -120,10 +130,13 @@ void main() {
   });
 
   test('test yScale', () async {
-    LineChart lineChart = LineChart([
-      ChartLineHelper.createLine(10, 2, Colors.cyan, 'W'),
-      ChartLineHelper.createLine(15, 1, Colors.cyan, 'W')
-    ], Dates(DateTime.now(), DateTime.now()));
+    LineChart lineChart = LineChart(
+        [
+          ChartLineHelper.createLine(10, 2, Colors.cyan, 'W'),
+          ChartLineHelper.createLine(15, 1, Colors.cyan, 'W')
+        ],
+        Dates(DateTime.parse('2012-02-27 13:27:00'),
+            DateTime.parse('2012-02-27 13:27:00')));
     lineChart.initialize(
       200,
       100,
@@ -135,10 +148,13 @@ void main() {
   });
 
   test('test heightStepSize', () async {
-    LineChart lineChart = LineChart([
-      ChartLineHelper.createLine(10, 2, Colors.cyan, 'W'),
-      ChartLineHelper.createLine(15, 1, Colors.cyan, 'W')
-    ], Dates(DateTime.now(), DateTime.now()));
+    LineChart lineChart = LineChart(
+        [
+          ChartLineHelper.createLine(10, 2, Colors.cyan, 'W'),
+          ChartLineHelper.createLine(15, 1, Colors.cyan, 'W')
+        ],
+        Dates(DateTime.parse('2012-02-27 13:27:00'),
+            DateTime.parse('2012-02-27 13:27:00')));
     lineChart.initialize(
       200,
       100,
@@ -150,10 +166,13 @@ void main() {
   });
 
   test('test widthStepSize', () async {
-    LineChart lineChart = LineChart([
-      ChartLineHelper.createLine(10, 2, Colors.cyan, 'W'),
-      ChartLineHelper.createLine(15, 1, Colors.cyan, 'W')
-    ], Dates(DateTime.now(), DateTime.now()));
+    LineChart lineChart = LineChart(
+        [
+          ChartLineHelper.createLine(10, 2, Colors.cyan, 'W'),
+          ChartLineHelper.createLine(15, 1, Colors.cyan, 'W')
+        ],
+        Dates(DateTime.parse('2012-02-27 13:27:00'),
+            DateTime.parse('2012-02-27 13:27:00')));
     lineChart.initialize(
       200,
       100,
@@ -165,10 +184,13 @@ void main() {
   });
 
   test('test axisOffSetWithPadding', () async {
-    LineChart lineChart = LineChart([
-      ChartLineHelper.createLine(10, 2, Colors.cyan, 'W'),
-      ChartLineHelper.createLine(15, 1, Colors.cyan, 'W')
-    ], Dates(DateTime.now(), DateTime.now()));
+    LineChart lineChart = LineChart(
+        [
+          ChartLineHelper.createLine(10, 2, Colors.cyan, 'W'),
+          ChartLineHelper.createLine(15, 1, Colors.cyan, 'W')
+        ],
+        Dates(DateTime.parse('2012-02-27 13:27:00'),
+            DateTime.parse('2012-02-27 13:27:00')));
     lineChart.initialize(
       200,
       100,
@@ -193,8 +215,10 @@ void main() {
       ChartPoint(minX, minY),
     ], Colors.pink, 'W');
 
-    LineChart lineChart = LineChart([ChartLine([], Colors.amber, 'W'), line],
-        Dates(DateTime.now(), DateTime.now()));
+    LineChart lineChart = LineChart(
+        [ChartLine([], Colors.amber, 'W'), line],
+        Dates(DateTime.parse('2012-02-27 13:27:00'),
+            DateTime.parse('2012-02-27 13:27:00')));
     lineChart.initialize(
       200,
       100,
@@ -211,7 +235,8 @@ void main() {
   test('width and height calculated based on min and max values', () async {
     LineChart lineChart = LineChart(
         [ChartLineHelper.createLine(10, 2, Colors.cyan, 'W')],
-        Dates(DateTime.now(), DateTime.now()));
+        Dates(DateTime.parse('2012-02-27 13:27:00'),
+            DateTime.parse('2012-02-27 13:27:00')));
     lineChart.initialize(
       200,
       100,
@@ -226,10 +251,13 @@ void main() {
   test('path calculate', () async {
     double chartHeight = 100.0;
 
-    LineChart lineChart = LineChart([
-      ChartLineHelper.createLine(10, 2, Colors.cyan, 'W'),
-      ChartLineHelper.createLine(10, 4, Colors.cyan, 'W')
-    ], Dates(DateTime.now(), DateTime.now()));
+    LineChart lineChart = LineChart(
+        [
+          ChartLineHelper.createLine(10, 2, Colors.cyan, 'W'),
+          ChartLineHelper.createLine(10, 4, Colors.cyan, 'W')
+        ],
+        Dates(DateTime.parse('2012-02-27 13:27:00'),
+            DateTime.parse('2012-02-27 13:27:00')));
     lineChart.initialize(
       200,
       chartHeight,
@@ -248,7 +276,8 @@ void main() {
 
     LineChart lineChart = LineChart(
         [ChartLineHelper.createLine(10, 2, Colors.cyan, 'W')],
-        Dates(DateTime.now(), DateTime.now()));
+        Dates(DateTime.parse('2012-02-27 13:27:00'),
+            DateTime.parse('2012-02-27 13:27:00')));
     lineChart.initialize(
       200,
       chartHeight,
@@ -266,7 +295,8 @@ void main() {
   test('find the highlight closest', () async {
     LineChart lineChart = LineChart(
         [ChartLineHelper.createLine(10, 2, Colors.cyan, 'W')],
-        Dates(DateTime.now(), DateTime.now()));
+        Dates(DateTime.parse('2012-02-27 13:27:00'),
+            DateTime.parse('2012-02-27 13:27:00')));
     lineChart.initialize(
       200,
       100,
@@ -283,7 +313,7 @@ void main() {
   });
 
   test('y axis calculations', () async {
-    DateTime start = DateTime.now();
+    DateTime start = DateTime.parse('2012-02-27 13:27:00');
 
     List<Map<DateTime, double>> series = [];
     Map<DateTime, double> line = Map();
@@ -317,7 +347,7 @@ void main() {
   });
 
   test('y axis calculations decimal', () async {
-    DateTime start = DateTime.now();
+    DateTime start = DateTime.parse('2012-02-27 13:27:00');
 
     List<Map<DateTime, double>> series = [];
     Map<DateTime, double> line = Map();
@@ -351,7 +381,7 @@ void main() {
   });
 
   test('x axis format hours minutes', () async {
-    DateTime start = DateTime.now();
+    DateTime start = DateTime.parse('2012-02-27 13:27:00');
 
     List<Map<DateTime, double>> series = [];
     Map<DateTime, double> line = Map();
@@ -379,7 +409,7 @@ void main() {
   });
 
   test('x axis format hours minutes day month', () async {
-    DateTime start = DateTime.now();
+    DateTime start = DateTime.parse('2012-02-27 13:27:00');
 
     List<Map<DateTime, double>> series = [];
     Map<DateTime, double> line = Map();
@@ -408,10 +438,14 @@ void main() {
 
   //The right side should be scaled down, with a factor of 10
   test('multi axis support scaling', () async {
-    LineChart lineChart = LineChart([
-      ChartLineHelper.createLine(10, 1.0, Colors.green, 'C'),
-      ChartLineHelper.createLine(10, 10.0, Colors.green, 'F'),
-    ], Dates(DateTime.now().subtract(Duration(hours: 1)), DateTime.now()));
+    LineChart lineChart = LineChart(
+        [
+          ChartLineHelper.createLine(10, 1.0, Colors.green, 'C'),
+          ChartLineHelper.createLine(10, 10.0, Colors.green, 'F'),
+        ],
+        Dates(
+            DateTime.parse('2012-02-27 13:27:00').subtract(Duration(hours: 1)),
+            DateTime.parse('2012-02-27 13:27:00')));
 
     lineChart.initialize(
       200,
@@ -425,10 +459,14 @@ void main() {
   });
 
   test('multi axis support highlight tooltip for scaled axis', () async {
-    LineChart lineChart = LineChart([
-      ChartLineHelper.createLine(10, 1.0, Colors.green, 'C'),
-      ChartLineHelper.createLine(10, 10.0, Colors.green, 'F'),
-    ], Dates(DateTime.now().subtract(Duration(hours: 1)), DateTime.now()));
+    LineChart lineChart = LineChart(
+        [
+          ChartLineHelper.createLine(10, 1.0, Colors.green, 'C'),
+          ChartLineHelper.createLine(10, 10.0, Colors.green, 'F'),
+        ],
+        Dates(
+            DateTime.parse('2012-02-27 13:27:00').subtract(Duration(hours: 1)),
+            DateTime.parse('2012-02-27 13:27:00')));
 
     lineChart.initialize(
       200,

@@ -9,10 +9,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  intl: ^0.17.0
+  intl: ^0.18.0
+  path_drawing: ^1.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-flutter:

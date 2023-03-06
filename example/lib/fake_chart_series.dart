@@ -61,10 +61,70 @@ class FakeChartSeries {
     return data;
   }
 
+  Map<DateTime, double> createLine2_3() {
+    Map<DateTime, double> data = {};
+
+    data[DateTime.parse('2012-02-27 12:33:00')] = 215.0;
+    data[DateTime.parse('2012-02-27 12:38:00')] = 212.0;
+    data[DateTime.parse('2012-02-27 12:43:00')] = 201.0;
+    data[DateTime.parse('2012-02-27 12:48:00')] = 204.0;
+    data[DateTime.parse('2012-02-27 12:53:00')] = 200.0;
+    data[DateTime.parse('2012-02-27 12:58:00')] = 200.0;
+    data[DateTime.parse('2012-02-27 13:03:00')] = 214.0;
+    data[DateTime.parse('2012-02-27 13:08:00')] = 215.0;
+    data[DateTime.parse('2012-02-27 13:13:00')] = 204.0;
+    data[DateTime.parse('2012-02-27 13:18:00')] = 199.0;
+    data[DateTime.parse('2012-02-27 13:23:00')] = 217.0;
+    data[DateTime.parse('2012-02-27 13:28:00')] = 200.0;
+    data[DateTime.parse('2012-02-27 13:33:43.564')] = 210.0;
+    data[DateTime.parse('2012-02-27 13:38:45.751')] = 202.0;
+    data[DateTime.parse('2012-02-27 13:43:00')] = 214.0;
+    data[DateTime.parse('2012-02-27 13:48:00')] = 216.0;
+    data[DateTime.parse('2012-02-27 13:53:00')] = 217.0;
+    data[DateTime.parse('2012-02-27 13:58:00')] = 207.0;
+    data[DateTime.parse('2012-02-27 14:03:00')] = 216.0;
+    data[DateTime.parse('2012-02-27 14:08:00')] = 214.0;
+    data[DateTime.parse('2012-02-27 14:13:00')] = 199.0;
+    data[DateTime.parse('2012-02-27 14:18:00')] = 212.0;
+    data[DateTime.parse('2012-02-27 14:23:00')] = 206.0;
+    data[DateTime.parse('2012-02-27 14:28:00')] = 199.0;
+    data[DateTime.parse('2012-02-27 14:33:00')] = 217.0;
+    data[DateTime.parse('2012-02-27 14:38:00')] = 201.0;
+    return data;
+  }
+
+  Map<DateTime, double> yAxisUpperMaxMarkerLine() {
+    Map<DateTime, double> data = {};
+    data[DateTime.parse('2012-02-27 12:33:00')] = 210.0;
+    data[DateTime.parse('2012-02-27 14:43:00')] = 210.0;
+    return data;
+  }
+
+  Map<DateTime, double> yAxisLowerMaxMarkerLine() {
+    Map<DateTime, double> data = {};
+    data[DateTime.parse('2012-02-27 12:33:00')] = 151.1;
+    data[DateTime.parse('2012-02-27 14:43:00')] = 151.1;
+    return data;
+  }
+
+  Map<DateTime, double> yAxisUpperMinMarkerLine() {
+    Map<DateTime, double> data = {};
+    data[DateTime.parse('2012-02-27 12:33:00')] = 208.0;
+    data[DateTime.parse('2012-02-27 14:43:00')] = 208.0;
+    return data;
+  }
+
+  Map<DateTime, double> yAxisLowerMinMarkerLine() {
+    Map<DateTime, double> data = {};
+    data[DateTime.parse('2012-02-27 12:33:00')] = 180.12;
+    data[DateTime.parse('2012-02-27 14:43:00')] = 180.12;
+    return data;
+  }
+
   Map<DateTime, double> createLine3() {
     Map<DateTime, double> data = {};
     data[DateTime.now().subtract(Duration(days: 6))] = 1100.0;
-    data[DateTime.now().subtract(Duration(days: 4))] = 2233.0;
+    data[DateTime.now().subtract(Duration(days: 5))] = 2233.0;
     data[DateTime.now().subtract(Duration(days: 4))] = 3744.0;
     data[DateTime.now().subtract(Duration(days: 3))] = 3100.0;
     data[DateTime.now().subtract(Duration(days: 2))] = 2900.0;

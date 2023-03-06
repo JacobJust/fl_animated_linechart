@@ -6,13 +6,14 @@ class ChartLine {
   final List<ChartPoint> points;
   final Color color;
   final String unit;
+  bool isMarkerLine;
 
   double _minX = 0;
   double _minY = 0;
   double _maxX = 0;
   double _maxY = 0;
 
-  ChartLine(this.points, this.color, this.unit) {
+  ChartLine(this.points, this.color, this.unit, {this.isMarkerLine = false}) {
     if (points.length > 0) {
       _minX = points[0].x;
       _maxX = points[0].x;

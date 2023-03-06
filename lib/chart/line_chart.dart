@@ -39,7 +39,7 @@ class LineChart {
   double? _heightStepSize;
   double? _xScale;
   double? _xOffset;
-  Map<int, List<HighlightPoint>> _seriesMap = {};
+  late Map<int, List<HighlightPoint>> _seriesMap;
   late Map<int, Path> _pathMap;
   double? _axisOffSetWithPadding;
   late Map<int, List<TextPainter>> _yAxisTexts;
@@ -79,7 +79,7 @@ class LineChart {
   double? yScale(String unit) => _yScales[unit];
 
   void _calcScales(double heightPX) {
-    Map<String, Pair> unitToMinMaxY = Map();
+    Map<String, Pair> unitToMinMaxY = {};
 
     lines.forEach((line) {
       if (unitToMinMaxY.containsKey(line.unit)) {
@@ -99,10 +99,10 @@ class LineChart {
       }
     });
 
-    _minY = Map();
-    _maxY = Map();
-    _yScales = Map();
-    indexToUnit = Map();
+    _minY = {};
+    _maxY = {};
+    _yScales = {};
+    indexToUnit = {};
 
     int i = 0;
     unitToMinMaxY.forEach((key, value) {
@@ -119,7 +119,7 @@ class LineChart {
     _calcScales(heightPX);
 
     //calc axis textpainters, before using
-    _yTicks = Map();
+    _yTicks = {};
 
     int index = 0;
     lines.forEach((chartLine) {
@@ -127,7 +127,7 @@ class LineChart {
       index++;
     });
 
-    _yAxisTexts = Map();
+    _yAxisTexts = {};
 
     double maxLeft = 0;
     double maxRight = 1;
@@ -182,8 +182,8 @@ class LineChart {
     if (_xOffset!.isNaN) {
       _xOffset = 0;
     }
-    //_seriesMap = Map();
-    _pathMap = Map();
+    _seriesMap = {};
+    _pathMap = {};
 
     index = 0;
     lines.forEach((chartLine) {

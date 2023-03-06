@@ -3,15 +3,16 @@ import 'package:fl_animated_linechart/common/pair.dart';
 import 'package:fl_animated_linechart/fl_animated_linechart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'dart:ui' as ui;
 
 import '../testHelpers/widget_test_helper.dart';
 
 void main() {
   testWidgets('Test animations runs and disposes', (WidgetTester tester) async {
-    DateTime start = DateTime.now();
+    DateTime start = DateTime.parse('2012-02-27 13:27:00');
 
     List<Map<DateTime, double>> series = [];
-    Map<DateTime, double> line = Map();
+    Map<DateTime, double> line = {};
     line[start] = 1.2;
     line[start.add(Duration(minutes: 5))] = 0.5;
     line[start.add(Duration(minutes: 10))] = 1.7;
@@ -57,7 +58,7 @@ void main() {
 
   testWidgets('Test horizontal drag multiple series',
       (WidgetTester tester) async {
-    DateTime start = DateTime.now();
+    DateTime start = DateTime.parse('2012-02-27 13:27:00');
 
     List<Map<DateTime, double>> series = [];
     Map<DateTime, double> line = Map();
@@ -125,7 +126,7 @@ void main() {
 
   testWidgets('Test horizontal drag multiple series different unit',
       (WidgetTester tester) async {
-    DateTime start = DateTime.now();
+    DateTime start = DateTime.parse('2012-02-27 13:27:00');
 
     List<Map<DateTime, double>> series = [];
     Map<DateTime, double> line = Map();
@@ -192,7 +193,7 @@ void main() {
   });
 
   testWidgets('Test horizontal drag single serie', (WidgetTester tester) async {
-    DateTime start = DateTime.now();
+    DateTime start = DateTime.parse('2012-02-27 13:27:00');
 
     List<Map<DateTime, double>> series = [];
     Map<DateTime, double> line = Map();
@@ -250,7 +251,7 @@ void main() {
   });
 
   testWidgets('Test tooltip triggered by tap', (WidgetTester tester) async {
-    DateTime start = DateTime.now();
+    DateTime start = DateTime.parse('2012-02-27 13:27:00');
 
     List<Map<DateTime, double>> series = [];
     Map<DateTime, double> line = Map();
@@ -292,7 +293,7 @@ void main() {
   });
 
   testWidgets('serie with same values', (WidgetTester tester) async {
-    DateTime start = DateTime.now();
+    DateTime start = DateTime.parse('2012-02-27 13:27:00');
 
     List<Map<DateTime, double>> series = [];
     Map<DateTime, double> line = Map();
@@ -332,7 +333,7 @@ void main() {
   });
 
   testWidgets('area chart', (WidgetTester tester) async {
-    DateTime start = DateTime.now();
+    DateTime start = DateTime.parse('2012-02-27 13:27:00');
 
     List<Map<DateTime, double>> series = [];
     Map<DateTime, double> line = Map();
@@ -372,7 +373,7 @@ void main() {
   });
 
   testWidgets('area chart with gradient', (WidgetTester tester) async {
-    DateTime start = DateTime.now();
+    DateTime start = DateTime.parse('2012-02-27 13:27:00');
 
     List<Map<DateTime, double>> series = [];
     Map<DateTime, double> line = Map();
@@ -410,5 +411,396 @@ void main() {
 
     await expectLater(find.byType(AnimatedLineChart),
         matchesGoldenFile('areaChartGradient.png'));
+  });
+
+  testWidgets('Test with upper and lower level dashed lines',
+      (WidgetTester tester) async {
+    DateTime start = DateTime.parse('2012-02-27 13:27:00');
+
+    List<Map<DateTime, double>> series = [];
+    Map<DateTime, double> line = {};
+    line[start] = 1.2;
+    line[start.add(Duration(minutes: 5))] = 0.5;
+    line[start.add(Duration(minutes: 10))] = 1.7;
+
+    Map<DateTime, double> upperCritical = {};
+    upperCritical[start] = 2;
+    upperCritical[start.add(Duration(minutes: 10))] = 2;
+
+    Map<DateTime, double> lowerCritical = {};
+    lowerCritical[start] = 0;
+    lowerCritical[start.add(Duration(minutes: 10))] = 0;
+
+    Map<DateTime, double> upperWarning = {};
+    upperWarning[start] = 1.7;
+    upperWarning[start.add(Duration(minutes: 10))] = 1.7;
+
+    Map<DateTime, double> lowerWarning = {};
+    lowerWarning[start] = 0.4;
+    lowerWarning[start.add(Duration(minutes: 10))] = 0.4;
+
+    series.add(line);
+    series.add(upperCritical);
+    series.add(upperWarning);
+    series.add(lowerWarning);
+    series.add(lowerCritical);
+
+    LineChart lineChart = LineChart.fromDateTimeMaps(
+        series,
+        [Colors.pink, Colors.red, Colors.yellow, Colors.yellow, Colors.red],
+        ['P', 'P', 'P', 'P', 'P']);
+
+    lineChart.initialize(
+      200,
+      100,
+      TextStyle(
+          color: Colors.grey[800], fontSize: 11.0, fontWeight: FontWeight.w200),
+    );
+    lineChart.lines[1].isMarkerLine = true;
+    lineChart.lines[2].isMarkerLine = true;
+    lineChart.lines[3].isMarkerLine = true;
+    lineChart.lines[4].isMarkerLine = true;
+
+    await tester.pumpWidget(
+      buildTestableWidget(
+        AnimatedLineChart(
+          lineChart,
+          gridColor: Colors.black54,
+          textStyle: TextStyle(fontSize: 10, color: Colors.black54),
+          toolTipColor: Colors.white,
+          showMarkerLines: true,
+        ),
+      ),
+    );
+
+    await tester.pump(Duration(seconds: 1));
+
+    await expectLater(find.byType(AnimatedLineChart),
+        matchesGoldenFile('animatedLineChartWithMarkerLines.png'));
+  });
+
+  testWidgets('Test with horizontal and vertical marker lines',
+      (WidgetTester tester) async {
+    DateTime start = DateTime.parse('2012-02-27 13:27:00');
+
+    List<Map<DateTime, double>> series = [];
+    Map<DateTime, double> line = {};
+    line[start] = 1.2;
+    line[start.add(Duration(minutes: 5))] = 0.5;
+    line[start.add(Duration(minutes: 7))] = 1.7;
+    line[start.add(Duration(minutes: 10))] = 1;
+
+    Map<DateTime, double> upperCritical = {};
+    upperCritical[start] = 2;
+    upperCritical[start.add(Duration(minutes: 10))] = 2;
+
+    Map<DateTime, double> lowerCritical = {};
+    lowerCritical[start] = 0;
+    lowerCritical[start.add(Duration(minutes: 10))] = 0;
+
+    Map<DateTime, double> upperWarning = {};
+    upperWarning[start] = 1.7;
+    upperWarning[start.add(Duration(minutes: 7))] = 1.7;
+
+    Map<DateTime, double> lowerWarning = {};
+    lowerWarning[start] = 0.4;
+    lowerWarning[start.add(Duration(minutes: 10))] = 0.4;
+
+    series.add(line);
+    series.add(upperCritical);
+    series.add(upperWarning);
+    series.add(lowerWarning);
+    series.add(lowerCritical);
+
+    LineChart lineChart = LineChart.fromDateTimeMaps(
+        series,
+        [Colors.pink, Colors.red, Colors.yellow, Colors.yellow, Colors.red],
+        ['P', 'P', 'P', 'P', 'P']);
+
+    lineChart.initialize(
+      200,
+      100,
+      TextStyle(
+          color: Colors.grey[800], fontSize: 11.0, fontWeight: FontWeight.w200),
+    );
+    lineChart.lines[1].isMarkerLine = true;
+    lineChart.lines[2].isMarkerLine = true;
+    lineChart.lines[3].isMarkerLine = true;
+    lineChart.lines[4].isMarkerLine = true;
+
+    await tester.pumpWidget(
+      buildTestableWidget(
+        AnimatedLineChart(
+          lineChart,
+          gridColor: Colors.black54,
+          textStyle: TextStyle(fontSize: 10, color: Colors.black54),
+          toolTipColor: Colors.white,
+          showMarkerLines: true,
+          verticalMarker: [
+            start.add(Duration(minutes: 7)),
+            start.add(Duration(minutes: 10))
+          ],
+          verticalMarkerColor: Colors.yellow,
+          verticalMarkerIcon: [
+            Icon(
+              Icons.report_problem_rounded,
+              color: Colors.yellow,
+            ),
+            Icon(
+              Icons.clear,
+              color: Colors.green,
+            )
+          ],
+          iconBackgroundColor: Colors.white,
+        ),
+      ),
+    );
+
+    await tester.pumpAndSettle(Duration(seconds: 1));
+    await tester.pump(Duration(seconds: 1));
+
+    await expectLater(
+        find.byType(AnimatedLineChart),
+        matchesGoldenFile(
+            'animatedLineChartWithHorizontalAndVerticalMarkerLines.png'));
+  });
+
+  testWidgets('Test legends showing', (WidgetTester tester) async {
+    final TestWidgetsFlutterBinding binding =
+        TestWidgetsFlutterBinding.ensureInitialized();
+
+    DateTime start = DateTime.parse('2012-02-27 13:27:00');
+
+    List<Map<DateTime, double>> series = [];
+    Map<DateTime, double> line = {};
+    line[start] = 1.2;
+    line[start.add(Duration(minutes: 5))] = 0.5;
+    line[start.add(Duration(minutes: 7))] = 1.7;
+    line[start.add(Duration(minutes: 10))] = 1;
+
+    series.add(line);
+
+    LineChart lineChart =
+        LineChart.fromDateTimeMaps(series, [Colors.pink], ['P']);
+
+    lineChart.initialize(
+      200,
+      100,
+      TextStyle(
+          color: Colors.grey[800], fontSize: 11.0, fontWeight: FontWeight.w200),
+    );
+
+    binding.window.physicalSizeTestValue = Size(400, 800);
+    binding.window.devicePixelRatioTestValue = 1.0;
+
+    await tester.pumpWidget(
+      buildTestableWidget(
+        AnimatedLineChart(
+          lineChart,
+          gridColor: Colors.black54,
+          textStyle: TextStyle(fontSize: 10, color: Colors.black54),
+          toolTipColor: Colors.white,
+          legends: [
+            Legend(
+              title: 'Total',
+              color: Colors.pink,
+              showLeadingLine: true,
+              style: TextStyle(fontSize: 10, color: Colors.black54),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    await tester.pumpAndSettle(Duration(seconds: 1));
+    await tester.pump(Duration(seconds: 1));
+
+    await expectLater(find.byType(AnimatedLineChart),
+        matchesGoldenFile('animatedLineChartWithLegends.png'));
+
+    binding.window.physicalSizeTestValue =
+        Size(800, 600); //restting size of device screen back to default value
+  });
+
+  testWidgets('Test shaded area between marker lines',
+      (WidgetTester tester) async {
+    DateTime start = DateTime.parse('2012-02-27 13:27:00');
+
+    List<Map<DateTime, double>> series = [];
+    Map<DateTime, double> line = {};
+    line[start] = 1.2;
+    line[start.add(Duration(minutes: 5))] = 0.5;
+    line[start.add(Duration(minutes: 7))] = 1.7;
+    line[start.add(Duration(minutes: 10))] = 1;
+
+    Map<DateTime, double> upperCritical = {};
+    upperCritical[start] = 2;
+    upperCritical[start.add(Duration(minutes: 10))] = 2;
+
+    Map<DateTime, double> lowerCritical = {};
+    lowerCritical[start] = 0;
+    lowerCritical[start.add(Duration(minutes: 10))] = 0;
+
+    Map<DateTime, double> upperWarning = {};
+    upperWarning[start] = 1.7;
+    upperWarning[start.add(Duration(minutes: 7))] = 1.7;
+
+    Map<DateTime, double> lowerWarning = {};
+    lowerWarning[start] = 0.4;
+    lowerWarning[start.add(Duration(minutes: 10))] = 0.4;
+
+    series.add(line);
+    series.add(upperCritical);
+    series.add(upperWarning);
+    series.add(lowerWarning);
+    series.add(lowerCritical);
+
+    LineChart lineChart = LineChart.fromDateTimeMaps(
+        series,
+        [Colors.pink, Colors.red, Colors.yellow, Colors.yellow, Colors.red],
+        ['P', 'P', 'P', 'P', 'P']);
+
+    lineChart.initialize(
+      200,
+      100,
+      TextStyle(
+          color: Colors.grey[800], fontSize: 11.0, fontWeight: FontWeight.w200),
+    );
+    lineChart.lines[1].isMarkerLine = true;
+    lineChart.lines[2].isMarkerLine = true;
+    lineChart.lines[3].isMarkerLine = true;
+    lineChart.lines[4].isMarkerLine = true;
+
+    await tester.pumpWidget(
+      buildTestableWidget(
+        AnimatedLineChart(
+          lineChart,
+          gridColor: Colors.black54,
+          textStyle: TextStyle(fontSize: 10, color: Colors.black54),
+          toolTipColor: Colors.white,
+          showMarkerLines: true,
+          fillMarkerLines: true,
+          filledMarkerLinesValues: [
+            MaxMin.MAX,
+            MaxMin.MAX,
+            MaxMin.MIN,
+            MaxMin.MIN,
+          ],
+        ),
+      ),
+    );
+
+    await tester.pumpAndSettle(Duration(seconds: 1));
+    await tester.pump(Duration(seconds: 1));
+
+    await expectLater(find.byType(AnimatedLineChart),
+        matchesGoldenFile('animatedLineChartShadedAreaBetweenMarkerLines.png'));
+  });
+
+  testWidgets('Test legends on right hand side when landscape mode',
+      (WidgetTester tester) async {
+    DateTime start = DateTime.parse('2012-02-27 13:27:00');
+
+    List<Map<DateTime, double>> series = [];
+    Map<DateTime, double> line = {};
+    line[start] = 1.2;
+    line[start.add(Duration(minutes: 5))] = 0.5;
+    line[start.add(Duration(minutes: 7))] = 1.7;
+    line[start.add(Duration(minutes: 10))] = 1;
+
+    Map<DateTime, double> upperCritical = {};
+    upperCritical[start] = 10;
+    upperCritical[start.add(Duration(minutes: 10))] = 10;
+
+    Map<DateTime, double> lowerCritical = {};
+    lowerCritical[start] = 0;
+    lowerCritical[start.add(Duration(minutes: 10))] = 0;
+
+    Map<DateTime, double> upperWarning = {};
+    upperWarning[start] = 9.9;
+    upperWarning[start.add(Duration(minutes: 7))] = 9.9;
+
+    Map<DateTime, double> lowerWarning = {};
+    lowerWarning[start] = 0.4;
+    lowerWarning[start.add(Duration(minutes: 10))] = 0.4;
+
+    series.add(line);
+    series.add(upperCritical);
+    series.add(upperWarning);
+    series.add(lowerWarning);
+    series.add(lowerCritical);
+
+    LineChart lineChart = LineChart.fromDateTimeMaps(
+        series,
+        [Colors.pink, Colors.red, Colors.yellow, Colors.yellow, Colors.red],
+        ['P', 'P', 'P', 'P', 'P']);
+
+    lineChart.initialize(
+      200,
+      100,
+      TextStyle(
+          color: Colors.grey[800], fontSize: 11.0, fontWeight: FontWeight.w200),
+    );
+    lineChart.lines[1].isMarkerLine = true;
+    lineChart.lines[2].isMarkerLine = true;
+    lineChart.lines[3].isMarkerLine = true;
+    lineChart.lines[4].isMarkerLine = true;
+
+    await tester.pumpWidget(
+      MediaQuery(
+        data: MediaQueryData.fromWindow(ui.window)
+            .copyWith(size: const Size(600.0, 800.0)),
+        child: buildTestableWidget(
+          AnimatedLineChart(
+            lineChart,
+            gridColor: Colors.black54,
+            textStyle: TextStyle(fontSize: 10, color: Colors.black54),
+            toolTipColor: Colors.white,
+            showMarkerLines: true,
+            legends: [
+              Legend(
+                title: 'Max: 10',
+                color: Colors.red,
+                showLeadingLine: true,
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+              Legend(
+                title: 'High: 9.9',
+                color: Colors.yellow,
+                icon: Icon(Icons.report_problem_rounded),
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+              Legend(
+                title: 'Low',
+                color: Colors.yellow,
+                icon: Icon(Icons.report_problem_rounded),
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+              Legend(
+                title: 'Min',
+                color: Colors.red,
+                showLeadingLine: true,
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+            ],
+            legendsRightLandscapeMode: true,
+          ),
+        ),
+      ),
+    );
+
+    await tester.pumpAndSettle(Duration(seconds: 1));
+    await tester.pump(Duration(seconds: 1));
+
+    await expectLater(find.byType(AnimatedLineChart),
+        matchesGoldenFile('animatedLineChartLandscapeModeLegends.png'));
   });
 }
