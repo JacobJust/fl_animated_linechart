@@ -25,6 +25,8 @@ Highlight for the line chart:
 
 ![Chart example with highlight](withSelection.png)
 
+Linechart with markerlines, icons and legends:
+
 ![Chart example with markerlines and legends](withMarkerlinesAndLegends.png)
 
 ![Chart example with horizontal and vertical markerlines along with icons on the chart and legends](withHorizontalAndVerticalMarkerlinesAndLegends.png)
