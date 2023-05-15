@@ -25,7 +25,7 @@ Highlight for the line chart:
 
 ![Chart example with highlight](withSelection.png)
 
-Linechart with markerlines, icons and legends:
+Linechart with markerlines, icons, legends and "heat-map" shaded zones:
 
 ![Chart example with markerlines and legends](withMarkerlinesAndLegends.png)
 
