@@ -22,13 +22,21 @@ There are currently two different charts:
 Try the sample project or include in your project.
 
 Highlight for the line chart:
+
 ![Chart example with highlight](withSelection.png)
+
 ![Chart example with markerlines and legends](withMarkerlinesAndLegends.png)
+
 ![Chart example with horizontal and vertical markerlines along with icons on the chart and legends](withHorizontalAndVerticalMarkerlinesAndLegends.png)
+
 ![Chart example with shaded area between markerlines](withShadedAreaBetweenMarkerlines.png)
 
 Area chart:
+
 ![Area Chart example](areaChart.png)
+
+
+
 ![Area Chart example](areaChartGradient.png)
 
 Example code:
