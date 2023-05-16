@@ -1,3 +1,7 @@
+## [1.1.8]
+
+* same as 1.1.7. Updated changelog in this version
+
 ## [1.1.7]
 
 * Ability to set marker lines(kind of thresholds if you will), legends and heat map like shaded zones. 
