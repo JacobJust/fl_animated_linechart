@@ -1,3 +1,8 @@
+## [1.1.7]
+
+* Ability to set marker lines(kind of thresholds if you will), legends and heat map like shaded zones. 
+* Configurable color for measurement highlighter
+
 ## [1.1.6]
 
 * Ability to set a custom label for yAxis(still use units[index] if not provided).Thanks to @AndriiHarashchak
