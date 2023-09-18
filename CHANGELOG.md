@@ -1,3 +1,6 @@
+## [1.1.9]
+* dart format files to pass static analysis
+
 ## [1.1.8]
 
 * same as 1.1.7. Updated changelog in this version
