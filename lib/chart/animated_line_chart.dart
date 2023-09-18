@@ -68,9 +68,11 @@ class _AnimatedLineChartState extends State<AnimatedLineChart>
     _controller =
         AnimationController(vsync: this, duration: Duration(milliseconds: 700));
 
-    Animation curve = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
+    Animation curve =
+        CurvedAnimation(parent: _controller, curve: Curves.easeIn);
 
-    _animation = Tween(begin: 0.0, end: 1.0).animate(curve as Animation<double>);
+    _animation =
+        Tween(begin: 0.0, end: 1.0).animate(curve as Animation<double>);
 
     _controller.forward();
 
@@ -503,8 +505,10 @@ class ChartPainter extends CustomPainter {
 
     highlights.forEach((highlight) {
       if (!_chart.lines[index].isMarkerLine) {
-        canvas.drawCircle(Offset(highlight.chartPoint.x, highlight.chartPoint.y),
-            5, _linePainter);
+        canvas.drawCircle(
+            Offset(highlight.chartPoint.x, highlight.chartPoint.y),
+            5,
+            _linePainter);
       }
 
       String prefix = '';
@@ -512,7 +516,8 @@ class ChartPainter extends CustomPainter {
       if (highlight.chartPoint is DateTimeChartPoint) {
         DateTimeChartPoint dateTimeChartPoint =
             highlight.chartPoint as DateTimeChartPoint;
-        prefix = _formatMonthDayHoursMinutes.format(dateTimeChartPoint.dateTime);
+        prefix =
+            _formatMonthDayHoursMinutes.format(dateTimeChartPoint.dateTime);
       }
 
       TextSpan span = TextSpan(
@@ -819,7 +824,8 @@ class ChartPainter extends CustomPainter {
 
         canvas.drawLine(
             Offset(lastVerticalMarker - 2, 0),
-            Offset(lastVerticalMarker - 2, size.height - LineChart.axisOffsetPX),
+            Offset(
+                lastVerticalMarker - 2, size.height - LineChart.axisOffsetPX),
             Paint()
               ..color = Colors.grey
               ..strokeWidth = 1);

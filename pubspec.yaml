@@ -1,6 +1,6 @@
 name: fl_animated_linechart
 description: Animated flutter line & area chart. Performs with big datasets, support multiple y axis and datetime x axis
-version: 1.1.8
+version: 1.1.9
 homepage: https://github.com/umbrew/fl_animated_linechart
 
 environment:
